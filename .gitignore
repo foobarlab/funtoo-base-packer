@@ -1,0 +1,10 @@
+.vagrant/
+packer_cache/
+/*.box
+.project
+packer.log
+/keys
+vagrant-cloud-*
+output-virtualbox-ovf/
+build_version
+build_number
