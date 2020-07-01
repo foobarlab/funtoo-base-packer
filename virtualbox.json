@@ -1,0 +1,82 @@
+{
+  "builders": [{
+    "boot_wait": "30s",
+    "type": "virtualbox-ovf",
+    "vm_name": "{{user `vm_name`}}",
+    "source_path": "{{user `source_path`}}",
+    "guest_additions_mode": "upload",
+    "guest_additions_path": "VBoxGuestAdditions.iso",
+    "headless": "{{user `headless`}}",
+    "ssh_pty": "true",
+    "ssh_username": "{{user `username`}}",
+    "ssh_password": "{{user `password`}}",
+    "ssh_wait_timeout": "30s",
+    "ssh_private_key_file": "keys/vagrant",
+    "shutdown_command": "echo 'packer' | sudo -S shutdown -P now",
+    "vboxmanage":[
+        ["modifyvm","{{.Name}}","--memory","{{user `memory`}}"],
+        ["modifyvm","{{.Name}}","--cpus","{{user `cpus`}}"],
+        ["modifyvm","{{.Name}}","--nictype1","virtio"],
+        ["modifyvm","{{.Name}}","--audio","none"],
+        ["modifyvm","{{.Name}}","--usb","off"],
+        ["modifyvm","{{.Name}}","--chipset","ich9"],
+        ["modifyvm","{{.Name}}","--rtcuseutc","on"],
+        ["modifyvm","{{.Name}}","--vram", "12"],
+        ["modifyvm","{{.Name}}","--vrde", "off"],
+        ["modifyvm","{{.Name}}","--hpet", "on"],
+        ["modifyvm","{{.Name}}","--hwvirtex", "on"],
+        ["modifyvm","{{.Name}}","--vtxvpid", "on"],
+        ["modifyvm","{{.Name}}","--spec-ctrl", "on"],
+        ["modifyvm","{{.Name}}","--largepages", "off"]
+      ]
+  }],
+  "provisioners": [{
+      "destination": "/tmp",
+      "source": "scripts",
+      "type": "file"
+  },
+  {
+      "type": "shell",
+      "script": "provision.sh",
+      "environment_vars": [
+          "SCRIPTS=/tmp",
+          "MAKEOPTS=-j{{user `cpus`}}",
+          "BUILD_RUN=true",
+          "BUILD_BOX_NAME={{user `vm_name`}}",
+          "BUILD_BOX_DESCRIPTION={{user `box_description`}}",
+          "BUILD_GCC_VERSION={{user `gcc_version`}}",
+		  "BUILD_BOX_VERSION={{user `box_version`}}",
+		  "BUILD_REBUILD_SYSTEM={{user `rebuild_system`}}",
+		  "BUILD_FLAVOR={{user `flavor`}}",
+		  "BUILD_REPORT_SPECTRE={{user `report_spectre`}}",
+          "BUILD_INCLUDE_ANSIBLE={{user `include_ansible`}}",
+          "BUILD_UNRESTRICTED_LICENSES={{user `unrestricted_licenses`}}"
+      ],
+      "expect_disconnect": false
+  }],
+  "description": "{{user `box_description`}}",
+  "post-processors": [{
+    "type": "vagrant",
+    "keep_input_artifact": false,
+    "output": "{{user `output_file`}}"
+  }],
+  "variables": {
+    "source_path": "{{env `BUILD_PARENT_OVF`}}",
+    "output_file": "{{env `BUILD_OUTPUT_FILE_TEMP`}}",
+    "box_description": "{{env `BUILD_BOX_DESCRIPTION`}}",
+    "guest_os_type": "{{env `BUILD_GUEST_TYPE`}}",
+    "vm_name": "{{env `BUILD_BOX_NAME`}}",
+    "memory": "{{env `BUILD_GUEST_MEMORY`}}",
+    "cpus": "{{env `BUILD_GUEST_CPUS`}}",
+    "gcc_version": "{{env `BUILD_GCC_VERSION`}}",
+    "box_version": "{{env `BUILD_BOX_VERSION`}}",
+    "rebuild_system": "{{env `BUILD_REBUILD_SYSTEM`}}",
+    "flavor": "{{env `BUILD_FLAVOR`}}",
+    "report_spectre": "{{env `BUILD_REPORT_SPECTRE`}}",
+    "include_ansible": "{{env `BUILD_INCLUDE_ANSIBLE`}}",
+    "unrestricted_licenses": "{{env `BUILD_UNRESTRICTED_LICENSES`}}",
+    "headless": "true",
+    "username": "vagrant",
+    "password": "vagrant"
+  }
+}
