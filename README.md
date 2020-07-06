@@ -18,7 +18,6 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
  - Optional: unrestricted licenses (creates a non-free version, default: disabled)
  - Optional: include *Ansible* (for automation, default: enabled)
  - List of additional installed software:
-    - *virtualbox-guest-additions* (vboxguest, vboxsf and vboxvideo modules)
     - Kernel tools: *genkernel, eclean-kernel*
     - *rsyslog* for logging
     - *vim* as default editor

@@ -3,35 +3,11 @@
 
 system("./config.sh >/dev/null")
 
-$script_guest_additions = <<SCRIPT
-## prepare kernel
-#sudo cp /usr/src/kernel.config /usr/src/linux/.config
-#cd /usr/src/linux
-#sudo make olddefconfig
-#sudo make modules_prepare
-## copy iso and start install
-#sudo mkdir -p /mnt/temp
-#sudo mv /home/vagrant/VBoxGuestAdditions.iso /tmp
-#sudo mount -o loop /tmp/VBoxGuestAdditions.iso /mnt/temp
-#sudo /mnt/temp/VBoxLinuxAdditions.run
-#sudo umount /mnt/temp
-#sudo cat /var/log/vboxadd-setup.log
-## FIXME if vagrant user is already in vboxsf group, do not add 
-### add user vagrant to vboxsf group
-##sudo gpasswd -a vagrant vboxsf
-## FIXME if 'vboxsf' is already there do not add again 
-### auto-load vboxsf (vboxguest already loaded by udev rule):
-##cat <<'DATA' | sudo tee -a /etc/conf.d/modules
-##modules="vboxsf"
-##DATA
-# remove iso
-sudo rm -f /home/vagrant/VBoxGuestAdditions.iso
-SCRIPT
-
 $script_cleanup = <<SCRIPT
 # clean stale kernel files
 sudo eclean-kernel
 sudo ego boot update
+# FIXME backup kernel config
 # clean kernel sources
 cd /usr/src/linux
 sudo make distclean
@@ -67,12 +43,17 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--hpet", "on"]
     vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
     vb.customize ["modifyvm", :id, "--vtxvpid", "on"]
-    vb.customize ["modifyvm", :id, "--spec-ctrl", "on"]
     vb.customize ["modifyvm", :id, "--largepages", "off"]
+    # spectre meltdown mitigations, see https://www.virtualbox.org/ticket/17987
+    vb.customize ["modifyvm", :id, "--spec-ctrl", "on"]
+    vb.customize ["modifyvm", :id, "--ibpb-on-vm-entry", "on"]
+    vb.customize ["modifyvm", :id, "--ibpb-on-vm-exit", "on"]
+    vb.customize ["modifyvm", :id, "--l1d-flush-on-sched", "off"]
+    vb.customize ["modifyvm", :id, "--l1d-flush-on-vm-entry", "on"]
+    vb.customize ["modifyvm", :id, "--nestedpaging", "off"]
   end
   config.ssh.pty = true
   config.ssh.insert_key = false
   config.vm.synced_folder '.', '/vagrant', disabled: true
-  config.vm.provision "guest-additions", type: "shell", inline: $script_guest_additions
   config.vm.provision "cleanup", type: "shell", inline: $script_cleanup
 end
