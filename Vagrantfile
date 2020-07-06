@@ -45,12 +45,12 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--vtxvpid", "on"]
     vb.customize ["modifyvm", :id, "--largepages", "off"]
     # spectre meltdown mitigations, see https://www.virtualbox.org/ticket/17987
-    vb.customize ["modifyvm", :id, "--spec-ctrl", "on"]
-    vb.customize ["modifyvm", :id, "--ibpb-on-vm-entry", "on"]
-    vb.customize ["modifyvm", :id, "--ibpb-on-vm-exit", "on"]
-    vb.customize ["modifyvm", :id, "--l1d-flush-on-sched", "off"]
-    vb.customize ["modifyvm", :id, "--l1d-flush-on-vm-entry", "on"]
-    vb.customize ["modifyvm", :id, "--nestedpaging", "off"]
+    #vb.customize ["modifyvm", :id, "--spec-ctrl", "on"]
+    #vb.customize ["modifyvm", :id, "--ibpb-on-vm-entry", "on"]
+    #vb.customize ["modifyvm", :id, "--ibpb-on-vm-exit", "on"]
+    #vb.customize ["modifyvm", :id, "--l1d-flush-on-sched", "off"]
+    #vb.customize ["modifyvm", :id, "--l1d-flush-on-vm-entry", "on"]
+    #vb.customize ["modifyvm", :id, "--nestedpaging", "off"]
   end
   config.ssh.pty = true
   config.ssh.insert_key = false

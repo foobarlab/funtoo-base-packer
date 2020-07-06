@@ -25,7 +25,6 @@
         ["modifyvm","{{.Name}}","--hpet", "on"],
         ["modifyvm","{{.Name}}","--hwvirtex", "on"],
         ["modifyvm","{{.Name}}","--vtxvpid", "on"],
-        ["modifyvm","{{.Name}}","--spec-ctrl", "on"],
         ["modifyvm","{{.Name}}","--largepages", "off"]
       ]
   }],
