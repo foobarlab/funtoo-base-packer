@@ -27,11 +27,10 @@ sys-kernel/debian-sources-lts -binary -custom-cflags
 #sys-firmware/intel-microcode initramfs
 DATA
 
-# FIXME firmware needed?
-#sudo mkdir -p /etc/portage/package.license
-#cat <<'DATA' | sudo tee -a /etc/portage/package.license/vbox-kernel
-#sys-kernel/linux-firmware linux-fw-redistributable
-#DATA
+sudo mkdir -p /etc/portage/package.license
+cat <<'DATA' | sudo tee -a /etc/portage/package.license/vbox-kernel
+sys-kernel/linux-firmware linux-fw-redistributable
+DATA
 
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-defaults
 app-admin/rsyslog gnutls normalize

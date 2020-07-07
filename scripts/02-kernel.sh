@@ -5,7 +5,15 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
-# FIXME evaluate BUILD_KERNEL var
+if [ -z ${BUILD_KERNEL:-} ]; then
+    echo "BUILD_KERNEL was not set. Skipping kernel rebuild."
+    exit 0
+else
+    if [ "$BUILD_KERNEL" = false ]; then
+        echo "BUILD_KERNEL set to FALSE. Skipping kernel rebuild."
+        exit 0
+    fi  
+fi
 
 sudo cp ${SCRIPTS}/scripts/kernel.config /usr/src
 
@@ -38,9 +46,9 @@ MULTIPATH="no"
 ISCSI="no"
 UNIONFS="no"
 BTRFS="no"
-#FIRMWARE="no"
+FIRMWARE="yes"
 #FIRMWARE_SRC="/lib/firmware"
-#FIRMWARE_FILES="/lib/firmware/amd/amd_sev_fam17h_model0xh.sbin,/lib/firmware/amd-ucode/microcode_amd_fam17h.bin,/lib/firmware/amd-ucode/microcode_amd_fam17h.bin.asc,/lib/firmware/amd-ucode/microcode_amd_fam15h.bin,/lib/firmware/amd-ucode/microcode_amd_fam15h.bin.asc,/lib/firmware/amd-ucode/microcode_amd_fam16h.bin.asc,/lib/firmware/amd-ucode/microcode_amd.bin,/lib/firmware/amd-ucode/microcode_amd_fam16h.bin,/lib/firmware/amd-ucode/microcode_amd.bin.asc"
+FIRMWARE_FILES="/lib/firmware/amd/amd_sev_fam17h_model0xh.sbin,/lib/firmware/amd-ucode/microcode_amd_fam17h.bin,/lib/firmware/amd-ucode/microcode_amd_fam17h.bin.asc,/lib/firmware/amd-ucode/microcode_amd_fam15h.bin,/lib/firmware/amd-ucode/microcode_amd_fam15h.bin.asc,/lib/firmware/amd-ucode/microcode_amd_fam16h.bin.asc,/lib/firmware/amd-ucode/microcode_amd.bin,/lib/firmware/amd-ucode/microcode_amd_fam16h.bin,/lib/firmware/amd-ucode/microcode_amd.bin.asc"
 DISKLABEL="yes"
 BOOTLOADER=""	# 'grub' value not needed here, we will use ego boot update command
 #SPLASH="yes"
@@ -63,7 +71,7 @@ GK_SHARE="${GK_SHARE:-/usr/share/genkernel}"
 CACHE_DIR="/usr/share/genkernel"
 DISTDIR="${CACHE_DIR}/src"
 LOGFILE="/var/log/genkernel.log"
-LOGLEVEL=2
+LOGLEVEL=1
 DEFAULT_KERNEL_SOURCE="/usr/src/linux"
 DEFAULT_KERNEL_CONFIG="/usr/src/kernel.config"
 #BUSYBOX_CONFIG="/path/to/file"
@@ -117,10 +125,11 @@ source /etc/profile
 sudo eselect kernel list
 
 # include firmware?
-#sudo emerge -vt sys-kernel/linux-firmware sys-firmware/intel-microcode sys-apps/iucode_tool
+sudo emerge -vt sys-kernel/linux-firmware sys-firmware/intel-microcode sys-apps/iucode_tool
 
 # TODO switch to debian-sources?
-sudo emerge -vt sys-kernel/debian-sources-lts
+sudo emerge -vt sys-kernel/debian-sources
+sudo emerge --unmerge sys-kernel/debian-sources-lts
 
 # FIXME: ensure we select the right one
 sudo eselect kernel list

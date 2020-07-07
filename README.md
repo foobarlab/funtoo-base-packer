@@ -11,8 +11,7 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
  - Timezone: ```UTC```
  - NAT Networking using DHCP (virtio)
  - Vagrant user *vagrant* with password *vagrant* (can get superuser via sudo without password), additionally using the default SSH authorized keys provided by Vagrant (see https://github.com/hashicorp/vagrant/tree/master/keys) 
- - Kernel: debian-sources-lts 4.9, stripped down for use with VirtualBox (default)
- - Optional: rebuild a linux kernel from debian-sources 5.6 (experimental, default: enabled)
+ - Debian Kernel 5.6, stripped down for use with VirtualBox
  - Optional: switch and rebuild a non-default GCC version (experimental, default: disabled)
  - Optional: rebuild world, recompile the whole system (experimental, default: disabled)
  - Optional: unrestricted licenses (creates a non-free version, default: disabled)
