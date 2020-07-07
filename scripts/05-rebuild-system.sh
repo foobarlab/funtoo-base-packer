@@ -12,7 +12,7 @@ else
 	if [ "$BUILD_REBUILD_SYSTEM" = false ]; then
 		echo "BUILD_REBUILD_SYSTEM set to FALSE. Skipping ..."
 		exit 0
-	fi	
+	fi
 fi
 
 sudo emerge -vt --emptytree --usepkg=n @system
