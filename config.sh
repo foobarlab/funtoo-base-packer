@@ -21,7 +21,7 @@ export BUILD_BOX_MEMORY="2048"
 export BUILD_BOX_PROVIDER="virtualbox"
 
 export BUILD_FLAVOR="server"              # specify the flavor profile, see https://www.funtoo.org/Funtoo_Profiles#Flavors
-export BUILD_KERNEL=true                  # set to true to build a new kernel
+export BUILD_KERNEL=false                 # set to true to build a new kernel
 export BUILD_GCC_VERSION=""               # specify which GCC version to install or leave empty to keep the default, e.g. "9.1.1"
 export BUILD_REBUILD_SYSTEM=false         # set to true when GCC version has changed
 export BUILD_REPORT_SPECTRE=true          # if true, report Spectre/Meltdown vulunerability status

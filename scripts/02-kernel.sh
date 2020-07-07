@@ -5,18 +5,6 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
-if [ -z ${BUILD_KERNEL:-} ]; then
-    echo "BUILD_KERNEL was not set. Skipping kernel rebuild."
-    exit 0
-else
-    if [ "$BUILD_KERNEL" = false ]; then
-        echo "BUILD_KERNEL set to FALSE. Skipping kernel rebuild."
-        exit 0
-    fi  
-fi
-
-sudo cp ${SCRIPTS}/scripts/kernel.config /usr/src
-
 sudo emerge -vt sys-kernel/genkernel
 sudo mv /etc/genkernel.conf /etc/genkernel.conf.dist
 
@@ -124,30 +112,44 @@ source /etc/profile
 
 sudo eselect kernel list
 
-# include firmware?
-sudo emerge -vt sys-kernel/linux-firmware sys-firmware/intel-microcode sys-apps/iucode_tool
-
-# TODO switch to debian-sources?
-sudo emerge -vt sys-kernel/debian-sources
-sudo emerge --unmerge sys-kernel/debian-sources-lts
-
-# FIXME: ensure we select the right one
-sudo eselect kernel list
-sudo eselect kernel set 1
-
-cd /usr/src/linux
-# FIXME the following seems not needed, we do mrproper in genkernel
-sudo make distclean
-
-# apply 'make olddefconfig' on 'kernel.config' in case kernel config is outdated
-sudo cp /usr/src/kernel.config /usr/src/kernel.config.old
-sudo mv -f /usr/src/kernel.config /usr/src/linux/.config
-sudo make olddefconfig
-sudo mv -f /usr/src/linux/.config /usr/src/kernel.config
-
-# FIXME is this sufficient, no need to set kernel config and issue "--install" or initramfs?
-#sudo genkernel --kernel-config=/usr/src/kernel.config --install initramfs all
-sudo genkernel all
+if [ -z ${BUILD_KERNEL:-} ]; then
+    echo "BUILD_KERNEL was not set. Skipping kernel rebuild."
+    exit 0
+else
+    if [ "$BUILD_KERNEL" = false ]; then
+        echo "BUILD_KERNEL set to FALSE. Skipping kernel rebuild."
+        exit 0
+    else
+        echo "BUILD_KERNEL set to TRUE. Rebuilding kernel ..."
+        
+        sudo cp ${SCRIPTS}/scripts/kernel.config /usr/src
+        
+        # include firmware?
+        sudo emerge -vt sys-kernel/linux-firmware sys-firmware/intel-microcode sys-apps/iucode_tool
+        
+        # TODO switch to debian-sources?
+        sudo emerge -vt sys-kernel/debian-sources
+        sudo emerge --unmerge sys-kernel/debian-sources-lts
+        
+        # FIXME: ensure we select the right one
+        sudo eselect kernel list
+        sudo eselect kernel set 1
+        
+        cd /usr/src/linux
+        # FIXME the following seems not needed, we do mrproper in genkernel
+        sudo make distclean
+        
+        # apply 'make olddefconfig' on 'kernel.config' in case kernel config is outdated
+        sudo cp /usr/src/kernel.config /usr/src/kernel.config.old
+        sudo mv -f /usr/src/kernel.config /usr/src/linux/.config
+        sudo make olddefconfig
+        sudo mv -f /usr/src/linux/.config /usr/src/kernel.config
+        
+        # FIXME is this sufficient, no need to set kernel config and issue "--install" or initramfs?
+        #sudo genkernel --kernel-config=/usr/src/kernel.config --install initramfs all
+        sudo genkernel all
+    fi
+fi
 
 cd /usr/src
 
