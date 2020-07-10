@@ -5,6 +5,21 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
+if [ -z ${BUILD_KERNEL:-} ]; then
+    echo "BUILD_KERNEL was not set. Skipping kernel rebuild."
+    exit 1
+else
+    if [ "$BUILD_KERNEL" = false ]; then
+        echo ">>> Skipping kernel rebuild."
+        exit 1
+    else
+        echo ">>> Rebuilding kernel ..."
+    fi
+fi
+
+sudo mv -f /usr/src/kernel.config /usr/src/kernel.config.old
+sudo cp ${SCRIPTS}/scripts/kernel.config /usr/src
+
 sudo emerge -vt sys-kernel/genkernel
 sudo mv /etc/genkernel.conf /etc/genkernel.conf.dist
 
@@ -12,7 +27,7 @@ cat <<'DATA' | sudo tee -a /etc/genkernel.conf
 INSTALL="yes"
 OLDCONFIG="yes"
 MENUCONFIG="no"
-CLEAN="yes"
+#CLEAN="yes"
 MRPROPER="yes"
 #ARCH_OVERRIDE="x86"
 MOUNTBOOT="yes"
@@ -34,9 +49,9 @@ MULTIPATH="no"
 ISCSI="no"
 UNIONFS="no"
 BTRFS="no"
-FIRMWARE="yes"
+#FIRMWARE="no"
 #FIRMWARE_SRC="/lib/firmware"
-FIRMWARE_FILES="/lib/firmware/amd/amd_sev_fam17h_model0xh.sbin,/lib/firmware/amd-ucode/microcode_amd_fam17h.bin,/lib/firmware/amd-ucode/microcode_amd_fam17h.bin.asc,/lib/firmware/amd-ucode/microcode_amd_fam15h.bin,/lib/firmware/amd-ucode/microcode_amd_fam15h.bin.asc,/lib/firmware/amd-ucode/microcode_amd_fam16h.bin.asc,/lib/firmware/amd-ucode/microcode_amd.bin,/lib/firmware/amd-ucode/microcode_amd_fam16h.bin,/lib/firmware/amd-ucode/microcode_amd.bin.asc"
+#FIRMWARE_FILES="/lib/firmware/amd/amd_sev_fam17h_model0xh.sbin,/lib/firmware/amd-ucode/microcode_amd_fam17h.bin,/lib/firmware/amd-ucode/microcode_amd_fam17h.bin.asc,/lib/firmware/amd-ucode/microcode_amd_fam15h.bin,/lib/firmware/amd-ucode/microcode_amd_fam15h.bin.asc,/lib/firmware/amd-ucode/microcode_amd_fam16h.bin.asc,/lib/firmware/amd-ucode/microcode_amd.bin,/lib/firmware/amd-ucode/microcode_amd_fam16h.bin,/lib/firmware/amd-ucode/microcode_amd.bin.asc"
 DISKLABEL="yes"
 BOOTLOADER=""	# 'grub' value not needed here, we will use ego boot update command
 #SPLASH="yes"
@@ -101,55 +116,36 @@ DEFAULT_KERNEL_CONFIG="/usr/src/kernel.config"
 #INITRAMFS_OVERLAY=""
 #INTEGRATED_INITRAMFS="1"
 COMPRESS_INITRD="yes"
-COMPRESS_INITRD_TYPE="fastest"
+#COMPRESS_INITRD_TYPE="fastest"
 #NETBOOT="1"
 REAL_ROOT="/dev/sda4"
-CMD_CALLBACK="emerge --quiet @module-rebuild"
+CMD_CALLBACK="emerge -vt @module-rebuild"
 DATA
 
 sudo env-update
 source /etc/profile
 
 sudo eselect kernel list
+sudo emerge --unmerge sys-kernel/debian-sources-lts
+sudo emerge -vt sys-kernel/debian-sources
 
-if [ -z ${BUILD_KERNEL:-} ]; then
-    echo "BUILD_KERNEL was not set. Skipping kernel rebuild."
-    exit 0
-else
-    if [ "$BUILD_KERNEL" = false ]; then
-        echo "BUILD_KERNEL set to FALSE. Skipping kernel rebuild."
-        exit 0
-    else
-        echo "BUILD_KERNEL set to TRUE. Rebuilding kernel ..."
-        
-        sudo cp ${SCRIPTS}/scripts/kernel.config /usr/src
-        
-        # include firmware?
-        sudo emerge -vt sys-kernel/linux-firmware sys-firmware/intel-microcode sys-apps/iucode_tool
-        
-        # TODO switch to debian-sources?
-        sudo emerge -vt sys-kernel/debian-sources
-        sudo emerge --unmerge sys-kernel/debian-sources-lts
-        
-        # FIXME: ensure we select the right one
-        sudo eselect kernel list
-        sudo eselect kernel set 1
-        
-        cd /usr/src/linux
-        # FIXME the following seems not needed, we do mrproper in genkernel
-        sudo make distclean
-        
-        # apply 'make olddefconfig' on 'kernel.config' in case kernel config is outdated
-        sudo cp /usr/src/kernel.config /usr/src/kernel.config.old
-        sudo mv -f /usr/src/kernel.config /usr/src/linux/.config
-        sudo make olddefconfig
-        sudo mv -f /usr/src/linux/.config /usr/src/kernel.config
-        
-        # FIXME is this sufficient, no need to set kernel config and issue "--install" or initramfs?
-        #sudo genkernel --kernel-config=/usr/src/kernel.config --install initramfs all
-        sudo genkernel all
-    fi
-fi
+# FIXME include AMD firmware?
+#sudo emerge -vt sys-kernel/linux-firmware
+
+# FIXME: ensure we select the right one
+sudo eselect kernel list
+sudo eselect kernel set 1
+sudo eselect kernel list
+
+cd /usr/src/linux
+
+# apply 'make olddefconfig' on 'kernel.config' in case kernel config is outdated
+sudo cp /usr/src/kernel.config /usr/src/kernel.config.old
+sudo mv -f /usr/src/kernel.config /usr/src/linux/.config
+sudo make olddefconfig
+sudo mv -f /usr/src/linux/.config /usr/src/kernel.config
+
+sudo genkernel all
 
 cd /usr/src
 

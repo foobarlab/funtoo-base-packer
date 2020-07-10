@@ -3,14 +3,17 @@
 
 system("./config.sh >/dev/null")
 
-$script_cleanup = <<SCRIPT
+$script_clean_kernel = <<SCRIPT
 # clean stale kernel files
 sudo eclean-kernel
 sudo ego boot update
-# FIXME backup kernel config
+# FIXME backup kernel config?
 # clean kernel sources
 cd /usr/src/linux
 sudo make distclean
+SCRIPT
+
+$script_cleanup = <<SCRIPT
 # run zerofree at last to squeeze the last bit
 # /boot (initially not mounted)
 sudo mount -o ro /dev/sda1
@@ -55,5 +58,6 @@ Vagrant.configure("2") do |config|
   config.ssh.pty = true
   config.ssh.insert_key = false
   config.vm.synced_folder '.', '/vagrant', disabled: true
+  config.vm.provision "clean_kernel", type: "shell", inline: $script_clean_kernel
   config.vm.provision "cleanup", type: "shell", inline: $script_cleanup
 end

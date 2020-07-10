@@ -23,13 +23,19 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-kernel
 sys-kernel/genkernel -cryptsetup
 sys-kernel/debian-sources -binary -custom-cflags
 sys-kernel/debian-sources-lts -binary -custom-cflags
-# FIXME firmware needed?
+# FIXME required for firmware?
 #sys-firmware/intel-microcode initramfs
 DATA
 
 sudo mkdir -p /etc/portage/package.license
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/vbox-kernel
 sys-kernel/linux-firmware linux-fw-redistributable
+DATA
+
+sudo mkdir -p /etc/portage/package.mask
+cat <<'DATA' | sudo tee -a /etc/portage/package.mask/vbox-kernel
+# FIXME virtualbox guest additions seem to not compile on newer kernels:
+>=sys-kernel/debian-sources-5.5
 DATA
 
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-defaults
@@ -47,8 +53,6 @@ fi
 
 sudo epro list
 
-lsblk
-
 sudo rm -f /etc/motd
 cat <<'DATA' | sudo tee -a /etc/motd
 Funtoo GNU/Linux (BUILD_BOX_NAME) - release BUILD_BOX_VERSION build BUILD_TIMESTAMP
@@ -58,12 +62,18 @@ sudo sed -i 's/BUILD_BOX_VERSION/'"$BUILD_BOX_VERSION"'/g' /etc/motd
 sudo sed -i 's/BUILD_TIMESTAMP/'"$BUILD_TIMESTAMP"'/g' /etc/motd
 sudo cat /etc/motd
 
+sudo mv -f /etc/issue /etc/issue.old
+cat <<'DATA' | sudo tee -a /etc/issue
+Funtoo GNU/Linux (\n BUILD_BOX_VERSION)
+DATA
+sudo sed -i 's/BUILD_BOX_VERSION/'$BUILD_BOX_VERSION'/g' /etc/issue
+sudo cat /etc/issue
+
 sudo locale-gen
 sudo eselect locale set en_US.UTF-8
 source /etc/profile
 
-# added for robustness:
 sudo emerge -1v portage ego
-
 sudo env-update
 source /etc/profile
+sudo ego sync
