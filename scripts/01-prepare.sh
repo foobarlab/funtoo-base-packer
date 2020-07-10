@@ -68,9 +68,12 @@ sudo cat /etc/motd
 
 sudo mv -f /etc/issue /etc/issue.old
 cat <<'DATA' | sudo tee -a /etc/issue
-Funtoo GNU/Linux (\n BUILD_BOX_VERSION)
+Funtoo GNU/Linux (BUILD_BOX_NAME BUILD_BOX_VERSION)
+
+
 DATA
 sudo sed -i 's/BUILD_BOX_VERSION/'$BUILD_BOX_VERSION'/g' /etc/issue
+sudo sed -i 's/BUILD_BOX_NAME/'$BUILD_BOX_NAME'/g' /etc/issue
 sudo cat /etc/issue
 
 sudo locale-gen
