@@ -7,13 +7,14 @@ $script_clean_kernel = <<SCRIPT
 # clean stale kernel files
 sudo eclean-kernel
 sudo ego boot update
-# FIXME backup kernel config?
 # clean kernel sources
 cd /usr/src/linux
 sudo make distclean
 SCRIPT
 
 $script_cleanup = <<SCRIPT
+# stop services
+sudo /etc/init.d/rsyslog stop
 # run zerofree at last to squeeze the last bit
 # /boot (initially not mounted)
 sudo mount -o ro /dev/sda1
