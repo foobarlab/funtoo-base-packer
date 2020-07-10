@@ -62,3 +62,21 @@ sudo emerge -vt app-shells/bash-completion sys-process/lsof sys-fs/ncdu sys-proc
 
 # some network related utils
 sudo emerge -vt www-client/links net-ftp/ncftp mail-client/mutt
+
+# nice console font (https://www.funtoo.org/Fonts)
+sudo emerge -vt media-fonts/terminus-font
+#BUILD_FONT="ter-112n"	# 12px
+BUILD_FONT="ter-114n"	# 14px
+#BUILD_FONT="ter-116n"	# 15px
+#BUILD_FONT="ter-118n"	# 18px
+#BUILD_FONT="ter-120n"	# 20px
+#BUILD_FONT="ter-122n"	# 22px
+#BUILD_FONT="ter-124n"	# 24px
+#BUILD_FONT="ter-128n"	# 28px
+#BUILD_FONT="ter-132n"	# 32px
+export BUILD_FONT
+sudo sed -i 's/consolefont=\"default8x16\"/consolefont=\"'$BUILD_FONT'\"/g' /etc/conf.d/consolefont
+sudo rc-update add consolefont boot
+
+# FIXME gpm not working
+#sudo emerge -vt sys-libs/gpm
