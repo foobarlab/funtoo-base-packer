@@ -12,6 +12,7 @@ sudo rc-update add rsyslog default
 # install vim and configure as default editor
 sudo emerge -vt app-editors/vim 
 sudo eselect editor set vi
+sudo eselect visual set vi
 sudo eselect vi set vim
 # add vim to .bashrc
 cat <<'DATA' | sudo tee -a /root/.bashrc
@@ -78,9 +79,33 @@ export BUILD_FONT
 sudo sed -i 's/consolefont=\"default8x16\"/consolefont=\"'$BUILD_FONT'\"/g' /etc/conf.d/consolefont
 sudo rc-update add consolefont boot
 
-sudo emerge -vt sys-libs/gpm
+sudo emerge -vt sys-libs/gpm app-misc/evtest
 sudo rc-update add gpm default
 sudo cp /etc/conf.d/gpm /etc/conf.d/gpm.dist
 cat <<'DATA' | sudo tee -a /etc/conf.d/gpm
-# FIXME configure (see /etc/conf.d/gpm.dist)
+# /etc/init.d/gpm
+
+# Please uncomment the type of mouse you have and the appropriate MOUSEDEV entry
+
+MOUSE=ps2
+#MOUSE=imps2
+#MOUSEDEV=/dev/psaux
+#MOUSEDEV=/dev/input/mice
+MOUSEDEV=/dev/input/event5
+
+# Extra settings
+
+#RESPONSIVENESS=
+#REPEAT_TYPE=raw
+
+# Please uncomment this line if you want gpm to understand charsets used
+# in URLs and names with ~ or : in them, etc. This is a good idea to turn on!
+
+APPEND="-l \"a-zA-Z0-9_.:~/\300-\326\330-\366\370-\377\""
+
+# Various other options, see gpm(8) manpage for more.
+
+#APPEND="-g 1 -A60"
+#APPEND="-l \"a-zA-Z0-9_.:~/\300-\326\330-\366\370-\377\" -g 1 -A60"
+
 DATA
