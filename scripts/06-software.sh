@@ -78,5 +78,9 @@ export BUILD_FONT
 sudo sed -i 's/consolefont=\"default8x16\"/consolefont=\"'$BUILD_FONT'\"/g' /etc/conf.d/consolefont
 sudo rc-update add consolefont boot
 
-# FIXME gpm not working
-#sudo emerge -vt sys-libs/gpm
+sudo emerge -vt sys-libs/gpm
+sudo rc-update add gpm default
+sudo cp /etc/conf.d/gpm /etc/conf.d/gpm.dist
+cat <<'DATA' | sudo tee -a /etc/conf.d/gpm
+# FIXME configure (see /etc/conf.d/gpm.dist)
+DATA
