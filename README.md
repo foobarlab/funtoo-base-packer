@@ -20,8 +20,10 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
     - Kernel tools: *genkernel, eclean-kernel*
     - *rsyslog* for logging
     - *vim* as default editor
+    - *gpm, evtest* for console mouse pointer integration
     - Commandline helpers/tools: *lsof, bash-completion, screen, tmux, htop, ncdu, mc*
 	- Network utils for www, ftp and email: *links, ncftp, mutt*
+	- *Terminus* console font (12 to 32px)
     - Any additional software installed in the [stage3 box](https://github.com/foobarlab/funtoo-stage3-packer)
 
 ### Download pre-build images
