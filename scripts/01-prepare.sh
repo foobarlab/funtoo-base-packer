@@ -53,6 +53,10 @@ fi
 
 sudo epro list
 
+sudo eselect python list
+sudo eselect python set python3.7
+sudo eselect python list
+
 sudo rm -f /etc/motd
 cat <<'DATA' | sudo tee -a /etc/motd
 Funtoo GNU/Linux (BUILD_BOX_NAME) - release BUILD_BOX_VERSION build BUILD_TIMESTAMP
