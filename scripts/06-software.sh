@@ -81,7 +81,7 @@ sudo rc-update add consolefont boot
 
 sudo emerge -vt sys-libs/gpm app-misc/evtest
 sudo rc-update add gpm default
-sudo cp /etc/conf.d/gpm /etc/conf.d/gpm.dist
+sudo mv -f /etc/conf.d/gpm /etc/conf.d/gpm.dist
 cat <<'DATA' | sudo tee -a /etc/conf.d/gpm
 # /etc/init.d/gpm
 
