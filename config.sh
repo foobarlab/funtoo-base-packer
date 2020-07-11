@@ -28,7 +28,7 @@ export BUILD_REPORT_SPECTRE=true          # if true, report Spectre/Meltdown vul
 export BUILD_INCLUDE_ANSIBLE=true         # if true, include Ansible for automation
 export BUILD_UNRESTRICTED_LICENSES=false  # set to true to allow any licence (if true then Vagrant Cloud upload is disabled)
 
-export BUILD_KEEP_MAX_CLOUD_BOXES=7		# set the maximum number of boxes to keep in Vagrant Cloud
+export BUILD_KEEP_MAX_CLOUD_BOXES=7       # set the maximum number of boxes to keep in Vagrant Cloud
 
 # ----------------------------! do not edit below this line !----------------------------
 
