@@ -74,7 +74,7 @@ sudo sed -i 's/consolefont=\"default8x16\"/consolefont=\"'$BUILD_FONT'\"/g' /etc
 sudo rc-update add consolefont boot
 
 sudo emerge -vt sys-libs/gpm app-misc/evtest
-sudo rc-update add gpm default
+#sudo rc-update add gpm default	# FIXME gpm currently not working, do not start service by default
 sudo mv -f /etc/conf.d/gpm /etc/conf.d/gpm.dist
 cat <<'DATA' | sudo tee -a /etc/conf.d/gpm
 # /etc/init.d/gpm
