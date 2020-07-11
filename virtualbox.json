@@ -1,4 +1,5 @@
 {
+  "min_packer_version": "1.6.0",
   "builders": [{
     "boot_wait": "30s",
     "type": "virtualbox-ovf",
