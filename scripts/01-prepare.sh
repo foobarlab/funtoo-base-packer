@@ -60,7 +60,7 @@ sudo eselect python list
 sudo rm -f /etc/motd
 cat <<'DATA' | sudo tee -a /etc/motd
 
-Funtoo GNU/Linux (BUILD_BOX_NAME) - release BUILD_BOX_VERSION build BUILD_TIMESTAMP
+Funtoo GNU/Linux Vagrant Box (BUILD_BOX_NAME) - release BUILD_BOX_VERSION build BUILD_TIMESTAMP
 
 DATA
 sudo sed -i 's/BUILD_BOX_NAME/'"$BUILD_BOX_NAME"'/g' /etc/motd
