@@ -11,7 +11,7 @@ sed -i 's/<br>/\n/g' /home/vagrant/.$BUILD_BOX_NAME
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
 # TODO reduce USE flags: delete the following line
 #USE="acl acpi bash-completion bindist cacert git gold gpm hwdb icu idn iptables kmod lzma lzo networkmanager ncurses pci pgo pic pie posix rdp readline recursion-limit smp syslog threads tools udev udisks unicode unwind upnp utils zlib -systemd"
-USE="idn lzma tools udev binddist syslog cacert threads pic gold ncurses gpm"
+USE="idn lzma tools udev binddist syslog cacert threads pic gold ncurses"
 VIDEO_CARDS="virtualbox"
 # verbose logging:
 PORTAGE_ELOG_CLASSES="info warn error log qa"
@@ -59,7 +59,9 @@ sudo eselect python list
 
 sudo rm -f /etc/motd
 cat <<'DATA' | sudo tee -a /etc/motd
+
 Funtoo GNU/Linux (BUILD_BOX_NAME) - release BUILD_BOX_VERSION build BUILD_TIMESTAMP
+
 DATA
 sudo sed -i 's/BUILD_BOX_NAME/'"$BUILD_BOX_NAME"'/g' /etc/motd
 sudo sed -i 's/BUILD_BOX_VERSION/'"$BUILD_BOX_VERSION"'/g' /etc/motd
@@ -68,8 +70,7 @@ sudo cat /etc/motd
 
 sudo mv -f /etc/issue /etc/issue.old
 cat <<'DATA' | sudo tee -a /etc/issue
-Funtoo GNU/Linux (BUILD_BOX_NAME BUILD_BOX_VERSION)
-
+This is a Funtoo GNU/Linux Vagrant Box (BUILD_BOX_NAME BUILD_BOX_VERSION)
 
 DATA
 sudo sed -i 's/BUILD_BOX_VERSION/'$BUILD_BOX_VERSION'/g' /etc/issue
