@@ -15,6 +15,9 @@ SCRIPT
 $script_cleanup = <<SCRIPT
 # stop services
 sudo /etc/init.d/rsyslog stop
+# delete logs (comment-in for debugging!)
+sudo rm -rf /var/log/*
+sudo sync
 # run zerofree at last to squeeze the last bit
 # /boot (initially not mounted)
 sudo mount -o ro /dev/sda1
