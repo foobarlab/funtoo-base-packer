@@ -7,11 +7,11 @@ fi
 
 if [ -z ${BUILD_KERNEL:-} ]; then
     echo "BUILD_KERNEL was not set. Skipping kernel rebuild."
-    exit 1
+    exit 0
 else
     if [ "$BUILD_KERNEL" = false ]; then
         echo ">>> Skipping kernel rebuild."
-        exit 1
+        exit 0
     else
         echo ">>> Rebuilding kernel ..."
     fi
