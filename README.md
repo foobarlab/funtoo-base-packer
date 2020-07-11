@@ -17,7 +17,7 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
  - Optional: unrestricted licenses (creates a non-free version, default: disabled)
  - Optional: include *Ansible* (for automation, default: enabled)
  - List of additional installed software:
-    - Kernel tools: *genkernel, eclean-kernel*
+    - Kernel build tool *genkernel*
     - *rsyslog* for logging
     - *vim* as default editor
     - Commandline helpers/tools: *lsof, bash-completion, screen, tmux, htop, ncdu, mc*
