@@ -24,8 +24,8 @@ export BUILD_FLAVOR="server"              # specify the flavor profile, see http
 export BUILD_KERNEL=true                  # set to true to build a new kernel
 export BUILD_GCC_VERSION=""               # specify which GCC version to install or leave empty to keep the default, e.g. "9.1.1"
 export BUILD_REBUILD_SYSTEM=false         # set to true when GCC version has changed
-export BUILD_REPORT_SPECTRE=true          # if true, report Spectre/Meltdown vulunerability status
-export BUILD_INCLUDE_ANSIBLE=true         # if true, include Ansible for automation
+export BUILD_REPORT_SPECTRE=false         # if true, report Spectre/Meltdown vulunerability status
+export BUILD_INCLUDE_ANSIBLE=false        # if true, include Ansible for automation
 export BUILD_UNRESTRICTED_LICENSES=false  # set to true to allow any licence (if true then Vagrant Cloud upload is disabled)
 
 export BUILD_KEEP_MAX_CLOUD_BOXES=7       # set the maximum number of boxes to keep in Vagrant Cloud
