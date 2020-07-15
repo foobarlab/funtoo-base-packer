@@ -13,7 +13,7 @@ else
         echo ">>> Skipping kernel rebuild."
         exit 0
     else
-        echo ">>> Rebuilding kernel ..."
+        echo ">>> Building kernel ..."
     fi
 fi
 
