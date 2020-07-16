@@ -24,6 +24,8 @@ sudo etc-update --verbose --automode -5		# force 'auto-merge' for remaining conf
 sudo eselect kernel list
 sudo ego boot update
 
+sudo eix-update
+
 sudo rm -f /etc/resolv.conf
 sudo rm -f /etc/resolv.conf.bak
 sudo rm -rf /var/cache/portage/distfiles/*

@@ -17,8 +17,13 @@ else
     fi
 fi
 
-sudo mv -f /usr/src/kernel.config /usr/src/kernel.config.old
-sudo cp ${SCRIPTS}/scripts/kernel.config /usr/src
+if [ -f ${SCRIPTS}/scripts/kernel.config ]; then
+	if [ -f /usr/src/kernel.config ]; then
+		KERNEL_RELEASE=$(uname -r)
+		sudo mv -f /usr/src/kernel.config /usr/src/kernel.config.${KERNEL_RELEASE}
+	fi
+	sudo cp ${SCRIPTS}/scripts/kernel.config /usr/src
+fi
 
 sudo emerge -vt sys-kernel/genkernel
 sudo mv /etc/genkernel.conf /etc/genkernel.conf.dist

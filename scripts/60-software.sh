@@ -58,11 +58,23 @@ cat <<'DATA' | sudo tee -a ~vagrant/.bashrc
 
 DATA
 
-# some commandline helpers/utils
-sudo emerge -vt app-shells/bash-completion sys-process/lsof sys-fs/ncdu sys-process/htop app-misc/screen app-misc/tmux sys-apps/mlocate
+# commandline utils
+sudo emerge -vt app-shells/bash-completion
 
-# some network related utils
+# process utils
+sudo emerge -vt sys-process/htop sys-process/glances
+
+# file utils
+sudo emerge -vt sys-process/lsof sys-fs/ncdu sys-apps/mlocate
+
+# terminal multiplexers
+sudo emerge -vt app-misc/screen app-misc/tmux
+
+# network related utils
 sudo emerge -vt www-client/links net-ftp/ncftp mail-client/mutt
+
+# funtoo/gentoo management
+sudo emerge -vt app-portage/eix
 
 # nice console font (https://www.funtoo.org/Fonts)
 sudo emerge -vt media-fonts/terminus-font
