@@ -62,7 +62,7 @@ DATA
 sudo emerge -vt app-shells/bash-completion
 
 # process utils
-sudo emerge -vt sys-process/htop
+sudo emerge -vt sys-process/htop sys-process/glances
 
 # file utils
 sudo emerge -vt sys-process/lsof sys-fs/ncdu sys-apps/mlocate
