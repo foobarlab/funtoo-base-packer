@@ -8,10 +8,12 @@ fi
 echo "$BUILD_BOX_DESCRIPTION" >> /home/vagrant/.$BUILD_BOX_NAME
 sed -i 's/<br>/\n/g' /home/vagrant/.$BUILD_BOX_NAME
 
-cat <<'DATA' | sudo tee -a /etc/portage/make.conf
-# TODO reduce USE flags: delete the following line
+# TODO setup USE flags: might need to enable some more, e.g.:
 #USE="acl acpi bash-completion bindist cacert git gold hwdb icu idn iptables kmod lzma lzo networkmanager ncurses pci pgo pic pie posix rdp readline recursion-limit smp syslog threads tools udev udisks unicode unwind upnp utils zlib -systemd"
-USE="idn lzma tools udev binddist syslog cacert threads pic gold ncurses"
+
+sudo sed -i 's/USE=\"/USE="idn lzma tools udev syslog cacert threads pic gold ncurses /g' /etc/portage/make.conf
+
+cat <<'DATA' | sudo tee -a /etc/portage/make.conf
 VIDEO_CARDS="virtualbox"
 # verbose logging:
 PORTAGE_ELOG_CLASSES="info warn error log qa"
