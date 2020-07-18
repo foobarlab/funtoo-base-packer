@@ -32,7 +32,7 @@ cat <<'DATA' | sudo tee -a /etc/genkernel.conf
 INSTALL="yes"
 OLDCONFIG="yes"
 MENUCONFIG="no"
-#CLEAN="yes"
+CLEAN="yes"
 MRPROPER="yes"
 #ARCH_OVERRIDE="x86"
 MOUNTBOOT="yes"
@@ -121,10 +121,10 @@ DEFAULT_KERNEL_CONFIG="/usr/src/kernel.config"
 #INITRAMFS_OVERLAY=""
 #INTEGRATED_INITRAMFS="1"
 COMPRESS_INITRD="yes"
-#COMPRESS_INITRD_TYPE="fastest"
+COMPRESS_INITRD_TYPE="best"
 #NETBOOT="1"
-REAL_ROOT="/dev/sda4"
 CMD_CALLBACK="emerge -vt @module-rebuild"
+REAL_ROOT="/dev/sda4"
 DATA
 
 sudo env-update
