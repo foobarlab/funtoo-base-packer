@@ -57,7 +57,6 @@
 		  "BUILD_FLAVOR={{user `flavor`}}",
 		  "BUILD_REPORT_SPECTRE={{user `report_spectre`}}",
           "BUILD_INCLUDE_ANSIBLE={{user `include_ansible`}}",
-          "BUILD_UNRESTRICTED_LICENSES={{user `unrestricted_licenses`}}",
           "BUILD_KERNEL={{user `kernel`}}"
       ],
       "expect_disconnect": false
@@ -84,7 +83,6 @@
     "flavor": "{{env `BUILD_FLAVOR`}}",
     "report_spectre": "{{env `BUILD_REPORT_SPECTRE`}}",
     "include_ansible": "{{env `BUILD_INCLUDE_ANSIBLE`}}",
-    "unrestricted_licenses": "{{env `BUILD_UNRESTRICTED_LICENSES`}}",
     "kernel": "{{env `BUILD_KERNEL`}}",
     "headless": "true",
     "username": "vagrant",
