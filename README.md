@@ -14,7 +14,6 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
  - Optional: Debian Kernel 5.4, stripped down for use with VirtualBox (default: enabled)
  - Optional: switch and rebuild a non-default GCC version (experimental, default: disabled)
  - Optional: rebuild world, recompile the whole system (experimental, default: disabled)
- - Optional: unrestricted licenses (creates a non-free version, default: disabled)
  - Optional: include *Ansible* (for automation, default: disabled)
  - List of additional installed software:
     - Kernel build tool *genkernel*
@@ -24,6 +23,11 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
 	- Network utils for www, ftp and email: *links, ncftp, mutt*
 	- *Terminus* console font (12 to 32px)
     - Any additional software installed in the [stage3 box](https://github.com/foobarlab/funtoo-stage3-packer)
+ - Scripts for system administration in */usr/local/sbin*:
+    - *vbox-update*: update local system
+    - *vbox-setup-non-free*: apply licensing and distribution changes to make.conf (make it 'non-free')
+    - *vbox-cleanup*: delete temporay files for housekeeping
+    - *vbox-prepare-compact*: zero-fill free disk space to prepare for hdd image compaction
 
 ### Download pre-build images
 
