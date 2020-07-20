@@ -1,0 +1,61 @@
+#!/bin/bash
+# simple script to modify global 'make.conf' to allow any license and restrict distribution
+
+echo
+echo "==============================================================================="
+echo
+echo "             !!!! PLEASE NOTE: CAREFULLY READ THIS TEXT !!!"
+echo " PLEASE ENSURE YOU FULLY UNDERSTAND ANY LEGAL IMPLICATIONS BEFORE PROCEEDING!"
+echo
+echo "==============================================================================="
+echo
+echo "This script will modify license configuration and make this system 'non-free'"
+echo "and therefore restricted for further distribution!"
+echo
+echo "The modifications will enable 'non-free' licenses (accepting of all licenses)."
+echo "The change of the 'bindist' USE flag to '-bindist' adds patented or in other"
+echo "form restricted alogorithms and software to existing and future installed"
+echo "software on this system. This is likely ok for your personal usage but not for"
+echo "distribution of the resulting artefacts."
+echo
+echo "These modifications have legal implications. You are strongly advised to pay"
+echo "close attention to any laws or regulations which apply to you. \"Foobarlab\" and"
+echo "authors of this Vagrant box are not liable for any violations you make here."
+echo "So be careful, it is your responsibility."
+echo
+echo "Please consult any license and binary distribution restrictions"
+echo "of the installed software before proceeding."
+echo
+echo "If unsure say No (enter 'n')."
+echo
+echo "==============================================================================="
+echo
+
+read -p "Modify licensing configuration and accept all implied restrictions (y/N)? " choice
+case "$choice" in 
+  y|Y ) echo
+        echo "User accepted."
+        ;;
+  * )   echo
+        echo "User cancelled."
+  		exit 0
+  		;;
+esac
+
+echo
+
+# FIXME backup with numbering?
+echo ">>> Backing up 'make.conf' ..."
+cp /etc/portage/make.conf /etc/portage/make.conf.bak
+
+# FIXME check if bindist already modified?
+echo ">>> Removing 'bindist' restrictions ..."
+sed -i 's/ bindist/ \-bindist/' /etc/portage/make.conf
+
+# FIXME check if licenses already modified?
+echo ">>> Accepting any license ..."
+sed -i 's/ACCEPT_LICENSE=\".*\"/ACCEPT_LICENSE=\"\*\"/' /etc/portage/make.conf
+
+echo
+echo "You should now run 'vbox-update' to apply the changes."
+echo

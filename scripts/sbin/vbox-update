@@ -1,0 +1,20 @@
+#!/bin/bash
+# simple system update script
+
+echo ">>> Update portage tree ..."
+ego sync
+
+for d in /var/git/overlay/*/ ; do
+	if [ -d "$d/.git" ] ; then
+		cd "$d"
+		#git config pull.rebase true
+		echo ">>> Update overlay $d ..."
+		git pull
+	fi 
+done
+
+echo ">>> Update eix database ..."
+eix-update
+
+echo ">>> Apply @world updates ..."
+emerge -vtuDN --with-bdeps=y @world

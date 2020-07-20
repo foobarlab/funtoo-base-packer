@@ -1,0 +1,11 @@
+#!/bin/bash
+# simple script to prepare this box to compact the hdd image (zerofree)
+
+# TODO needs to stop all services blocking disc access, maybe 'telinit 1'
+
+# TODO delete temporary files: portage tree, distfiles, logs, ...
+
+mount -o remount,ro /dev/sda4 || echo "Unable to mount in read-only mode. Aborting."; exit 1
+zerofree -v /dev/sda4
+
+# TODO propose system reboot?

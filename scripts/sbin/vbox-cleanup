@@ -1,0 +1,4 @@
+#!/bin/bash
+# simple script to cleanup the system (delete temporary files, logs, portage tree, etc)
+
+# TODO
