@@ -1,6 +1,8 @@
 #!/bin/bash
 # simple script to modify global 'make.conf' to allow any license and restrict distribution
 
+if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
+
 echo
 echo "==============================================================================="
 echo
@@ -44,18 +46,18 @@ esac
 
 echo
 
-# FIXME backup with numbering?
+# FIXME backup with incremental numbering?
 echo ">>> Backing up 'make.conf' ..."
 cp /etc/portage/make.conf /etc/portage/make.conf.bak
 
-# FIXME check if bindist already modified?
+# FIXME check if bindist was already disabled?
 echo ">>> Removing 'bindist' restrictions ..."
 sed -i 's/ bindist/ \-bindist/' /etc/portage/make.conf
 
-# FIXME check if licenses already modified?
+# FIXME check if ACCEPT_LICENSES was already modified?
 echo ">>> Accepting any license ..."
 sed -i 's/ACCEPT_LICENSE=\".*\"/ACCEPT_LICENSE=\"\*\"/' /etc/portage/make.conf
 
 echo
-echo "You should now run 'vbox-update' to apply the changes."
+echo "You should now run 'foo-sync' and 'foo-update' to apply the changes to your system."
 echo

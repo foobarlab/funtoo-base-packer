@@ -1,27 +1,38 @@
 #!/bin/bash
 # simple script to prepare this box to compact the hdd image (zerofree)
 
-echo ">>> Switching runlevel, trying to kill all daemons ..."
-telinit 1
+if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
 
-echo ">>> Ensure 'rsyslog' is stopped ..."
-/etc/init.d/rsynclog stop || echo "Failed to stop service 'rsynclog'."
+echo ">>> Disabling swap partition ..."
+swapoff -v /dev/sda3 || true
 
-echo ">>> Ensure 'dhcpd' is stopped ..."
-/etc/init.d/dhcpd stop || echo "Failed to stop service 'dhcpd'."
+echo ">>> Filling swap partition with zeros ..."
+bash -c 'dd if=/dev/zero of=/dev/sda3 2>/dev/null' || true
 
-echo ">>> Claim remaining free space by file ..."
+echo ">>> Initializing swap partition ..."
+mkswap /dev/sda3 || true
+
+echo ">>> Switching to 'single' runlevel, trying to kill all daemons ..."
+openrc single
+
+echo ">>> Claiming remaining free space by file ..."
 sudo bash -c 'dd if=/dev/zero of=/EMPTY bs=1M 2>/dev/null' || true
 sudo rm -f /EMPTY
 
-echo ">>> Sync I/O ..."
+echo ">>> Syncing I/O ..."
 sync
 
-echo ">>> Mounting root filesystem 'read-only' ..."
-mount -o remount,ro /dev/sda4 || echo "Unable to mount in read-only mode. Aborting."; exit 1
+echo ">>> Mounting boot partition 'read-only' ..."
+mount -o ro /dev/sda1 || true
 
-echo ">>> Zerofree root filesystem ..."
-zerofree -v /dev/sda4
+echo ">>> Zero-filling free space on boot partition ..."
+zerofree -v /dev/sda1 || true
+
+echo ">>> Mounting root partition 'read-only' ..."
+mount -o remount,ro /dev/sda4 || true
+
+echo ">>> Zero-filling free space on root partition ..."
+zerofree -v /dev/sda4 || true
 
 echo "Your system is prepared for compaction. Power off in 5 secs."
 shutdown -h -t 5 now "System ready for compaction." 
