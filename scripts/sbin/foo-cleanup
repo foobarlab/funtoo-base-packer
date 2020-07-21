@@ -1,0 +1,35 @@
+#!/bin/bash
+# simple script to cleanup the system (delete temporary files, logs, portage tree, etc)
+
+if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
+
+echo ">>> Removing distfiles ..."
+rm -rf /var/cache/portage/distfiles/*
+
+echo ">>> Removing meta-repo ..."
+rm -rf /var/git/meta-repo
+
+echo ">>> Clean logs ..."
+shopt -s globstar
+truncate -s 0 /var/log/*.log
+truncate -s 0 /var/log/**/*.log
+find /var/log -type f -name '*.[0-99].gz' -exec rm {} +
+logfiles=( messages dmesg lastlog wtmp )
+for i in "${logfiles[@]}"; do
+	truncate -s 0 /var/log/$i
+done
+
+echo ">>> Clean home dirs ..."
+bash -c 'cat /dev/null > ~/.bash_history && history -c && exit'
+rm -rf /home/vagrant/.bash_history
+
+echo ">>> Clean kernel sources ..."
+cd /usr/src/linux
+make distclean
+
+echo ">>> Cleaning installed kernels ..."
+mount /boot || echo "Boot partition already mounted or unable to mount."
+eclean-kernel -n 2	# keep 2 kernels maximum
+
+echo ">>> Sync I/O ..."
+sync

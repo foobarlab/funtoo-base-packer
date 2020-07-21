@@ -1,0 +1,24 @@
+#!/bin/bash
+# simple system update script
+
+if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
+
+echo ">>> Install @world updates ..."
+emerge -vtuDN --with-bdeps=y @world
+
+echo ">>> Depclean system ..."
+emerge --depclean
+
+echo ">>> Install @world updates ..."
+emerge -vtuDN --with-bdeps=y @world
+
+echo ">>> Install preserved rebuild ..."
+emerge -vt @preserved-rebuild
+
+echo ">>> Clean Perl ..."
+perl-cleaner --all
+
+echo ">>> Checking reverse dependencies ..."
+revdep-rebuild
+
+echo "Finished update. Please run 'etc-update' or 'dispatch-conf' to setup any configuration files needing updateing."

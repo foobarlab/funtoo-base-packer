@@ -26,7 +26,6 @@ export BUILD_GCC_VERSION=""               # specify which GCC version to install
 export BUILD_REBUILD_SYSTEM=false         # set to true when GCC version has changed
 export BUILD_REPORT_SPECTRE=false         # if true, report Spectre/Meltdown vulunerability status
 export BUILD_INCLUDE_ANSIBLE=false        # if true, include Ansible for automation
-export BUILD_UNRESTRICTED_LICENSES=false  # set to true to allow any licence (if true then Vagrant Cloud upload is disabled)
 
 export BUILD_KEEP_MAX_CLOUD_BOXES=3       # set the maximum number of boxes to keep in Vagrant Cloud
 
@@ -43,13 +42,6 @@ fi
 if [[ -n "$BUILD_INCLUDE_ANSIBLE" ]]; then
     if [ "$BUILD_INCLUDE_ANSIBLE" = true ]; then
         BUILD_BOX_RELEASE_NOTES="${BUILD_BOX_RELEASE_NOTES}, Ansible 2.8"     # edit this to reflect actual setup
-    fi
-fi
-
-if [[ -n "$BUILD_UNRESTRICTED_LICENSES" ]]; then
-    if [ "$BUILD_UNRESTRICTED_LICENSES" = true ]; then
-        BUILD_BOX_RELEASE_NOTES="${BUILD_BOX_RELEASE_NOTES}, unrestricted licenses (non-free, not suitable for distribution!)"
-        BUILD_BOX_NAME="${BUILD_BOX_NAME}-nonfree"
     fi
 fi
 
