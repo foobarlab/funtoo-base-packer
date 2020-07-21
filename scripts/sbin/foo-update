@@ -1,0 +1,17 @@
+#!/bin/bash
+# simple system update script
+
+echo ">>> Install @world updates ..."
+emerge -vtuDN --with-bdeps=y @world
+
+echo ">>> Depclean system ..."
+emerge -vt --depclean
+
+echo ">>> Install @world updates ..."
+emerge -vtuDN --with-bdeps=y @world
+
+echo ">>> Install preserved rebuild ..."
+emerge -vt @preserved-rebuild
+
+echo ">>> Clean Perl ..."
+perl-cleaner --all

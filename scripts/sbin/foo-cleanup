@@ -1,0 +1,24 @@
+#!/bin/bash
+# simple script to cleanup the system (delete temporary files, logs, portage tree, etc)
+
+echo ">>> Removing temp files ..."
+# TODO
+
+echo ">>> Removing distfiles ..."
+rm -rf /var/cache/portage/distfiles/*
+
+echo ">>> Removing meta-repo ..."
+rm -rf /var/git/meta-repo
+
+echo ">>> Clean logs ..."
+# TODO
+
+echo ">>> Deleteing bash history ..."
+bash -c 'cat /dev/null > ~/.bash_history && history -c && exit'
+
+echo ">>> Clean kernel sources ..."
+cd /usr/src/linux
+make distclean
+
+echo ">>> Sync I/O ..."
+sync

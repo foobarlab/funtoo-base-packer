@@ -24,10 +24,11 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
 	- *Terminus* console font (12 to 32px)
     - Any additional software installed in the [stage3 box](https://github.com/foobarlab/funtoo-stage3-packer)
  - Scripts for system administration in */usr/local/sbin*:
-    - *vbox-update*: update local system
-    - *vbox-setup-non-free*: apply licensing and distribution changes to make.conf (make it 'non-free')
-    - *vbox-cleanup*: delete temporay files for housekeeping
-    - *vbox-prepare-compact*: zero-fill free disk space to prepare for hdd image compaction
+    - *foo-sync*: wrapper to sync meta-repo and any overlays
+    - *foo-update*: wrapper to install @world updates
+    - *foo-setup-non-free*: apply licensing and distribution changes to make.conf (make it 'non-free')
+    - *foo-cleanup*: delete temporay files for housekeeping
+    - *foo-prepare-compact*: zero-fill free disk space to prepare for hdd image compaction
 
 ### Download pre-build images
 
