@@ -62,12 +62,12 @@ cat <<'DATA' | sudo tee -a ~vagrant/.bashrc
 
 DATA
 
-# commandline utils
-sudo emerge -vt app-shells/bash-completion
-
 # shells
 sudo emerge -vt app-shells/dash
 sudo emerge -vt app-shells/zsh app-shells/zsh-completions app-doc/zsh-lovers
+
+# commandline utils
+sudo emerge -vt app-shells/bash-completion emerge -vt app-shells/fzf emerge -vt sys-apps/pv
 
 # process utils
 sudo emerge -vt sys-process/htop sys-process/glances
