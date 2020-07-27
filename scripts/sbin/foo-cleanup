@@ -26,6 +26,7 @@ rm -rf /home/vagrant/.bash_history
 echo ">>> Clean kernel sources ..."
 cd /usr/src/linux
 make distclean
+cp /usr/src/kernel.config /usr/src/linux/.config
 
 echo ">>> Cleaning installed kernels ..."
 mount /boot || echo "Boot partition already mounted or unable to mount."
