@@ -21,7 +21,7 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
     - *vixie-cron* for cronjob services
     - *vim* as default editor
     - Commandline helpers/tools: *progress, tree, lsof, bash-completion, screen, tmux, htop, ncdu, mc, eix*
-    - Additional shells: *zsh*
+    - Additional shells: *zsh, dash*
 	- Network utils for www, ftp and email: *links, ncftp, mutt*
 	- *Terminus* console font (12 to 32px)
     - Any additional software installed in the [stage3 box](https://github.com/foobarlab/funtoo-stage3-packer)

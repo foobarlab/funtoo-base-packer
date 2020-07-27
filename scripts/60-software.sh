@@ -66,6 +66,7 @@ DATA
 sudo emerge -vt app-shells/bash-completion
 
 # shells
+sudo emerge -vt app-shells/dash
 sudo emerge -vt app-shells/zsh app-shells/zsh-completions app-doc/zsh-lovers
 
 # process utils
