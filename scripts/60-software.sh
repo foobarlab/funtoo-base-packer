@@ -9,6 +9,10 @@ fi
 sudo emerge -vt app-admin/rsyslog
 sudo rc-update add rsyslog default
 
+# add a cron service
+sudo emerge -vt sys-process/vixie-cron
+sudo rc-update add vixie-cron default
+
 # install vim and configure as default editor
 sudo emerge -vt app-editors/vim 
 sudo eselect editor set vi
@@ -58,14 +62,18 @@ cat <<'DATA' | sudo tee -a ~vagrant/.bashrc
 
 DATA
 
+# shells
+sudo emerge -vt app-shells/dash
+sudo emerge -vt app-shells/zsh app-shells/zsh-completions app-doc/zsh-lovers
+
 # commandline utils
-sudo emerge -vt app-shells/bash-completion
+sudo emerge -vt app-shells/bash-completion emerge -vt app-shells/fzf emerge -vt sys-apps/pv
 
 # process utils
 sudo emerge -vt sys-process/htop sys-process/glances
 
 # file utils
-sudo emerge -vt sys-process/lsof sys-fs/ncdu sys-apps/mlocate
+sudo emerge -vt sys-process/lsof sys-fs/ncdu sys-apps/mlocate app-text/tree sys-apps/progress
 
 # terminal multiplexers
 sudo emerge -vt app-misc/screen app-misc/tmux
@@ -73,7 +81,7 @@ sudo emerge -vt app-misc/screen app-misc/tmux
 # network related utils
 sudo emerge -vt www-client/links net-ftp/ncftp mail-client/mutt
 
-# funtoo/gentoo management
+# funtoo/gentoo utils
 sudo emerge -vt app-portage/eix
 
 # nice console font (https://www.funtoo.org/Fonts)
