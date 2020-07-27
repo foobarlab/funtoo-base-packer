@@ -27,7 +27,7 @@ export BUILD_REBUILD_SYSTEM=false         # set to true when GCC version has cha
 export BUILD_REPORT_SPECTRE=false         # if true, report Spectre/Meltdown vulunerability status
 export BUILD_INCLUDE_ANSIBLE=false        # if true, include Ansible for automation
 
-export BUILD_KEEP_MAX_CLOUD_BOXES=3       # set the maximum number of boxes to keep in Vagrant Cloud
+export BUILD_KEEP_MAX_CLOUD_BOXES=1       # set the maximum number of boxes to keep in Vagrant Cloud
 
 # ----------------------------! do not edit below this line !----------------------------
 
