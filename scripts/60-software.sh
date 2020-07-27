@@ -67,7 +67,7 @@ sudo emerge -vt app-shells/dash
 sudo emerge -vt app-shells/zsh app-shells/zsh-completions app-doc/zsh-lovers
 
 # commandline utils
-sudo emerge -vt app-shells/bash-completion emerge -vt app-shells/fzf emerge -vt sys-apps/pv
+sudo emerge -vt app-shells/bash-completion app-shells/fzf sys-apps/pv
 
 # process utils
 sudo emerge -vt sys-process/htop sys-process/glances
