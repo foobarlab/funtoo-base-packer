@@ -5,8 +5,6 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
-# TODO update root's .bashrc / expand PATH / maybe set Default +env_keep = "PATH" in /etc/sudoers.d/vagrant
-
 # install 'sbin' scripts to /usr/local/sbin/
 sudo chown root.root /tmp/sbin/*
 sudo chmod 755 /tmp/sbin/*
