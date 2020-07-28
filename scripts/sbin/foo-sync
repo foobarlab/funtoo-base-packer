@@ -3,9 +3,6 @@
 
 if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
 
-echo ">>> Sync portage tree ..."
-ego sync
-
 for d in /var/git/overlay/*/ ; do
 	if [ -d "$d/.git" ] ; then
 		cd "$d"
@@ -14,6 +11,9 @@ for d in /var/git/overlay/*/ ; do
 		git pull
 	fi 
 done
+
+echo ">>> Sync portage tree ..."
+ego sync
 
 echo ">>> Update eix database ..."
 eix-update
