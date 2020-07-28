@@ -9,9 +9,6 @@ emerge -vtuDN --with-bdeps=y @world
 echo ">>> Depclean system ..."
 emerge --depclean
 
-#echo ">>> Install @world updates ..."
-#emerge -vtuDN --with-bdeps=y @world
-
 echo ">>> Install preserved rebuild ..."
 emerge -vt @preserved-rebuild
 
