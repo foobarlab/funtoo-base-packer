@@ -5,6 +5,16 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
+# add bash-completion
+sudo emerge -vt app-shells/bash-completion
+
+# add zsh 
+sudo emerge -vt app-shells/zsh app-shells/zsh-completions app-doc/zsh-lovers
+# TODO configure ~/.zshrc and /root/.zshrc
+
+# add dash
+sudo emerge -vt app-shells/dash
+
 # add a logging facility
 sudo emerge -vt app-admin/rsyslog
 sudo rc-update add rsyslog default
@@ -62,12 +72,8 @@ cat <<'DATA' | sudo tee -a ~vagrant/.bashrc
 
 DATA
 
-# shells
-sudo emerge -vt app-shells/dash
-sudo emerge -vt app-shells/zsh app-shells/zsh-completions app-doc/zsh-lovers
-
 # commandline utils
-sudo emerge -vt app-shells/bash-completion app-shells/fzf sys-apps/pv
+sudo emerge -vt app-shells/fzf sys-apps/pv
 
 # process utils
 sudo emerge -vt sys-process/htop sys-process/glances
