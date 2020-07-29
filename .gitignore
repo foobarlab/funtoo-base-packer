@@ -3,6 +3,7 @@ packer_cache/
 /*.box
 .project
 packer.log
+packer.log.*
 /keys
 vagrant-cloud-*
 output-virtualbox-ovf/
