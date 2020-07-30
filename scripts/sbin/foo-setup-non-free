@@ -59,5 +59,11 @@ echo ">>> Accepting any license ..."
 sed -i 's/ACCEPT_LICENSE=\".*\"/ACCEPT_LICENSE=\"\*\"/' /etc/portage/make.conf
 
 echo
-echo "You can now run 'foo-sync' and 'foo-update' to apply the changes to your system."
+echo "You can now run:"
+echo "foo-sync && foo-update"
+echo "to apply changes to your system (quick but possibly incomplete)."
+echo
+echo "If you encounter strange behaviour please consider a system-wide rebuild:"
+echo "emerge -vt --emptytree --keep-going @world"
+echo "Rebuilding the system will take a significant amount of time and resources!"
 echo

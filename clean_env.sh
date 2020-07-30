@@ -32,4 +32,4 @@ echo "Current Status for VirtualBox (if any): "
 $VBOXMANAGE list vms
 echo "Current Status for Vagrant (if any):"
 vagrant global-status
-echo "All done. Environment was cleaned. You may now run './build.sh' to build a fresh box."
+echo "All done. You may now run './build.sh' to build a fresh box."
