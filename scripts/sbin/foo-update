@@ -18,4 +18,4 @@ perl-cleaner --all
 echo ">>> Checking reverse dependencies ..."
 revdep-rebuild
 
-echo "Finished update. Please run 'etc-update' or 'dispatch-conf' to setup any configuration files needing updateing."
+echo "Please run 'etc-update' or 'dispatch-conf' to update changed configuration files."
