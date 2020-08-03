@@ -93,7 +93,7 @@ cat <<'DATA' | sudo tee -a ~vagrant/.zshrc
 DATA
 
 # commandline utils
-sudo emerge -vt app-shells/fzf sys-apps/pv
+sudo emerge -vt sys-apps/pv
 
 # process utils
 sudo emerge -vt sys-process/htop sys-process/glances dev-python/py-cpuinfo dev-python/scandir dev-python/netifaces
