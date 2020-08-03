@@ -6,6 +6,7 @@ if [ -z ${BUILD_RUN:-} ]; then
 fi
 
 # configure zsh: install oh-my-zsh, see https://github.com/ohmyzsh/ohmyzsh
+# TODO add 'ansible' plugin if BUILD_INCLUDE_ANSIBLE is set
 cat <<'DATA' | sudo tee -a /etc/zsh/zshenv
 export ZSH=/opt/oh-my-zsh    # use globally installed oh-my-zsh
 export LANG=en_US.UTF-8
