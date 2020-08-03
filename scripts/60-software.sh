@@ -10,7 +10,6 @@ sudo emerge -vt app-shells/bash-completion
 
 # add zsh 
 sudo emerge -vt app-shells/zsh app-shells/zsh-completions app-doc/zsh-lovers
-# TODO configure ~/.zshrc and /root/.zshrc
 
 # add dash
 sudo emerge -vt app-shells/dash
@@ -31,23 +30,23 @@ sudo eselect vi set vim
 # add vim to rc files
 cat <<'DATA' | sudo tee -a /root/.bashrc
 
-# use vim as default editor
-export EDITOR=/usr/bin/vim
+export EDITOR=/usr/bin/vim    # default editor
+
 DATA
 cat <<'DATA' | sudo tee -a /root/.zshrc
 
-# use vim as default editor
-export EDITOR=/usr/bin/vim
+export EDITOR=/usr/bin/vim    # default editor
+
 DATA
 cat <<'DATA' | sudo tee -a ~vagrant/.bashrc
 
-# use vim as default editor
-export EDITOR=/usr/bin/vim
+export EDITOR=/usr/bin/vim    # default editor
+
 DATA
 cat <<'DATA' | sudo tee -a ~vagrant/.zshrc
 
-# use vim as default editor
-export EDITOR=/usr/bin/vim
+export EDITOR=/usr/bin/vim    # default editor
+
 DATA
 
 # custom .vimrc
@@ -77,7 +76,17 @@ cat <<'DATA' | sudo tee -a /root/.bashrc
 . /usr/libexec/mc/mc.sh
 
 DATA
+cat <<'DATA' | sudo tee -a /root/.zshrc
+# restart mc with last used folder
+. /usr/libexec/mc/mc.sh
+
+DATA
 cat <<'DATA' | sudo tee -a ~vagrant/.bashrc
+# restart mc with last used folder
+. /usr/libexec/mc/mc.sh
+
+DATA
+cat <<'DATA' | sudo tee -a ~vagrant/.zshrc
 # restart mc with last used folder
 . /usr/libexec/mc/mc.sh
 

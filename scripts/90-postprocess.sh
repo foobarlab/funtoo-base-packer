@@ -5,6 +5,30 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
+# configure zsh: install oh-my-zsh, see https://github.com/ohmyzsh/ohmyzsh
+cat <<'DATA' | sudo tee -a /etc/zsh/zshenv
+export ZSH=/opt/oh-my-zsh    # use globally installed oh-my-zsh
+export LANG=en_US.UTF-8
+DATA
+cat <<'DATA' | sudo tee -a /root/.zshrc
+ZSH_THEME="clean"
+DISABLE_AUTO_UPDATE="true"
+ENABLE_CORRECTION="true"
+plugins=(git)
+source $ZSH/oh-my-zsh.sh
+DATA
+cat <<'DATA' | sudo tee -a /home/vagrant/.zshrc
+ZSH_THEME="agnoster"
+DISABLE_AUTO_UPDATE="true"
+ENABLE_CORRECTION="true"
+plugins=(git)
+source $ZSH/oh-my-zsh.sh
+DATA
+cd /tmp
+sudo wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+sudo chmod 755 ./install.sh
+sudo ZSH="/opt/oh-my-zsh" ./install.sh --unattended --keep-zshrc
+
 # net-mail/mailbase: adjust permissions as recommended during install
 sudo chown root:mail /var/spool/mail/
 sudo chmod 03775 /var/spool/mail/
