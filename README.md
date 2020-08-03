@@ -14,7 +14,7 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
  - Optional: Debian Kernel 5.4, stripped down for use with VirtualBox (default: enabled)
  - Optional: switch and rebuild a non-default GCC version (experimental, default: disabled)
  - Optional: rebuild world, recompile the whole system (experimental, default: disabled)
- - Optional: include *Ansible* (for automation, default: disabled)
+ - Optional: include *Ansible* (for automation, default: enabled)
  - List of additional installed software:
     - Kernel build tool *genkernel*
     - *rsyslog* for logging
