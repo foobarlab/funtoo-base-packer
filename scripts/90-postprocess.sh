@@ -15,14 +15,14 @@ cat <<'DATA' | sudo tee -a /root/.zshrc
 ZSH_THEME="clean"
 DISABLE_AUTO_UPDATE="true"
 ENABLE_CORRECTION="true"
-plugins=(git)
+plugins=(git ansible)
 source $ZSH/oh-my-zsh.sh
 DATA
 cat <<'DATA' | sudo tee -a /home/vagrant/.zshrc
 ZSH_THEME="agnoster"
 DISABLE_AUTO_UPDATE="true"
 ENABLE_CORRECTION="true"
-plugins=(git)
+plugins=(git ansible)
 source $ZSH/oh-my-zsh.sh
 DATA
 cd /tmp
