@@ -7,7 +7,7 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
 
  - Minimal Funtoo Linux 1.4 installation ('server' profile)
  - Architecture: x86-64bit, generic_64
- - 40 GB dynamic sized HDD image (ext4)
+ - 50 GB dynamic sized HDD image (ext4)
  - Timezone: ```UTC```
  - NAT Networking using DHCP (virtio)
  - Vagrant user *vagrant* with password *vagrant* (can get superuser via sudo without password), additionally using the default SSH authorized keys provided by Vagrant (see https://github.com/hashicorp/vagrant/tree/master/keys) 
