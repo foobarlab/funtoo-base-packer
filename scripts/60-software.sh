@@ -28,8 +28,13 @@ sudo emerge -vt app-editors/vim
 sudo eselect editor set vi
 sudo eselect visual set vi
 sudo eselect vi set vim
-# add vim to .bashrc
+# add vim to rc files
 cat <<'DATA' | sudo tee -a /root/.bashrc
+
+# use vim as default editor
+export EDITOR=/usr/bin/vim
+DATA
+cat <<'DATA' | sudo tee -a /root/.zshrc
 
 # use vim as default editor
 export EDITOR=/usr/bin/vim
@@ -39,6 +44,12 @@ cat <<'DATA' | sudo tee -a ~vagrant/.bashrc
 # use vim as default editor
 export EDITOR=/usr/bin/vim
 DATA
+cat <<'DATA' | sudo tee -a ~vagrant/.zshrc
+
+# use vim as default editor
+export EDITOR=/usr/bin/vim
+DATA
+
 # custom .vimrc
 cat <<'DATA' | sudo tee -a /root/.vimrc
 " default to no visible whitespace (was enabled in global /etc/vim/vimrc)
@@ -76,7 +87,7 @@ DATA
 sudo emerge -vt app-shells/fzf sys-apps/pv
 
 # process utils
-sudo emerge -vt sys-process/htop sys-process/glances
+sudo emerge -vt sys-process/htop sys-process/glances dev-python/py-cpuinfo dev-python/scandir dev-python/netifaces
 
 # file utils
 sudo emerge -vt sys-process/lsof sys-fs/ncdu sys-apps/mlocate app-text/tree sys-apps/progress
