@@ -11,6 +11,13 @@ sudo emerge -vt app-shells/bash-completion
 # add zsh 
 sudo emerge -vt app-shells/zsh app-shells/zsh-completions app-doc/zsh-lovers
 
+cat <<'DATA' | sudo tee -a /root/.zshrc
+# zsh config for root user:
+
+# add /usr/local paths
+export PATH=$PATH:/usr/local/bin:/usr/local/sbin
+DATA
+
 # add dash
 sudo emerge -vt app-shells/dash
 
