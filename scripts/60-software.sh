@@ -10,7 +10,13 @@ sudo emerge -vt app-shells/bash-completion
 
 # add zsh 
 sudo emerge -vt app-shells/zsh app-shells/zsh-completions app-doc/zsh-lovers
-# TODO configure ~/.zshrc and /root/.zshrc
+
+cat <<'DATA' | sudo tee -a /root/.zshrc
+# zsh config for root user:
+
+# add /usr/local paths
+export PATH=$PATH:/usr/local/bin:/usr/local/sbin
+DATA
 
 # add dash
 sudo emerge -vt app-shells/dash
@@ -28,17 +34,28 @@ sudo emerge -vt app-editors/vim
 sudo eselect editor set vi
 sudo eselect visual set vi
 sudo eselect vi set vim
-# add vim to .bashrc
+# add vim to rc files
 cat <<'DATA' | sudo tee -a /root/.bashrc
 
-# use vim as default editor
-export EDITOR=/usr/bin/vim
+export EDITOR=/usr/bin/vim    # default editor
+
+DATA
+cat <<'DATA' | sudo tee -a /root/.zshrc
+
+export EDITOR=/usr/bin/vim    # default editor
+
 DATA
 cat <<'DATA' | sudo tee -a ~vagrant/.bashrc
 
-# use vim as default editor
-export EDITOR=/usr/bin/vim
+export EDITOR=/usr/bin/vim    # default editor
+
 DATA
+cat <<'DATA' | sudo tee -a ~vagrant/.zshrc
+
+export EDITOR=/usr/bin/vim    # default editor
+
+DATA
+
 # custom .vimrc
 cat <<'DATA' | sudo tee -a /root/.vimrc
 " default to no visible whitespace (was enabled in global /etc/vim/vimrc)
@@ -66,17 +83,27 @@ cat <<'DATA' | sudo tee -a /root/.bashrc
 . /usr/libexec/mc/mc.sh
 
 DATA
+cat <<'DATA' | sudo tee -a /root/.zshrc
+# restart mc with last used folder
+. /usr/libexec/mc/mc.sh
+
+DATA
 cat <<'DATA' | sudo tee -a ~vagrant/.bashrc
+# restart mc with last used folder
+. /usr/libexec/mc/mc.sh
+
+DATA
+cat <<'DATA' | sudo tee -a ~vagrant/.zshrc
 # restart mc with last used folder
 . /usr/libexec/mc/mc.sh
 
 DATA
 
 # commandline utils
-sudo emerge -vt app-shells/fzf sys-apps/pv
+sudo emerge -vt sys-apps/pv
 
 # process utils
-sudo emerge -vt sys-process/htop sys-process/glances
+sudo emerge -vt sys-process/htop sys-process/glances dev-python/py-cpuinfo dev-python/scandir dev-python/netifaces
 
 # file utils
 sudo emerge -vt sys-process/lsof sys-fs/ncdu sys-apps/mlocate app-text/tree sys-apps/progress
