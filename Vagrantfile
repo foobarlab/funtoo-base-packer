@@ -11,7 +11,7 @@ ego boot update
 cd /usr/src/linux
 make distclean
 # copy latest kernel config
-cp /usr/src/kernel.config /usr/src/linux/.config
+cp -f /usr/src/kernel.config /usr/src/linux/.config
 SCRIPT
 
 $script_cleanup = <<SCRIPT
