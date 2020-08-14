@@ -29,6 +29,10 @@ sudo rc-update add rsyslog default
 sudo emerge -vt sys-process/vixie-cron
 sudo rc-update add vixie-cron default
 
+# add some entropy and randomness
+sudo emerge -vt sys-apps/haveged
+sudo rc-update add haveged default
+
 # install vim and configure as default editor
 sudo emerge -vt app-editors/vim 
 sudo eselect editor set vi
