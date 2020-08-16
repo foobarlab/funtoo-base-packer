@@ -10,8 +10,8 @@ sudo chown root.root /tmp/sbin/*
 sudo chmod 750 /tmp/sbin/*
 sudo cp -f /tmp/sbin/* /usr/local/sbin/
 
-echo "$BUILD_BOX_DESCRIPTION" >> /home/vagrant/.release_$BUILD_BOX_NAME
-sed -i 's/<br>/\n/g' /home/vagrant/.release_$BUILD_BOX_NAME
+echo "$BUILD_BOX_DESCRIPTION" >> ~vagrant/.release_$BUILD_BOX_NAME
+sed -i 's/<br>/\n/g' ~vagrant/.release_$BUILD_BOX_NAME
 
 # TODO setup USE flags: might need to enable some more, e.g.:
 #USE="acl acpi bash-completion bindist cacert git gold hwdb icu idn iptables kmod lzma lzo networkmanager ncurses pci pgo pic pie posix rdp readline recursion-limit smp syslog threads tools udev udisks unicode unwind upnp utils zlib -systemd"
