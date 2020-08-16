@@ -18,6 +18,8 @@ echo "Cleaning packer output-virtualbox-ovf dir ..."
 rm -rf output-virtualbox-ovf || true
 echo "Drop build version ..."
 rm -f build_version || true
+echo "Drop major version ..."
+rm -f version || true
 echo "Deleting any box file ..."
 rm -f *.box || true
 echo "Cleanup old logs ..."
