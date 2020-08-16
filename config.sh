@@ -1,9 +1,10 @@
 #!/bin/bash
 
-. version.sh
-
 export BUILD_BOX_NAME="funtoo-base"
 export BUILD_BOX_USERNAME="foobarlab"
+
+export BUILD_BOX_FUNTOO_VERSION="1.4"
+export BUILD_BOX_SOURCES="https://github.com/foobarlab/funtoo-base-packer"
 
 export BUILD_PARENT_BOX_NAME="funtoo-stage3"
 export BUILD_PARENT_BOX_VAGRANTCLOUD_NAME="$BUILD_BOX_USERNAME/$BUILD_PARENT_BOX_NAME"
@@ -31,7 +32,11 @@ export BUILD_KEEP_MAX_CLOUD_BOXES=1       # set the maximum number of boxes to k
 
 # ----------------------------! do not edit below this line !----------------------------
 
-BUILD_BOX_RELEASE_NOTES="Funtoo 1.4 (x86, generic 64-bit), Debian Kernel 5.4, VirtualBox Guest Additions 6.1"     # edit this to reflect actual setup
+echo $BUILD_BOX_FUNTOO_VERSION | sed -e 's/\.//g' > version
+
+. version.sh
+
+BUILD_BOX_RELEASE_NOTES="Funtoo $BUILD_BOX_FUNTOO_VERSION (x86, generic 64-bit), Debian Kernel 5.4, VirtualBox Guest Additions 6.1"     # edit this to reflect actual setup
 
 if [ -z ${BUILD_GCC_VERSION:-} ]; then
     BUILD_BOX_RELEASE_NOTES="${BUILD_BOX_RELEASE_NOTES}, GCC 9.2"     # edit this to reflect actual setup
@@ -58,7 +63,7 @@ else
     # NOTE: for Jenkins builds we got some additional information: BUILD_NUMBER, BUILD_ID, BUILD_DISPLAY_NAME, BUILD_TAG, BUILD_URL
     BUILD_BOX_DESCRIPTION="$BUILD_BOX_DESCRIPTION ($BUILD_TAG)"
 fi
-export BUILD_BOX_DESCRIPTION="$BUILD_BOX_RELEASE_NOTES<br><br>$BUILD_BOX_DESCRIPTION<br>created @$BUILD_TIMESTAMP<br><br>Source code: https://github.com/foobarlab/funtoo-base-packer"
+export BUILD_BOX_DESCRIPTION="$BUILD_BOX_RELEASE_NOTES<br><br>$BUILD_BOX_DESCRIPTION<br>created @$BUILD_TIMESTAMP<br><br>Source code: $BUILD_BOX_SOURCES"
 
 export BUILD_OUTPUT_FILE="$BUILD_BOX_NAME-$BUILD_BOX_VERSION.box"
 export BUILD_OUTPUT_FILE_TEMP="$BUILD_BOX_NAME.tmp.box"
