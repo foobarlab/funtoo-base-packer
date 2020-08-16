@@ -7,7 +7,7 @@ fi
 
 # install 'sbin' scripts to /usr/local/sbin/
 sudo chown root.root /tmp/sbin/*
-sudo chmod 755 /tmp/sbin/*
+sudo chmod 750 /tmp/sbin/*
 sudo cp -f /tmp/sbin/* /usr/local/sbin/
 
 echo "$BUILD_BOX_DESCRIPTION" >> /home/vagrant/.release_$BUILD_BOX_NAME
