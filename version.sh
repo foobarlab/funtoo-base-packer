@@ -6,7 +6,7 @@
 # as required by Vagrant
 
 if [ ! -f version ]; then
-	echo "Missing major version in file 'version'! Please run 'config.sh' for default value."
+	echo "Missing file 'version'! Please run 'config.sh' for default major version numbering."
 	exit 1
 fi
 
