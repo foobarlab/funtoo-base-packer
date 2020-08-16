@@ -3,13 +3,12 @@
 VBOXMANAGE=VBoxManage
 
 command -v vagrant >/dev/null 2>&1 || { echo "Command 'vagrant' required but it's not installed.  Aborting." >&2; exit 1; }
-# FIXME command may be written as 'VBoxManage' instead of 'vboxmanage'
 command -v $VBOXMANAGE >/dev/null 2>&1 || { echo "Command '$VBOXMANAGE' required but it's not installed.  Aborting." >&2; exit 1; }
 
 . config.sh
 
 # do a local folder clean before
-. clean.sh
+exec ./clean.sh
 
 # do some more system cleanup:
 # => suspend all VMs as seen by the current user
