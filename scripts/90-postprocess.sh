@@ -18,13 +18,14 @@ ENABLE_CORRECTION="true"
 plugins=(git ansible)
 source $ZSH/oh-my-zsh.sh
 DATA
-cat <<'DATA' | sudo tee -a /home/vagrant/.zshrc
+cat <<'DATA' | sudo tee -a ~vagrant/.zshrc
 ZSH_THEME="agnoster"
 DISABLE_AUTO_UPDATE="true"
 ENABLE_CORRECTION="true"
 plugins=(git ansible)
 source $ZSH/oh-my-zsh.sh
 DATA
+sudo chown vagrant:vagrant ~vagrant/.zshrc
 cd /tmp
 sudo wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
 sudo chmod 755 ./install.sh
