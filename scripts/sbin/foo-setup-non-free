@@ -64,6 +64,6 @@ echo "foo-sync && foo-update"
 echo "to apply changes to your system (quick but possibly incomplete)."
 echo
 echo "If you encounter strange behaviour please consider a system-wide rebuild:"
-echo "emerge -vt --emptytree --keep-going @world"
+echo "emerge -avt --emptytree --keep-going @world"
 echo "Rebuilding the system will take a significant amount of time and resources!"
 echo
