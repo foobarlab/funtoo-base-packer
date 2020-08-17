@@ -18,14 +18,14 @@ else
 	# generate minor version (date in format YYMMDD):
 	BUILD_MINOR_VERSION=$(date -u +%y%m%d)
 	# take existing env var BUILD_NUMBER, increment the one stored in
-	# file 'build_number' or initialize a new one beginning with 100000:
+	# file 'build_number' or initialize a new one beginning with 0:
 	if [ -z ${BUILD_NUMBER:-} ] ; then
 		if [ -f build_number ]; then
 			# read from file and increase by one
 			BUILD_NUMBER=$(<build_number)
 			BUILD_NUMBER=$((BUILD_NUMBER+1))
 		else
-			BUILD_NUMBER=1
+			BUILD_NUMBER=0
 		fi
 		# store for later reuse in file 'build_number'
 		echo $BUILD_NUMBER > build_number
