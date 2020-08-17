@@ -2,7 +2,11 @@
 
 command -v vagrant >/dev/null 2>&1 || { echo "Command 'vagrant' required but it's not installed.  Aborting." >&2; exit 1; }
 
-. config.sh
+. config.sh quiet
+
+echo "---------------------------------------------------------------------------"
+echo "  CLEANUP"
+echo "---------------------------------------------------------------------------"
 
 echo "Suspending any running instances ..."
 vagrant suspend && true
@@ -11,21 +15,19 @@ vagrant destroy -f || true
 echo "Removing box '$BUILD_BOX_NAME' ..."
 vagrant box remove -f "$BUILD_BOX_NAME" 2>/dev/null || true
 echo "Cleaning .vagrant dir ..."
-rm -vrf .vagrant/ || true
+rm -rf .vagrant/ || true
 echo "Cleaning packer_cache ..."
-rm -vrf packer_cache/ || true
+rm -rf packer_cache/ || true
 echo "Cleaning packer output-virtualbox-ovf dir ..."
-rm -vrf output-virtualbox-ovf || true
-echo "Drop build number ..."
-rm -vf build_number || true
+rm -rf output-virtualbox-ovf || true
 echo "Drop build version ..."
-rm -vf build_version || true
+rm -f build_version || true
 echo "Drop major version ..."
-rm -vf version || true
+rm -f version || true
 echo "Deleting any box file ..."
-rm -vf *.box || true
+rm -f *.box || true
 echo "Cleanup old logs ..."
-rm -vf *.log || true
+rm -f *.log || true
 echo "Cleanup broken wget downloads ..."
-rm -vf download || true
+rm -f download || true
 echo "All done. You may now run './build.sh' to build a fresh box."
