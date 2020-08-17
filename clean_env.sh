@@ -1,15 +1,15 @@
 #!/bin/bash -ue
 
-VBOXMANAGE=VBoxManage
+VBOXMANAGE=VBoxManage    # FIXME set this to the proper command, either 'vboxmanage' or 'VBoxManage'
 
 command -v vagrant >/dev/null 2>&1 || { echo "Command 'vagrant' required but it's not installed.  Aborting." >&2; exit 1; }
-# FIXME command may be written as 'VBoxManage' instead of 'vboxmanage'
 command -v $VBOXMANAGE >/dev/null 2>&1 || { echo "Command '$VBOXMANAGE' required but it's not installed.  Aborting." >&2; exit 1; }
 
-. config.sh
+. config.sh quiet
 
-# do a local folder clean before
-. clean.sh
+echo "---------------------------------------------------------------------------"
+echo "  EXTENDED CLEANUP"
+echo "---------------------------------------------------------------------------"
 
 # do some more system cleanup:
 # => suspend all VMs as seen by the current user
@@ -32,4 +32,8 @@ echo "Current Status for VirtualBox (if any): "
 $VBOXMANAGE list vms
 echo "Current Status for Vagrant (if any):"
 vagrant global-status
-echo "All done. You may now run './build.sh' to build a fresh box."
+echo "Drop build number ..."
+rm -f build_number || true
+
+# basic cleanup
+. clean.sh
