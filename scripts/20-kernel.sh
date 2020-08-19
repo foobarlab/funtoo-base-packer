@@ -134,8 +134,7 @@ sudo eselect kernel list
 sudo emerge --unmerge sys-kernel/debian-sources-lts
 sudo emerge -vt sys-kernel/debian-sources
 
-# FIXME include AMD microcode?
-#sudo emerge -vt sys-kernel/linux-firmware
+#sudo emerge -vt sys-kernel/linux-firmware    # TODO enable for AMD microcode? strip down included firmware files
 
 sudo eselect kernel list
 sudo eselect kernel set 1
@@ -148,6 +147,7 @@ sudo cp -f /usr/src/kernel.config /usr/src/kernel.config.bak
 sudo mv -f /usr/src/kernel.config /usr/src/linux/.config
 sudo make olddefconfig
 sudo mv -f /usr/src/linux/.config /usr/src/kernel.config
+sudo cp /usr/src/kernel.config /usr/src/kernel.config.base-dist
 
 sudo genkernel all
 
