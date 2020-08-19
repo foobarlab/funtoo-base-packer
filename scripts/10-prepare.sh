@@ -30,7 +30,8 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-kernel
 sys-kernel/genkernel -cryptsetup
 sys-kernel/debian-sources -binary -custom-cflags
 sys-kernel/debian-sources-lts -binary -custom-cflags
-#sys-firmware/intel-microcode initramfs
+sys-kernel/linux-firmware initramfs redistributable
+sys-firmware/intel-microcode initramfs
 DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-rsyslog
 app-admin/rsyslog gnutls normalize
@@ -40,6 +41,7 @@ app-misc/mc -edit -slang
 DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-portage
 sys-apps/portage doc
+app-portage/eix doc
 DATA
 
 sudo mkdir -p /etc/portage/package.license
