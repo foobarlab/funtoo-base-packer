@@ -30,8 +30,16 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-kernel
 sys-kernel/genkernel -cryptsetup
 sys-kernel/debian-sources -binary -custom-cflags
 sys-kernel/debian-sources-lts -binary -custom-cflags
-# FIXME required for firmware?
 #sys-firmware/intel-microcode initramfs
+DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-rsyslog
+app-admin/rsyslog gnutls normalize
+DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-mc
+app-misc/mc -edit -slang
+DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-portage
+sys-apps/portage doc
 DATA
 
 sudo mkdir -p /etc/portage/package.license
@@ -43,11 +51,6 @@ sudo mkdir -p /etc/portage/package.mask
 cat <<'DATA' | sudo tee -a /etc/portage/package.mask/vbox-kernel
 # FIXME virtualbox guest additions seem to not compile on newer kernels:
 >=sys-kernel/debian-sources-5.5
-DATA
-
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-defaults
-app-admin/rsyslog gnutls normalize
-app-misc/mc -edit -slang
 DATA
 
 sudo ego sync
