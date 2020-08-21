@@ -71,7 +71,7 @@ Get the latest build from Vagrant Cloud: [foobarlab/funtoo-base](https://app.vag
 
  - Run ```./config.sh```
 
-#### Cleanup build environment (poweroff all Vagrant and VirtualBox machines)
+#### Cleanup build environment (poweroff any Vagrant and VirtualBox machines)
 
  - Run ```./clean_env.sh```
 
