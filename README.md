@@ -21,7 +21,8 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
     - *vixie-cron* for cronjob services
     - *vim* as default editor
     - *haveged* providing entropy
-    - Commandline helpers/tools: *progress, tree, lsof, bash-completion, screen, tmux, htop, ncdu, mc, eix*
+    - Commandline helpers/tools: *progress, tree, lsof, bash-completion, screen, tmux, htop, ncdu, mc*
+    - Portage utils: *eix, genlop*
     - Additional shells: *zsh, dash*
 	- Network utils for www, ftp and email: *links, ncftp, mutt*
 	- *Terminus* console font (12 to 32px)
@@ -71,7 +72,7 @@ Get the latest build from Vagrant Cloud: [foobarlab/funtoo-base](https://app.vag
 
  - Run ```./config.sh```
 
-#### Cleanup build environment (poweroff all Vagrant and VirtualBox machines)
+#### Cleanup build environment (poweroff any Vagrant and VirtualBox machines)
 
  - Run ```./clean_env.sh```
 

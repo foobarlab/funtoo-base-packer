@@ -33,6 +33,9 @@ sudo eix-update
 sudo rm -f /etc/resolv.conf
 sudo rm -f /etc/resolv.conf.bak
 
+sudo rc-update    # show final runlevels
+sudo genlop -l    # show installed packages before logs are cleared
+
 sudo /usr/local/sbin/foo-cleanup
 
 # simple way to claim some free space before export
