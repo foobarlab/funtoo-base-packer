@@ -3,13 +3,13 @@
 
 if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
 
-echo ">>> Install @world updates ..."
+echo ">>> Install world updates ..."
 emerge -vtuDN --with-bdeps=y @world
 
 echo ">>> Depclean system ..."
 emerge --depclean
 
-echo ">>> Install preserved rebuild ..."
+echo ">>> Rebuild preserved packages ..."
 emerge -vt @preserved-rebuild
 
 echo ">>> Clean Perl ..."
