@@ -34,7 +34,7 @@ sudo emerge -vt sys-apps/haveged
 sudo rc-update add haveged default
 
 # install vim and configure as default editor
-sudo emerge -vt app-editors/vim 
+sudo emerge -vt app-editors/vim
 sudo eselect editor set vi
 sudo eselect visual set vi
 sudo eselect vi set vim
