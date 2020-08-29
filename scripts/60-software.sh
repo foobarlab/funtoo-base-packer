@@ -34,7 +34,7 @@ sudo emerge -vt sys-apps/haveged
 sudo rc-update add haveged default
 
 # install vim and configure as default editor
-sudo emerge -vt app-editors/vim 
+sudo emerge -vt app-editors/vim
 sudo eselect editor set vi
 sudo eselect visual set vi
 sudo eselect vi set vim
@@ -110,7 +110,7 @@ sudo emerge -vt sys-apps/pv
 sudo emerge -vt sys-process/htop sys-process/glances dev-python/py-cpuinfo dev-python/scandir dev-python/netifaces
 
 # file utils
-sudo emerge -vt sys-process/lsof sys-fs/ncdu sys-apps/mlocate app-text/tree sys-apps/progress
+sudo emerge -vt sys-apps/hdparm sys-process/lsof sys-fs/ncdu sys-apps/mlocate app-text/tree sys-apps/progress
 
 # terminal multiplexers
 sudo emerge -vt app-misc/screen app-misc/tmux
