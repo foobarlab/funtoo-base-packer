@@ -119,7 +119,7 @@ sudo emerge -vt app-misc/screen app-misc/tmux
 sudo emerge -vt www-client/links net-ftp/ncftp mail-client/mutt
 
 # funtoo/gentoo utils
-sudo emerge -vt app-portage/eix app-portage/genlop
+sudo emerge -vt app-portage/eix app-portage/genlop app-portage/cpuid2cpuflags
 
 # nice console font (https://www.funtoo.org/Fonts)
 sudo emerge -vt media-fonts/terminus-font

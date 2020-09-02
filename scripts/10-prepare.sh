@@ -19,38 +19,44 @@ sed -i 's/<br>/\n/g' ~vagrant/.release_$BUILD_BOX_NAME
 sudo sed -i 's/USE=\"/USE="idn lzma tools udev syslog cacert threads pic gold ncurses /g' /etc/portage/make.conf
 
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
+# adding some flags for CPUs newer than 2011 (intel-nehalem/amd-bulldozer)
+CPU_FLAGS_X86="${CPU_FLAGS_X86} popcnt sse3 sse4_1 sse4_2 ssse3"
+
+# added here, not in profiles:
 VIDEO_CARDS="virtualbox"
+
 # verbose logging:
 PORTAGE_ELOG_CLASSES="info warn error log qa"
 PORTAGE_ELOG_SYSTEM="echo save save_summary"
+
 DATA
 
 sudo mkdir -p /etc/portage/package.use
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-kernel
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-kernel
 sys-kernel/genkernel -cryptsetup
 sys-kernel/debian-sources -binary -custom-cflags
 sys-kernel/debian-sources-lts -binary -custom-cflags
 sys-kernel/linux-firmware initramfs redistributable
 sys-firmware/intel-microcode initramfs
 DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-rsyslog
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-rsyslog
 app-admin/rsyslog gnutls normalize
 DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-mc
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-mc
 app-misc/mc -edit -slang
 DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/vbox-portage
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-portage
 sys-apps/portage doc
 app-portage/eix doc
 DATA
 
 sudo mkdir -p /etc/portage/package.license
-cat <<'DATA' | sudo tee -a /etc/portage/package.license/vbox-kernel
+cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-kernel
 sys-kernel/linux-firmware linux-fw-redistributable
 DATA
 
 sudo mkdir -p /etc/portage/package.mask
-cat <<'DATA' | sudo tee -a /etc/portage/package.mask/vbox-kernel
+cat <<'DATA' | sudo tee -a /etc/portage/package.mask/base-kernel
 # FIXME virtualbox guest additions seem to not compile on newer kernels:
 >=sys-kernel/debian-sources-5.5
 DATA
