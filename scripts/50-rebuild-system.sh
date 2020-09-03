@@ -25,5 +25,11 @@ sudo emerge -vt @preserved-rebuild
 
 sudo perl-cleaner --reallyall
 
+# rebuild kernel (again)
+cd /usr/src/linux
+sudo make distclean
+sudo genkernel all
+sudo ego boot update
+
 sudo env-update
 source /etc/profile
