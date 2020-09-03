@@ -24,3 +24,6 @@ sudo etc-update --verbose --preen
 sudo emerge -vt @preserved-rebuild
 
 sudo perl-cleaner --reallyall
+
+sudo env-update
+source /etc/profile
