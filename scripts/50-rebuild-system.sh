@@ -24,3 +24,20 @@ sudo etc-update --verbose --preen
 sudo emerge -vt @preserved-rebuild
 
 sudo perl-cleaner --reallyall
+
+if [ -z ${BUILD_KERNEL:-} ]; then
+    echo "BUILD_KERNEL was not set. Skipping kernel build."
+else
+    if [ "$BUILD_KERNEL" = false ]; then
+        echo ">>> Skipping kernel build."
+    else
+        echo ">>> Building kernel ..."
+        cd /usr/src/linux
+        sudo make distclean
+        sudo genkernel all
+        sudo ego boot update
+    fi
+fi
+
+sudo env-update
+source /etc/profile
