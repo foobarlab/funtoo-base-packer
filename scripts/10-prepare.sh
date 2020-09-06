@@ -15,9 +15,6 @@ sed -i 's/<br>/\n/g' ~vagrant/.release_$BUILD_BOX_NAME
 
 sudo sed -i 's/USE=\"/USE="idn lzma tools udev syslog cacert threads pic gold ncurses /g' /etc/portage/make.conf
 
-# TODO test more USE flags?
-#USE="acl acpi bash-completion git hwdb icu iptables kmod lzo networkmanager pci pgo pie posix rdp readline recursion-limit smp udisks unicode unwind upnp utils zlib -systemd"
-
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
 
 # experimental: add some flags for CPUs after 2011 (intel-nehalem/amd-bulldozer)
