@@ -131,6 +131,7 @@ sudo env-update
 source /etc/profile
 
 # remove any installed kernel from stage3
+sudo eclean-kernel -l
 sudo eselect kernel list
 sudo emerge --unmerge sys-kernel/debian-sources-lts
 sudo emerge --unmerge sys-kernel/debian-sources
