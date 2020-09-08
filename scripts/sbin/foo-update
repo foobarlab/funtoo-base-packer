@@ -26,9 +26,6 @@ emerge --depclean
 echo ">>> Rebuild preserved packages ..."
 emerge -vt @preserved-rebuild
 
-echo ">>> Clean Perl ..."
-perl-cleaner --all
-
 echo ">>> Checking reverse dependencies ..."
 revdep-rebuild
 
