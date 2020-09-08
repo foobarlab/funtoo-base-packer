@@ -35,7 +35,7 @@ export BUILD_KEEP_MAX_CLOUD_BOXES=1       # set the maximum number of boxes to k
 echo $BUILD_BOX_FUNTOO_VERSION | sed -e 's/\.//g' > version    # auto set major version
 . version.sh    # determine build version
 
-BUILD_BOX_RELEASE_NOTES="Funtoo $BUILD_BOX_FUNTOO_VERSION (x86, generic 64-bit), Debian Kernel 5.4, VirtualBox Guest Additions 6.1"     # edit this to reflect actual setup
+BUILD_BOX_RELEASE_NOTES="Funtoo $BUILD_BOX_FUNTOO_VERSION (x86, generic 64-bit), Debian Kernel 5.7, VirtualBox Guest Additions 6.1"     # edit this to reflect actual setup
 
 if [ -z ${BUILD_GCC_VERSION:-} ]; then
     BUILD_BOX_RELEASE_NOTES="${BUILD_BOX_RELEASE_NOTES}, GCC 9.2"     # edit this to reflect actual setup

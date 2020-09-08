@@ -54,8 +54,8 @@ DATA
 
 sudo mkdir -p /etc/portage/package.mask
 cat <<'DATA' | sudo tee -a /etc/portage/package.mask/base-kernel
-# FIXME virtualbox guest additions seem to not compile on newer kernels:
->=sys-kernel/debian-sources-5.5
+# to stick with older kernel uncomment this:
+#>=sys-kernel/debian-sources-5.5
 DATA
 
 sudo ego sync
