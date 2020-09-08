@@ -8,7 +8,7 @@ fi
 sudo env-update
 source /etc/profile
 
-sudo emerge -vt --depclean
+sudo emerge --depclean
 
 sudo find /etc/ -name '._cfg*'				# DEBUG: list all config files needing an update
 sudo find /etc/ -name '._cfg*' -print -exec cat -n '{}' \;  # DEBUG: cat all config files needing an update
