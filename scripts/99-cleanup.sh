@@ -8,7 +8,7 @@ fi
 sudo env-update
 source /etc/profile
 
-sudo emerge --depclean
+sudo emerge -vt --depclean
 
 sudo find /etc/ -name '._cfg*'				# DEBUG: list all config files needing an update
 sudo find /etc/ -name '._cfg*' -print -exec cat -n '{}' \;  # DEBUG: cat all config files needing an update
@@ -26,6 +26,7 @@ sudo find /etc/ -name '._cfg*' -print -exec cat -n '{}' \;  # DEBUG: cat all con
 sudo etc-update --verbose --automode -5		# force 'auto-merge' for remaining configs
 
 sudo eselect kernel list
+sudo eclean-kernel -l
 sudo ego boot update
 
 sudo eix-update

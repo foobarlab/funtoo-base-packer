@@ -130,8 +130,11 @@ DATA
 sudo env-update
 source /etc/profile
 
+# remove any installed kernel from stage3
 sudo eselect kernel list
 sudo emerge --unmerge sys-kernel/debian-sources-lts
+sudo emerge --unmerge sys-kernel/debian-sources
+
 sudo emerge -vt sys-kernel/debian-sources
 
 #sudo emerge -vt sys-kernel/linux-firmware    # TODO enable for AMD microcode? strip down included firmware files
@@ -139,11 +142,11 @@ sudo emerge -vt sys-kernel/debian-sources
 sudo eselect kernel list
 sudo eselect kernel set 1
 sudo eselect kernel list
+sudo eclean-kernel -l
 
 cd /usr/src/linux
 
 # apply 'make olddefconfig' on 'kernel.config' in case kernel config is outdated
-sudo cp -f /usr/src/kernel.config /usr/src/kernel.config.bak
 sudo mv -f /usr/src/kernel.config /usr/src/linux/.config
 sudo make olddefconfig
 sudo mv -f /usr/src/linux/.config /usr/src/kernel.config
