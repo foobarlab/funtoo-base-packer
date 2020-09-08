@@ -3,8 +3,22 @@
 
 if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
 
+echo ">>> Checking meta repo ..."
+if [ ! -d "/var/git/meta-repo" ]; then
+	echo ">>> Syncing meta repo and overlays ..."
+	/usr/local/sbin/foo-sync
+fi
+
 echo ">>> Install world updates ..."
-emerge -vtuDN --with-bdeps=y @world
+emerge -avtuDN --with-bdeps=y @world
+
+if [ $? -eq 0 ]
+then
+  echo ">>> Success updating world."
+else
+  echo ">>> Failure: world update has been cancelled or an error ocurred." >&2
+  exit 1
+fi
 
 echo ">>> Depclean system ..."
 emerge --depclean
