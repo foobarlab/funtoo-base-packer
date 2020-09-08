@@ -13,15 +13,9 @@ sudo cp -f /tmp/sbin/* /usr/local/sbin/
 echo "$BUILD_BOX_DESCRIPTION" >> ~vagrant/.release_$BUILD_BOX_NAME
 sed -i 's/<br>/\n/g' ~vagrant/.release_$BUILD_BOX_NAME
 
-sudo sed -i 's/USE=\"/USE="idn lzma tools udev syslog cacert threads pic gold ncurses /g' /etc/portage/make.conf
+sudo sed -i 's/USE=\"/USE="zsh-completion idn lzma tools udev syslog cacert threads pic gold ncurses /g' /etc/portage/make.conf
 
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
-
-# experimental: add some flags for CPUs after 2011 (intel-nehalem/amd-bulldozer)
-#CPU_FLAGS_X86="${CPU_FLAGS_X86} popcnt sse3 sse4_1 sse4_2 ssse3"
-
-# testing: save some space: just install locales "en", "en_US", "de", "fr"
-#INSTALL_MASK="/usr/share/locale -/usr/share/locale/en -/usr/share/locale/en_US -/usr/share/locale/de -/usr/share/locale/fr"
 
 # added here, not in profiles yet:
 VIDEO_CARDS="virtualbox"
@@ -48,6 +42,8 @@ app-misc/mc -edit -slang
 DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-portage
 sys-apps/portage doc
+DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-eix
 app-portage/eix doc
 DATA
 

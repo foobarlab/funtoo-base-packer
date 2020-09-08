@@ -75,7 +75,9 @@ export PACKER_LOG_PATH="$PWD/packer.log"
 export PACKER_LOG="1"
 packer build virtualbox.json
 
-echo "Optimizing box size ..."
+echo "------------------------------------------------------------------------"
+echo "                         OPTIMIZING BOX SIZE"
+echo "------------------------------------------------------------------------"
 
 if [ -f "$BUILD_OUTPUT_FILE_TEMP" ]; then
     echo "Suspending any running instances ..."

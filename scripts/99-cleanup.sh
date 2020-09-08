@@ -26,6 +26,7 @@ sudo find /etc/ -name '._cfg*' -print -exec cat -n '{}' \;  # DEBUG: cat all con
 sudo etc-update --verbose --automode -5		# force 'auto-merge' for remaining configs
 
 sudo eselect kernel list
+sudo eclean-kernel -l
 sudo ego boot update
 
 sudo eix-update

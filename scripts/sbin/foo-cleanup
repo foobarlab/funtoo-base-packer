@@ -30,6 +30,7 @@ cp /usr/src/kernel.config /usr/src/linux/.config
 
 echo ">>> Cleaning installed kernels ..."
 mount /boot || echo "Boot partition already mounted or unable to mount."
+eclean-kernel -l
 eclean-kernel -n 2	# keep 2 kernels maximum
 
 echo ">>> Sync I/O ..."

@@ -5,7 +5,9 @@ system("./config.sh >/dev/null")
 
 $script_clean_kernel = <<SCRIPT
 # clean stale kernel files
-eclean-kernel
+mount /boot || true
+eclean-kernel -l
+eclean-kernel -n 1
 ego boot update
 # clean kernel sources
 cd /usr/src/linux
@@ -20,8 +22,8 @@ $script_cleanup = <<SCRIPT
 # ensure all file operations finished
 sync
 # run zerofree at last to squeeze the last bit
-# /boot (initially not mounted)
-mount -o ro /dev/sda1
+# /boot
+mount -o remount,ro /dev/sda1
 zerofree -v /dev/sda1
 # /
 mount -o remount,ro /dev/sda4
