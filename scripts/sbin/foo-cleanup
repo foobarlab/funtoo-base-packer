@@ -29,7 +29,7 @@ make distclean
 cp /usr/src/kernel.config /usr/src/linux/.config
 
 echo ">>> Cleaning installed kernels ..."
-mount /boot || echo "Boot partition already mounted or unable to mount."
+mount /boot || true
 eclean-kernel -l
 eclean-kernel -n 2	# keep 2 kernels maximum
 
