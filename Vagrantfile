@@ -12,14 +12,25 @@ ego boot update
 # clean kernel sources
 cd /usr/src/linux
 make distclean
-make modules_prepare
 # copy latest kernel config
 cp -f /usr/src/kernel.config /usr/src/linux/.config
+# prepare for module compiles
+make olddefconfig
+make modules_prepare
 SCRIPT
 
 $script_cleanup = <<SCRIPT
+# debug: list running services
+rc-status
 # stop services
-openrc single
+/etc/init.d/rsyslog stop
+/etc/init.d/dbus stop
+/etc/init.d/haveged stop
+/etc/init.d/udev stop
+/etc/init.d/vixie-cron stop
+killall dhcpcd
+# debug: list running services
+rc-status
 # ensure all file operations finished
 sync && sleep 10
 # run zerofree at last to squeeze the last bit
