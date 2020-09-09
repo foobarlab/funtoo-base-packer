@@ -19,8 +19,13 @@ SCRIPT
 $script_cleanup = <<SCRIPT
 # stop services
 /etc/init.d/rsyslog stop
+/etc/init.d/dbus stop
+/etc/init.d/haveged stop
+/etc/init.d/udev stop
+/etc/init.d/vixie-cron stop
+killall dhcpcd
 # ensure all file operations finished
-sync
+sync && sleep 10
 # run zerofree at last to squeeze the last bit
 # /boot
 mount -o remount,ro /dev/sda1
