@@ -46,6 +46,10 @@ DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-eix
 app-portage/eix doc
 DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-ansible
+# save some space, only support python 3.x:
+app-admin/ansible -python_targets_python2_7
+DATA
 
 sudo mkdir -p /etc/portage/package.license
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-kernel
