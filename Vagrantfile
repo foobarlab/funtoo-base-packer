@@ -28,7 +28,7 @@ rc-status
 /etc/init.d/haveged stop
 /etc/init.d/udev stop
 /etc/init.d/vixie-cron stop
-killall dhcpcd
+/etc/init.d/dhcpcd stop
 # debug: list running services
 rc-status
 # ensure all file operations finished
