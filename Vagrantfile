@@ -29,10 +29,12 @@ rc-status
 /etc/init.d/udev stop
 /etc/init.d/vixie-cron stop
 /etc/init.d/dhcpcd stop
+/etc/init.d/local stop
+/etc/init.d/acpid stop
 # debug: list running services
 rc-status
 # ensure all file operations finished
-sync && sleep 10
+sync && sleep 15
 # run zerofree at last to squeeze the last bit
 # /boot
 mount -o remount,ro /dev/sda1
