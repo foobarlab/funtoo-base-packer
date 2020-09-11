@@ -24,7 +24,7 @@ $script_cleanup = <<SCRIPT
 rc-status
 # stop services
 /etc/init.d/rsyslog stop
-/etc/init.d/dbus stop
+/etc/init.d/dbus -D stop
 /etc/init.d/haveged stop
 /etc/init.d/udev stop
 /etc/init.d/vixie-cron stop
