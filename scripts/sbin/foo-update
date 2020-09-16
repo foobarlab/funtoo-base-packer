@@ -26,7 +26,4 @@ emerge --depclean
 echo ">>> Rebuild preserved packages ..."
 emerge -vt @preserved-rebuild
 
-echo ">>> Checking reverse dependencies ..."
-revdep-rebuild
-
 echo "Please run 'etc-update' or 'dispatch-conf' to update changed configuration files."
