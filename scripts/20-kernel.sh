@@ -25,8 +25,8 @@ if [ -f ${SCRIPTS}/scripts/kernel.config ]; then
 	sudo cp ${SCRIPTS}/scripts/kernel.config /usr/src
 fi
 
-sudo emerge -vt sys-kernel/genkernel
-sudo mv /etc/genkernel.conf /etc/genkernel.conf.dist
+#sudo emerge -vt sys-kernel/genkernel  # FIXME this should better be enabled, but genkernel install fails because of download failure of dmraid binary
+sudo mv /etc/genkernel.conf /etc/genkernel.conf.old
 
 cat <<'DATA' | sudo tee -a /etc/genkernel.conf
 INSTALL="yes"
