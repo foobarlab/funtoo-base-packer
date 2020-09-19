@@ -27,6 +27,8 @@ export BUILD_GCC_VERSION=""               # experimental: specify which GCC vers
 export BUILD_REBUILD_SYSTEM=false         # experimental: set to true when GCC version has changed
 export BUILD_REPORT_SPECTRE=true          # if true, report Spectre/Meltdown vulunerability status
 export BUILD_INCLUDE_ANSIBLE=true         # if true, include Ansible for automation
+export BUILD_WINDOW_SYSTEM=true           # build X window system (X.Org)
+export BUILD_HEADLESS=false               # if false, gui will be shown
 
 export BUILD_KEEP_MAX_CLOUD_BOXES=1       # set the maximum number of boxes to keep in Vagrant Cloud
 

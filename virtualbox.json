@@ -58,7 +58,8 @@
 		  "BUILD_FLAVOR={{user `flavor`}}",
 		  "BUILD_REPORT_SPECTRE={{user `report_spectre`}}",
           "BUILD_INCLUDE_ANSIBLE={{user `include_ansible`}}",
-          "BUILD_KERNEL={{user `kernel`}}"
+          "BUILD_KERNEL={{user `kernel`}}",
+          "BUILD_WINDOW_SYSTEM={{user `window_system`}}"
       ],
       "expect_disconnect": false
   }],
@@ -85,7 +86,8 @@
     "report_spectre": "{{env `BUILD_REPORT_SPECTRE`}}",
     "include_ansible": "{{env `BUILD_INCLUDE_ANSIBLE`}}",
     "kernel": "{{env `BUILD_KERNEL`}}",
-    "headless": "false",
+    "window_system": "{{env `BUILD_WINDOW_SYSTEM`}}",
+    "headless": "{{env `BUILD_HEADLESS`}}",
     "username": "vagrant",
     "password": "vagrant"
   }

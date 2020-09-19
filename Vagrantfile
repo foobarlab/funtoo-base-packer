@@ -55,6 +55,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     #vb.gui = false
     vb.gui = true
+    vb.gui = (ENV['BUILD_HEADLESS'] == "false")
     vb.memory = "#{ENV['BUILD_BOX_MEMORY']}"
     vb.cpus = "#{ENV['BUILD_BOX_CPUS']}"
     # customize VirtualBox settings, see also 'virtualbox.json'
