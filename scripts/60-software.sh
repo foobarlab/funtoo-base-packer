@@ -123,7 +123,7 @@ sudo emerge -vt app-portage/eix app-portage/genlop app-portage/cpuid2cpuflags
 
 # nice console font (https://www.funtoo.org/Fonts)
 sudo emerge -vt media-fonts/terminus-font
-BUILD_FONT="ter-i14v"
+BUILD_FONT="ter-116b"
 export BUILD_FONT
 sudo sed -i 's/consolefont=\"default8x16\"/consolefont=\"'$BUILD_FONT'\"/g' /etc/conf.d/consolefont
 sudo rc-update add consolefont boot
