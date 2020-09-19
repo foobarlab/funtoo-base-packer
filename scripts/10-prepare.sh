@@ -16,7 +16,6 @@ sed -i 's/<br>/\n/g' ~vagrant/.release_$BUILD_BOX_NAME
 sudo sed -i 's/USE=\"/USE="zsh-completion idn lzma tools udev syslog cacert threads pic gold ncurses /g' /etc/portage/make.conf
 
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
-
 # added here, not in profiles yet:
 VIDEO_CARDS="virtualbox"
 

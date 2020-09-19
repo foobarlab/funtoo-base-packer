@@ -3,6 +3,9 @@
 
 if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
 
+echo ">>> Removing temporary files ..."
+rm -rf /usr/tmp/*
+
 echo ">>> Removing distfiles ..."
 rm -rf /var/cache/portage/distfiles/*
 
