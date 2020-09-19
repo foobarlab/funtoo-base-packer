@@ -26,7 +26,8 @@
         ["modifyvm","{{.Name}}","--hpet", "on"],
         ["modifyvm","{{.Name}}","--hwvirtex", "on"],
         ["modifyvm","{{.Name}}","--vtxvpid", "on"],
-        ["modifyvm","{{.Name}}","--largepages", "on"]
+        ["modifyvm","{{.Name}}","--largepages", "on"],
+        ["modifyvm","{{.Name}}","--graphicscontroller", "vmsvga"]
       ]
   }],
   "provisioners": [{
@@ -84,7 +85,7 @@
     "report_spectre": "{{env `BUILD_REPORT_SPECTRE`}}",
     "include_ansible": "{{env `BUILD_INCLUDE_ANSIBLE`}}",
     "kernel": "{{env `BUILD_KERNEL`}}",
-    "headless": "true",
+    "headless": "false",
     "username": "vagrant",
     "password": "vagrant"
   }

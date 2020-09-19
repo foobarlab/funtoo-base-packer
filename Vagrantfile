@@ -53,7 +53,8 @@ Vagrant.configure("2") do |config|
   config.vm.box = "#{ENV['BUILD_BOX_NAME']}"
   config.vm.hostname = "#{ENV['BUILD_BOX_NAME']}"
   config.vm.provider "virtualbox" do |vb|
-    vb.gui = false
+    #vb.gui = false
+    vb.gui = true
     vb.memory = "#{ENV['BUILD_BOX_MEMORY']}"
     vb.cpus = "#{ENV['BUILD_BOX_CPUS']}"
     # customize VirtualBox settings, see also 'virtualbox.json'
@@ -68,6 +69,12 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
     vb.customize ["modifyvm", :id, "--vtxvpid", "on"]
     vb.customize ["modifyvm", :id, "--largepages", "on"]
+    # set graphics stuff
+    #vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+    #vb.customize ["modifyvm", :id, "--accelerate2dvideo", "on"]
+    vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
+    #vb.customize ["modifyvm", :id, "--graphicscontroller", "vboxsvga"]
+    #vb.customize ["modifyvm", :id, "--graphicscontroller", "vboxvga"]
   end
   config.ssh.pty = true
   config.ssh.insert_key = false
