@@ -21,13 +21,15 @@
         ["modifyvm","{{.Name}}","--usb","off"],
         ["modifyvm","{{.Name}}","--chipset","ich9"],
         ["modifyvm","{{.Name}}","--rtcuseutc","on"],
-        ["modifyvm","{{.Name}}","--vram", "12"],
+        ["modifyvm","{{.Name}}","--vram", "32"],
         ["modifyvm","{{.Name}}","--vrde", "off"],
         ["modifyvm","{{.Name}}","--hpet", "on"],
         ["modifyvm","{{.Name}}","--hwvirtex", "on"],
         ["modifyvm","{{.Name}}","--vtxvpid", "on"],
         ["modifyvm","{{.Name}}","--largepages", "on"],
-        ["modifyvm","{{.Name}}","--graphicscontroller", "vmsvga"]
+        ["modifyvm","{{.Name}}","--graphicscontroller", "vmsvga"],
+        ["modifyvm","{{.Name}}","--accelerate3d", "on"],
+        ["modifyvm","{{.Name}}","--accelerate2dvideo", "on"]
       ]
   }],
   "provisioners": [{
