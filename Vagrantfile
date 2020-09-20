@@ -23,6 +23,8 @@ $script_cleanup = <<SCRIPT
 # debug: list running services
 rc-status
 # stop services
+/etc/init.d/xdm stop || true
+/etc/init.d/gpm stop || true
 /etc/init.d/rsyslog stop
 /etc/init.d/dbus -D stop
 /etc/init.d/haveged stop
