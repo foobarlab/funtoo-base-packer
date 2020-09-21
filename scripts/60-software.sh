@@ -127,3 +127,8 @@ BUILD_FONT="ter-116b"
 export BUILD_FONT
 sudo sed -i 's/consolefont=\"default8x16\"/consolefont=\"'$BUILD_FONT'\"/g' /etc/conf.d/consolefont
 sudo rc-update add consolefont boot
+
+# verbose 'local.d' service
+cat <<'DATA' | sudo tee -a /etc/conf.d/local
+rc_verbose=yes
+DATA
