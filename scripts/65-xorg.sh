@@ -132,7 +132,6 @@ sudo sed -i 's/#autologin-user=/autologin-user=vagrant/g' /etc/lightdm/lightdm.c
 
 mkdir ~vagrant/.fluxbox || true
 
-cp ~vagrant/.fluxbox/startup ~vagrant/.fluxbox/startup.dist || true
 cat <<'DATA' | sudo tee -a ~vagrant/.fluxbox/startup
 #!/bin/sh
 #
@@ -154,6 +153,9 @@ xmodmap "/home/vagrant/.Xmodmap"
 # Enable autoscaling client display:
 sudo /usr/bin/VBoxClient --vmsvga &
 
+# Initially start a terminal
+xterm -fullscreen &
+
 # And last but not least we start fluxbox.
 # Because it is the last app you have to run it with ''exec'' before it.
 
@@ -162,9 +164,8 @@ exec fluxbox
 # exec fluxbox -log "/home/vagrant/.fluxbox/log"
 
 DATA
-#sudo chown vagrant:vagrant ~vagrant/.fluxbox/startup  # FIXME check if needed
+sudo chown vagrant:vagrant ~vagrant/.fluxbox/startup
 
-cp ~vagrant/.fluxbox/init ~vagrant/.fluxbox/init.dist || true
 cat <<'DATA' | sudo tee -a ~vagrant/.fluxbox/init
 session.screen0.tab.placement:  TopLeft
 session.screen0.tab.width:  64
@@ -243,9 +244,8 @@ session.styleFile:  /usr/share/fluxbox/fluxmod/styles/Pillow
 session.forcePseudoTransparency:    false
 
 DATA
-#sudo chown vagrant:vagrant ~vagrant/.fluxbox/init  # FIXME check if needed
+sudo chown vagrant:vagrant ~vagrant/.fluxbox/init
 
-cp ~vagrant/.fluxbox/overlay ~vagrant/.fluxbox/overlay.dist || true
 cat <<'DATA' | sudo tee -a ~vagrant/.fluxbox/overlay
 ! Prevent styles from setting the background:
 background: none
@@ -274,7 +274,7 @@ menu.itemHeight:                14
 borderColor:                    #666666
 
 DATA
-#sudo chown vagrant:vagrant ~vagrant/.fluxbox/overlay  # FIXME check if needed
+sudo chown vagrant:vagrant ~vagrant/.fluxbox/overlay
 
 sudo rc-update add xdm default
 
@@ -282,7 +282,8 @@ sudo rc-update add xdm default
 
 sudo emerge -vt \
 	x11-terms/xterm \
-	x11-apps/mesa-progs
+	x11-apps/mesa-progs \
+	media-gfx/feh
 
 # TODO gnome-extra/nm-applet?
 # TODO check gnome compatibility, add NetworkManager?
@@ -292,6 +293,12 @@ xterm*background: black
 xterm*foreground: lightgray
 xterm*font: *-fixed-*-*-*-13-*
 DATA
-#sudo chown vagrant:vagrant ~vagrant/.Xresources  # FIXME check if needed
+sudo chown vagrant:vagrant ~vagrant/.Xresources
+
+cat <<'DATA' | sudo tee -a ~vagrant/.dmrc
+[Desktop]
+Session=fluxbox
+DATA
+sudo chown vagrant:vagrant ~vagrant/.dmrc
 
 fluxbox-generate_menu -is -ds
