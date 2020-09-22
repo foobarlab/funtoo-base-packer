@@ -24,6 +24,8 @@ $script_cleanup = <<SCRIPT
 rc-status
 # stop services
 /etc/init.d/xdm stop || true
+/etc/init.d/xdm-setup stop || true
+/etc/init.d/elogind stop || true
 /etc/init.d/gpm stop || true
 /etc/init.d/rsyslog stop
 /etc/init.d/dbus -D stop
@@ -33,10 +35,10 @@ rc-status
 /etc/init.d/dhcpcd stop
 /etc/init.d/local stop
 /etc/init.d/acpid stop
+# let it settle
+sync && sleep 15
 # debug: list running services
 rc-status
-# ensure all file operations finished
-sync && sleep 15
 # run zerofree at last to squeeze the last bit
 # /boot
 mount -o remount,ro /dev/sda1
@@ -55,8 +57,6 @@ Vagrant.configure("2") do |config|
   config.vm.box = "#{ENV['BUILD_BOX_NAME']}"
   config.vm.hostname = "#{ENV['BUILD_BOX_NAME']}"
   config.vm.provider "virtualbox" do |vb|
-    #vb.gui = false
-    vb.gui = true
     vb.gui = (ENV['BUILD_HEADLESS'] == "false")
     vb.memory = "#{ENV['BUILD_BOX_MEMORY']}"
     vb.cpus = "#{ENV['BUILD_BOX_CPUS']}"
