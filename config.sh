@@ -28,7 +28,7 @@ export BUILD_REBUILD_SYSTEM=false         # experimental: set to true when GCC v
 export BUILD_REPORT_SPECTRE=true          # if true, report Spectre/Meltdown vulunerability status
 export BUILD_INCLUDE_ANSIBLE=true         # if true, include Ansible for automation
 export BUILD_WINDOW_SYSTEM=true           # build X window system (X.Org)
-export BUILD_HEADLESS=false               # if false, gui will be shown
+export BUILD_HEADLESS=true                # if false, gui will be shown
 
 export BUILD_KEEP_MAX_CLOUD_BOXES=3       # set the maximum number of boxes to keep in Vagrant Cloud
 
@@ -45,9 +45,15 @@ else
     BUILD_BOX_RELEASE_NOTES="${BUILD_BOX_RELEASE_NOTES}, GCC ${BUILD_GCC_VERSION}"
 fi
 
+if [[ -n "$BUILD_WINDOW_SYSTEM" ]]; then
+    if [ "$BUILD_WINDOW_SYSTEM" = true ]; then
+        BUILD_BOX_RELEASE_NOTES="${BUILD_BOX_RELEASE_NOTES}, X11 (Fluxbox)"     # edit this to reflect actual setup
+    fi
+fi
+
 if [[ -n "$BUILD_INCLUDE_ANSIBLE" ]]; then
     if [ "$BUILD_INCLUDE_ANSIBLE" = true ]; then
-        BUILD_BOX_RELEASE_NOTES="${BUILD_BOX_RELEASE_NOTES}, Ansible 2.9"     # edit this to reflect actual setup
+        BUILD_BOX_RELEASE_NOTES="${BUILD_BOX_RELEASE_NOTES}, Ansible 2.10"     # edit this to reflect actual setup
     fi
 fi
 
