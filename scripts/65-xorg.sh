@@ -121,6 +121,8 @@ sudo emerge -vt \
 	x11-wm/fluxbox \
 	x11-themes/fluxbox-styles-fluxmod
 
+# TODO remove 'elogind' when FL-7408 is resolved
+
 sudo sed -i 's/DISPLAYMANAGER=\"xdm\"/DISPLAYMANAGER=\"lightdm\"/g' /etc/conf.d/xdm
 
 # configure lightdm: autologin user 'vagrant'
@@ -276,7 +278,7 @@ borderColor:                    #666666
 DATA
 sudo chown vagrant:vagrant ~vagrant/.fluxbox/overlay
 
-sudo rc-update add xdm default
+sudo rc-update add xdm default   # FIXME enabled just for debugging
 
 # ---- install utils
 
@@ -284,9 +286,6 @@ sudo emerge -vt \
 	x11-terms/xterm \
 	x11-apps/mesa-progs \
 	media-gfx/feh
-
-# TODO gnome-extra/nm-applet?
-# TODO check gnome compatibility, add NetworkManager?
 
 cat <<'DATA' | sudo tee -a ~vagrant/.Xresources
 xterm*background: black
