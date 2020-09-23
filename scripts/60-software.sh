@@ -103,23 +103,28 @@ cat <<'DATA' | sudo tee -a ~vagrant/.zshrc
 
 DATA
 
-# commandline utils
-sudo emerge -vt sys-apps/pv
-
-# process utils
-sudo emerge -vt sys-process/htop sys-process/glances dev-python/py-cpuinfo dev-python/scandir dev-python/netifaces
-
-# file utils
-sudo emerge -vt sys-apps/hdparm sys-process/lsof sys-fs/ncdu sys-apps/mlocate app-text/tree sys-apps/progress
-
-# terminal multiplexers
-sudo emerge -vt app-misc/screen app-misc/tmux
-
-# network related utils
-sudo emerge -vt www-client/links net-ftp/ncftp mail-client/mutt
-
-# funtoo/gentoo utils
-sudo emerge -vt app-portage/eix app-portage/genlop app-portage/cpuid2cpuflags
+# various utils
+sudo emerge -vt \
+	sys-apps/pv \
+	app-misc/byobu \
+	sys-process/htop \
+	dev-python/py-cpuinfo \
+	dev-python/scandir \
+	dev-python/netifaces \
+	sys-apps/hdparm \
+	sys-process/lsof \
+	sys-fs/ncdu \
+	sys-apps/mlocate \
+	app-text/tree \
+	sys-apps/progress \
+	app-misc/screen \
+	app-misc/tmux \
+	www-client/links \
+	net-ftp/ncftp \
+	mail-client/mutt \
+	app-portage/eix \
+	app-portage/genlop \
+	app-portage/cpuid2cpuflags
 
 # nice console font (https://www.funtoo.org/Fonts)
 sudo emerge -vt media-fonts/terminus-font
