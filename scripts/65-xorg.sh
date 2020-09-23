@@ -129,6 +129,12 @@ sudo sed -i 's/#autologin-user=/autologin-user=vagrant/g' /etc/lightdm/lightdm.c
 
 # ---- fluxbox config
 
+cat <<'DATA' | sudo tee -a ~vagrant/.dmrc
+[Desktop]
+Session=fluxbox
+DATA
+sudo chown vagrant:vagrant ~vagrant/.dmrc
+
 mkdir ~vagrant/.fluxbox || true
 
 cat <<'DATA' | sudo tee -a ~vagrant/.fluxbox/startup
@@ -273,6 +279,10 @@ borderColor:                    #666666
 DATA
 sudo chown vagrant:vagrant ~vagrant/.fluxbox/overlay
 
+# TODO customize usermenu
+
+fluxbox-generate_menu -is -ds
+
 sudo rc-update add xdm default   # FIXME enabled just for debugging
 
 # ---- install utils
@@ -289,14 +299,9 @@ xterm*utf8: 1
 xterm*background: black
 xterm*foreground: lightgray
 ! set font size
-xterm*font: *-fixed-*-*-*-13-*
+!xterm*font: *-fixed-*-*-*-13-*
 DATA
 sudo chown vagrant:vagrant ~vagrant/.Xresources
 
-cat <<'DATA' | sudo tee -a ~vagrant/.dmrc
-[Desktop]
-Session=fluxbox
-DATA
-sudo chown vagrant:vagrant ~vagrant/.dmrc
-
-fluxbox-generate_menu -is -ds
+sudo eselect fontconfig disable 10-scale-bitmap-fonts
+sudo eselect fontconfig enable 75-yes-terminus.conf
