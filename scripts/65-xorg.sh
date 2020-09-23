@@ -93,7 +93,7 @@ cat <<'DATA' | sudo tee -a /etc/X11/xorg.conf.d/30keyboard.conf
 # see: https://blechtog.wordpress.com/2012/05/25/gentoo-config-for-us-international-keyboard-layout/
 # see: https://zuttobenkyou.wordpress.com/2011/08/24/xorg-using-the-us-international-altgr-intl-variant-keyboard-layout/
 Section "InputClass"
-    Identifier "Default keyboard"
+    Identifier "Default Keyboard"
     MatchIsKeyboard "on"
     Option "XkbLayout" "us"
     Option "XkbVariant" "altgr-intl"
