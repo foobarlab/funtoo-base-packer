@@ -130,8 +130,6 @@ sudo sed -i 's/#autologin-user=/autologin-user=vagrant/g' /etc/lightdm/lightdm.c
 
 # ---- fluxbox config
 
-# TODO put into Ansible role?
-
 mkdir ~vagrant/.fluxbox || true
 
 cat <<'DATA' | sudo tee -a ~vagrant/.fluxbox/startup
