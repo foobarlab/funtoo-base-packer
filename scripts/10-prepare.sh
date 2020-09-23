@@ -61,6 +61,9 @@ DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-byobu
 app-misc/byobu screen
 DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-terminus-font
+media-fonts/terminus-font distinct-l
+DATA
 
 sudo mkdir -p /etc/portage/package.license
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-kernel
