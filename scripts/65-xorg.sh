@@ -15,6 +15,10 @@ else
   fi
 fi
 
+# FIXME check build config for compatibility:
+# - should BUILD_KERNEL be set to 'true'?
+# - should BUILD_HEADLESS be set to 'true'?
+
 # ---- console mouse support
 
 sudo emerge -vt sys-libs/gpm
@@ -23,7 +27,6 @@ sudo rc-update add gpm default
 # ---- set make.conf
 
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
-#VIDEO_CARDS="virtualbox"
 VIDEO_CARDS="vmware gallium-vmware"
 
 DATA
@@ -37,9 +40,6 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-xorg
 
 # required for 'lightdm':
 >=sys-auth/consolekit-1.2.1 policykit
-
-# required by 'nm-applet':
->=app-crypt/pinentry-1.1.0-r3 gnome-keyring
 
 # required for 'xinit':
 >=x11-apps/xinit-1.4.1 -minimal
@@ -60,6 +60,12 @@ DATA
 
 sudo epro mix-ins +X +gfxcard-vmware
 sudo epro list
+
+# ---- prepare system update
+
+# pkg 'rust' gets pulled in by 'X' but needs a significant amount
+# of time to compile, therefore we prefer to compile pkg 'rust-bin' instead
+sudo emerge -vt dev-lang/rust-bin
 
 # ---- update system
 
@@ -108,17 +114,17 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-xorg
 >=x11-wm/fluxbox-1.3.7 vim-syntax
 DATA
 
+# TODO remove 'elogind' once FL-7408 is resolved
 sudo emerge -vt \
 	x11-misc/lightdm \
 	sys-auth/elogind \
 	x11-wm/fluxbox \
 	x11-themes/fluxbox-styles-fluxmod
 
-# TODO remove 'elogind' when FL-7408 is resolved
-
 sudo sed -i 's/DISPLAYMANAGER=\"xdm\"/DISPLAYMANAGER=\"lightdm\"/g' /etc/conf.d/xdm
 
 # configure lightdm: autologin user 'vagrant'
+sudo sed -i 's/#user-session=default/user-session=fluxbox/g' /etc/lightdm/lightdm.conf
 sudo sed -i 's/#autologin-user=/autologin-user=vagrant/g' /etc/lightdm/lightdm.conf
 
 # ---- fluxbox config
@@ -235,7 +241,6 @@ session.autoRaiseDelay: 250
 session.slitlistFile:   /home/vagrant/.fluxbox/slitlist
 session.styleFile:  /usr/share/fluxbox/fluxmod/styles/Pillow
 session.forcePseudoTransparency:    false
-
 DATA
 sudo chown vagrant:vagrant ~vagrant/.fluxbox/init
 
@@ -265,7 +270,6 @@ menu.frame.textColor:           #222222
 menu.itemHeight:                14
 !menu.alpha:                     255
 borderColor:                    #666666
-
 DATA
 sudo chown vagrant:vagrant ~vagrant/.fluxbox/overlay
 
@@ -279,13 +283,12 @@ sudo emerge -vt \
 	media-gfx/feh
 
 cat <<'DATA' | sudo tee -a ~vagrant/.Xresources
-! global font
-*font: xft:terminus
-*boldFont: xft:terminus
-
-! xterm
+! always enable Unicode
+xterm*utf8: 1
+! set dark backround
 xterm*background: black
 xterm*foreground: lightgray
+! set font size
 xterm*font: *-fixed-*-*-*-13-*
 DATA
 sudo chown vagrant:vagrant ~vagrant/.Xresources
