@@ -106,7 +106,6 @@ DATA
 # various utils
 sudo emerge -vt \
 	sys-apps/pv \
-	app-misc/byobu \
 	sys-process/htop \
 	dev-python/py-cpuinfo \
 	dev-python/scandir \
@@ -125,6 +124,8 @@ sudo emerge -vt \
 	app-portage/eix \
 	app-portage/genlop \
 	app-portage/cpuid2cpuflags
+
+# TODO add app-misc/byobu, currently fails
 
 # nice console font (https://www.funtoo.org/Fonts)
 sudo emerge -vt media-fonts/terminus-font
