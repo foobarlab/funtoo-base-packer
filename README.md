@@ -15,6 +15,7 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
  - Optional: switch and rebuild a non-default GCC version (experimental, default: disabled)
  - Optional: rebuild world, recompile the whole system (experimental, default: disabled)
  - Optional: include *Ansible* (for automation, default: enabled)
+ - Optional: include 3D-enabled *X.Org* server and the lightweight *Fluxbox* window manager (experimental, default: enabled)
  - List of additional installed software:
     - Kernel build tool *genkernel*
     - *rsyslog* for logging
