@@ -118,14 +118,15 @@ sudo emerge -vt \
 	sys-apps/progress \
 	app-misc/screen \
 	app-misc/tmux \
+	app-misc/byobu \
 	www-client/links \
 	net-ftp/ncftp \
 	mail-client/mutt \
 	app-portage/eix \
 	app-portage/genlop \
-	app-portage/cpuid2cpuflags
-
-# TODO add app-misc/byobu, currently fails
+	app-portage/cpuid2cpuflags \
+	app-misc/ranger \
+	sys-apps/most
 
 # nice console font (https://www.funtoo.org/Fonts)
 sudo emerge -vt media-fonts/terminus-font
