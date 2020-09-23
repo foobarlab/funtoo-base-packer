@@ -66,7 +66,7 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--usb", "off"]
     vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
     vb.customize ["modifyvm", :id, "--chipset", "ich9"]
-    vb.customize ["modifyvm", :id, "--vram", "32"]
+    vb.customize ["modifyvm", :id, "--vram", "64"]
     vb.customize ["modifyvm", :id, "--vrde", "off"]
     vb.customize ["modifyvm", :id, "--hpet", "on"]
     vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
