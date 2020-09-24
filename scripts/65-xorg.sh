@@ -27,7 +27,8 @@ sudo rc-update add gpm default
 # ---- set make.conf
 
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
-VIDEO_CARDS="vmware gallium-vmware"
+# required for graphics display:
+VIDEO_CARDS="vmware gallium-vmware xa"
 
 DATA
 
@@ -35,17 +36,17 @@ DATA
 
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-xorg
 # required for funtoo profile 'X':
->=media-libs/gd-2.2.5-r2 fontconfig jpeg truetype png
->=media-libs/mesa-20.1.6 video_cards_xa
+media-libs/gd fontconfig jpeg truetype png
+media-libs/mesa -llvm xa gallium-vmware
 
 # required for 'lightdm':
->=sys-auth/consolekit-1.2.1 policykit
+sys-auth/consolekit policykit
 
 # required for 'xinit':
->=x11-apps/xinit-1.4.1 -minimal
+x11-apps/xinit -minimal
 
 # required by 'x11-drivers/xf86-video-vmware':
->=x11-libs/libdrm-2.4.101 video_cards_vmware
+x11-libs/libdrm video_cards_vmware
 
 DATA
 
@@ -300,6 +301,9 @@ xterm*background: black
 xterm*foreground: lightgray
 ! set font size
 !xterm*font: *-fixed-*-*-*-13-*
+
+! TODO set font + term colors, switch to xterm-256colors (see https://robotmoon.com/256-colors/) ...
+
 DATA
 sudo chown vagrant:vagrant ~vagrant/.Xresources
 
