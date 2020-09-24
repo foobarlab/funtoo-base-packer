@@ -107,7 +107,6 @@ DATA
 sudo emerge -vt \
 	sys-apps/pv \
 	sys-process/htop \
-	dev-python/py-cpuinfo \
 	dev-python/scandir \
 	dev-python/netifaces \
 	sys-apps/hdparm \
