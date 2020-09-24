@@ -58,9 +58,6 @@ DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-nghttp2
 net-libs/nghttp2 libressl
 DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-byobu
-app-misc/byobu screen
-DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-terminus-font
 media-fonts/terminus-font distinct-l
 DATA

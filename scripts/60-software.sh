@@ -118,7 +118,6 @@ sudo emerge -vt \
 	sys-apps/progress \
 	app-misc/screen \
 	app-misc/tmux \
-	app-misc/byobu \
 	www-client/links \
 	net-ftp/ncftp \
 	mail-client/mutt \
