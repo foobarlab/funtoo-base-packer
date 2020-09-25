@@ -27,7 +27,12 @@ sudo rc-update add gpm default
 # ---- set make.conf
 
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
-# required for graphics display:
+# FIXME:
+# - virtualbox-video seems not to build!
+# - vmware not included in mix-in 'gfxcard-vmware'?
+# - 3d acceleration seems not working
+# - other stuff, see also FL-7431
+#VIDEO_CARDS="virtualbox vmware gallium-vmware xa"
 VIDEO_CARDS="vmware gallium-vmware xa"
 
 DATA
@@ -37,7 +42,9 @@ DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-xorg
 # required for funtoo profile 'X':
 media-libs/gd fontconfig jpeg truetype png
-media-libs/mesa -llvm xa gallium-vmware
+#media-libs/mesa -llvm xa gallium-vmware
+media-libs/mesa xa gallium-vmware
+#media-libs/mesa xa gallium-vmware unwind
 
 # required for 'lightdm':
 sys-auth/consolekit policykit
@@ -48,6 +55,10 @@ x11-apps/xinit -minimal
 # required by 'x11-drivers/xf86-video-vmware':
 x11-libs/libdrm video_cards_vmware
 
+# required for TrueType support:
+x11-terms/xterm truetype
+x11-libs/libXfont2 truetype
+
 DATA
 
 # ---- set required licenses
@@ -55,6 +66,20 @@ DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-xorg
 # required for funtoo profile 'X':
 >=media-libs/libpng-1.6.37 libpng2
+DATA
+
+# TODO try also without llvm? (mesa USE -llvm)
+cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
+>=sys-devel/llvm-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-devel/clang-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-devel/clang-common-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-libs/compiler-rt-sanitizers-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-libs/compiler-rt-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-libs/libomp-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-libs/llvm-libunwind-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-devel/lld-9.0 Apache-2.0-with-LLVM-exceptions
+>=dev-util/lldb-9.0 Apache-2.0-with-LLVM-exceptions
 DATA
 
 # ---- set 'X' profile
@@ -284,28 +309,58 @@ sudo chown vagrant:vagrant ~vagrant/.fluxbox/overlay
 
 fluxbox-generate_menu -is -ds
 
-sudo rc-update add xdm default   # FIXME enabled just for debugging
+#sudo rc-update add xdm default   # enable just for debugging
 
 # ---- install utils
 
 sudo emerge -vt \
 	x11-terms/xterm \
 	x11-apps/mesa-progs \
-	media-gfx/feh
+	media-gfx/feh \
+	media-fonts/inconsolata
 
 cat <<'DATA' | sudo tee -a ~vagrant/.Xresources
-! always enable Unicode
-xterm*utf8: 1
-! set dark backround
-xterm*background: black
-xterm*foreground: lightgray
-! set font size
-!xterm*font: *-fixed-*-*-*-13-*
+! Default settings for X11
+! Enable it at runtime with :
+! $ xrdb ~/.Xresources
+! or
+! $ cat ~/.Xresources | xrdb
 
-! TODO set font + term colors, switch to xterm-256colors (see https://robotmoon.com/256-colors/) ...
+ *background: #000000
+ *foreground: #ffffff
+ *color0:     #000000
+ *color1:     #d36265
+ *color2:     #aece91
+ *color3:     #e7e18c
+ *color4:     #7a7ab0
+ *color5:     #963c59
+ *color6:     #418179
+ *color7:     #bebebe
+ *color8:     #666666
+ *color9:     #ef8171
+ *color10:    #e5f779
+ *color11:    #fff796
+ *color12:    #4186be
+ *color13:    #ef9ebe
+ *color14:    #71bebe
+ *color15:    #ffffff
+
+ xterm*utf8: 1
+ xterm*faceName: Inconsolata
+ xterm*faceSize: 12
+ xterm*renderFont: true
+ 
+! references:
+! see: https://robotmoon.com/256-colors/
+! see: https://wiki.archlinux.org/index.php/X_resources
+! see: http://futurile.net/2016/06/14/xterm-setup-and-truetype-font-configuration/
 
 DATA
 sudo chown vagrant:vagrant ~vagrant/.Xresources
 
-sudo eselect fontconfig disable 10-scale-bitmap-fonts
-sudo eselect fontconfig enable 75-yes-terminus.conf
+sudo eselect fontconfig enable 10-autohint.conf || true
+sudo eselect fontconfig disable 10-scale-bitmap-fonts.conf || true
+sudo eselect fontconfig disable 70-no-bitmaps.conf || true
+sudo eselect fontconfig enable 70-yes-bitmaps.conf || true
+sudo eselect fontconfig enable 75-yes-terminus.conf || true
+sudo eselect fontconfig list
