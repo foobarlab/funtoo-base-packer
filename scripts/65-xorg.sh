@@ -316,8 +316,7 @@ fluxbox-generate_menu -is -ds
 sudo emerge -vt \
 	x11-terms/xterm \
 	x11-apps/mesa-progs \
-	media-gfx/feh \
-	media-fonts/inconsolata
+	media-gfx/feh
 
 cat <<'DATA' | sudo tee -a ~vagrant/.Xresources
 ! Default settings for X11
@@ -346,8 +345,8 @@ cat <<'DATA' | sudo tee -a ~vagrant/.Xresources
  *color15:    #ffffff
 
  xterm*utf8: 1
- xterm*faceName: Inconsolata
- xterm*faceSize: 12
+ xterm*faceName: Terminus
+ xterm*faceSize: 10
  xterm*renderFont: true
  
 ! references:
@@ -359,6 +358,7 @@ DATA
 sudo chown vagrant:vagrant ~vagrant/.Xresources
 
 sudo eselect fontconfig enable 10-autohint.conf || true
+sudo eselect fontconfig enable 10-no-sub-pixel.conf || true
 sudo eselect fontconfig disable 10-scale-bitmap-fonts.conf || true
 sudo eselect fontconfig disable 70-no-bitmaps.conf || true
 sudo eselect fontconfig enable 70-yes-bitmaps.conf || true
