@@ -13,15 +13,18 @@ sudo cp -f /tmp/sbin/* /usr/local/sbin/
 echo "$BUILD_BOX_DESCRIPTION" >> ~vagrant/.release_$BUILD_BOX_NAME
 sed -i 's/<br>/\n/g' ~vagrant/.release_$BUILD_BOX_NAME
 
-sudo sed -i 's/USE=\"/USE="zsh-completion idn lzma tools udev syslog cacert threads pic gold ncurses /g' /etc/portage/make.conf
+# TODO experimental
+#sudo sed -i 's/USE=\"/USE="gold /g' /etc/portage/make.conf
+
+sudo sed -i 's/USE=\"/USE="zsh-completion idn lzma tools udev syslog cacert threads pic ncurses /g' /etc/portage/make.conf
 
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
-# added here, not in profiles yet:
-VIDEO_CARDS="virtualbox"
-
-# verbose logging:
 PORTAGE_ELOG_CLASSES="info warn error log qa"
 PORTAGE_ELOG_SYSTEM="echo save save_summary"
+
+#EMERGE_DEFAULT_OPTS="--keep-going"
+
+CURL_SSL="libressl"
 
 DATA
 
@@ -49,16 +52,24 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-ansible
 # save some space, only support python 3.x:
 app-admin/ansible -python_targets_python2_7
 DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-curl
+>=net-misc/curl-7.65.1 http2
+DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-nghttp2
+net-libs/nghttp2 libressl
+DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-terminus-font
+media-fonts/terminus-font distinct-l
+DATA
 
 sudo mkdir -p /etc/portage/package.license
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-kernel
 sys-kernel/linux-firmware linux-fw-redistributable
 DATA
 
-sudo mkdir -p /etc/portage/package.mask
-cat <<'DATA' | sudo tee -a /etc/portage/package.mask/base-kernel
-# to stick with older kernel uncomment this:
-#>=sys-kernel/debian-sources-5.5
+sudo mkdir -p /etc/portage/package.accept_keywords
+cat <<'DATA' | sudo tee -a /etc/portage/package.accept_keywords/base-libressl
+dev-libs/libressl **
 DATA
 
 sudo ego sync

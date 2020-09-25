@@ -18,6 +18,7 @@ for script in \
   40-gcc-upgrade \
   50-rebuild-system \
   60-software \
+  65-xorg \
   70-spectre \
   80-ansible \
   90-postprocess \

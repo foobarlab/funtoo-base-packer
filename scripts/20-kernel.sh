@@ -25,10 +25,6 @@ if [ -f ${SCRIPTS}/scripts/kernel.config ]; then
 	sudo cp ${SCRIPTS}/scripts/kernel.config /usr/src
 fi
 
-# FIXME workaround: genkernel: could not download from 'funtoo' mirror:
-sudo cp -rf /usr/share/genkernel/src/* /var/cache/portage/distfiles
-sudo chown portage:portage /var/cache/portage/distfiles/*
-
 sudo emerge -vt sys-kernel/genkernel
 sudo mv /etc/genkernel.conf /etc/genkernel.conf.old
 
