@@ -16,7 +16,7 @@ sed -i 's/<br>/\n/g' ~vagrant/.release_$BUILD_BOX_NAME
 # TODO experimental
 #sudo sed -i 's/USE=\"/USE="gold /g' /etc/portage/make.conf
 
-sudo sed -i 's/USE=\"/USE="zsh-completion idn lzma tools udev syslog cacert threads pic ncurses /g' /etc/portage/make.conf
+sudo sed -i 's/USE=\"/USE="zsh-completion lzma tools udev syslog cacert threads pic ncurses /g' /etc/portage/make.conf
 
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
 PORTAGE_ELOG_CLASSES="info warn error log qa"
