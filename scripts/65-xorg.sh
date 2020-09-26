@@ -42,9 +42,7 @@ DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-xorg
 # required for funtoo profile 'X':
 media-libs/gd fontconfig jpeg truetype png
-#media-libs/mesa -llvm xa gallium-vmware
 media-libs/mesa xa gallium-vmware
-#media-libs/mesa xa gallium-vmware unwind
 
 # required for 'lightdm':
 sys-auth/consolekit policykit
@@ -110,18 +108,20 @@ sudo emerge -vt \
 	x11-drivers/xf86-video-vmware
 
 cat <<'DATA' | sudo tee -a /etc/X11/xorg.conf.d/10video.conf
-# set vmware video driver
-# see: see: https://forums.virtualbox.org/viewtopic.php?f=3&t=96378
+# setup vmware svga video driver (VMSVGA with virtualbox):
+# see: https://docs.mesa3d.org/vmware-guest.html
+# see: https://www.x.org/releases/current/doc/man/man4/vmware.4.xhtml
 Section "Device"
   BoardName    "VirtualBox Graphics"
   Driver       "vmware"
-  Identifier   "Device[0]"
-  VendorName   "Oracle Corporation"
+  Identifier   "Device[0]"   # FIXME use "card[0]"?
+  VendorName   "VMware"
+  Option "RenderAccel" "on"
 EndSection
 DATA
 
 cat <<'DATA' | sudo tee -a /etc/X11/xorg.conf.d/30keyboard.conf
-# set us-international keyboard
+# setup us-international keyboard
 # see: https://blechtog.wordpress.com/2012/05/25/gentoo-config-for-us-international-keyboard-layout/
 # see: https://zuttobenkyou.wordpress.com/2011/08/24/xorg-using-the-us-international-altgr-intl-variant-keyboard-layout/
 Section "InputClass"
@@ -134,7 +134,13 @@ DATA
 
 sudo gpasswd -a vagrant video
 
-# ---- install display / window manager
+cat <<'DATA' | sudo tee -a /etc/udev/rules.d/10-vmwgfx.rules
+SUBSYSTEM=="vmwgfx", GROUP="video"
+KERNEL=="controlD[0-9]*", SUBSYSTEM=="vmwgfx", NAME="dri/%k", MODE="0666"
+KERNEL=="card[0-9]*", SUBSYSTEM=="vmwgfx", NAME="dri/%k", ENV{ACL_MANAGE}="1"
+DATA
+
+# ---- install display / window managers
 
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-xorg
 >=x11-wm/fluxbox-1.3.7 vim-syntax
@@ -147,19 +153,23 @@ sudo emerge -vt \
 	x11-wm/fluxbox \
 	x11-themes/fluxbox-styles-fluxmod
 
+# ---- lighdm config
+
 sudo sed -i 's/DISPLAYMANAGER=\"xdm\"/DISPLAYMANAGER=\"lightdm\"/g' /etc/conf.d/xdm
 
 # configure lightdm: autologin user 'vagrant'
-sudo sed -i 's/#user-session=default/user-session=fluxbox/g' /etc/lightdm/lightdm.conf
+sudo sed -i 's/#autologin-session=default/autologin-session=fluxbox/g' /etc/lightdm/lightdm.conf
 sudo sed -i 's/#autologin-user=/autologin-user=vagrant/g' /etc/lightdm/lightdm.conf
-
-# ---- fluxbox config
 
 cat <<'DATA' | sudo tee -a ~vagrant/.dmrc
 [Desktop]
 Session=fluxbox
 DATA
 sudo chown vagrant:vagrant ~vagrant/.dmrc
+
+# ---- fluxbox config
+
+# see http://fluxbox-wiki.org/category/howtos/en/index.html
 
 mkdir ~vagrant/.fluxbox || true
 
@@ -171,7 +181,7 @@ cat <<'DATA' | sudo tee -a ~vagrant/.fluxbox/startup
 # Lines starting with a '#' are ignored.
 
 # Change your keymap:
-xmodmap "/home/vagrant/.Xmodmap"
+#xmodmap "/home/vagrant/.Xmodmap"
 
 # Applications you want to run with fluxbox.
 # MAKE SURE THAT APPS THAT KEEP RUNNING HAVE AN ''&'' AT THE END.
@@ -180,6 +190,9 @@ xmodmap "/home/vagrant/.Xmodmap"
 # wmnd &
 # wmsmixer -w &
 # idesk &
+
+# background color
+fbsetroot -solid gray23 &
 
 # Enable autoscaling client display:
 sudo /usr/bin/VBoxClient --vmsvga &
@@ -311,7 +324,7 @@ fluxbox-generate_menu -is -ds
 
 #sudo rc-update add xdm default   # enable just for debugging
 
-# ---- install utils
+# ---- install basic utils
 
 sudo emerge -vt \
 	x11-terms/xterm \
@@ -319,41 +332,37 @@ sudo emerge -vt \
 	media-gfx/feh
 
 cat <<'DATA' | sudo tee -a ~vagrant/.Xresources
-! Default settings for X11
-! Enable it at runtime with :
-! $ xrdb ~/.Xresources
-! or
-! $ cat ~/.Xresources | xrdb
+! Custom settings for X
+! see also http://fluxbox-wiki.org/Xdefaults_setup.html
 
- *background: #000000
- *foreground: #ffffff
- *color0:     #000000
- *color1:     #d36265
- *color2:     #aece91
- *color3:     #e7e18c
- *color4:     #7a7ab0
- *color5:     #963c59
- *color6:     #418179
- *color7:     #bebebe
- *color8:     #666666
- *color9:     #ef8171
- *color10:    #e5f779
- *color11:    #fff796
- *color12:    #4186be
- *color13:    #ef9ebe
- *color14:    #71bebe
- *color15:    #ffffff
+! global color scheme
+
+ *background: #1a1a1a
+ *foreground: #eeeeec
+ *color0:     #1a1a1a
+ *color1:     #cc0000
+ *color2:     #4e9a06
+ *color3:     #edd400
+ *color4:     #3465a4
+ *color5:     #92659a
+ *color6:     #07c7ca
+ *color7:     #d3d7cf
+ *color8:     #6e706b
+ *color9:     #ef2929
+ *color10:    #8ae234
+ *color11:    #fce94f
+ *color12:    #729fcf
+ *color13:    #c19fbe
+ *color14:    #63e9e9
+ *color15:    #eeeeec
+
+! xterm settings
 
  xterm*utf8: 1
  xterm*faceName: Terminus
  xterm*faceSize: 10
  xterm*renderFont: true
  
-! references:
-! see: https://robotmoon.com/256-colors/
-! see: https://wiki.archlinux.org/index.php/X_resources
-! see: http://futurile.net/2016/06/14/xterm-setup-and-truetype-font-configuration/
-
 DATA
 sudo chown vagrant:vagrant ~vagrant/.Xresources
 
