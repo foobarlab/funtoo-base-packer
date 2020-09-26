@@ -5,7 +5,7 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
-# install 'sbin' scripts to /usr/local/sbin/
+# install /usr/local scripts
 sudo chown root.root /tmp/sbin/*
 sudo chmod 750 /tmp/sbin/*
 sudo cp -f /tmp/sbin/* /usr/local/sbin/
@@ -16,7 +16,7 @@ sed -i 's/<br>/\n/g' ~vagrant/.release_$BUILD_BOX_NAME
 # TODO experimental
 #sudo sed -i 's/USE=\"/USE="gold /g' /etc/portage/make.conf
 
-sudo sed -i 's/USE=\"/USE="zsh-completion lzma tools udev syslog cacert threads pic ncurses /g' /etc/portage/make.conf
+sudo sed -i 's/USE=\"/USE="zsh-completion idn lzma tools udev syslog cacert threads pic ncurses /g' /etc/portage/make.conf
 
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
 PORTAGE_ELOG_CLASSES="info warn error log qa"
@@ -36,30 +36,19 @@ sys-kernel/debian-sources-lts -binary -custom-cflags
 sys-kernel/linux-firmware initramfs redistributable
 sys-firmware/intel-microcode initramfs
 DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-rsyslog
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-misc
 app-admin/rsyslog gnutls normalize
-DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-mc
 app-misc/mc -edit -slang
-DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-portage
 sys-apps/portage doc
-DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-eix
 app-portage/eix doc
-DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-ansible
+>=net-misc/curl-7.65.1 http2
+net-libs/nghttp2 libressl
+media-fonts/terminus-font distinct-l
+
+# FIXME move to ansible-base + collections (Ansible 2.10)
 # save some space, only support python 3.x:
 app-admin/ansible -python_targets_python2_7
-DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-curl
->=net-misc/curl-7.65.1 http2
-DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-nghttp2
-net-libs/nghttp2 libressl
-DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-terminus-font
-media-fonts/terminus-font distinct-l
+
 DATA
 
 sudo mkdir -p /etc/portage/package.license
