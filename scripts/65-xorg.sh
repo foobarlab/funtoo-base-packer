@@ -27,13 +27,8 @@ sudo rc-update add gpm default
 # ---- set make.conf
 
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
-# FIXME:
-# - virtualbox-video seems not to build!
-# - vmware not included in mix-in 'gfxcard-vmware'?
-# - 3d acceleration seems not working
-# - other stuff, see also FL-7431
-#VIDEO_CARDS="virtualbox vmware gallium-vmware xa"
-VIDEO_CARDS="vmware gallium-vmware xa"
+#VIDEO_CARDS="virtualbox vmware gallium-vmware xa dri3" # FIXME virtualbox/vbox-video fails on build
+VIDEO_CARDS="vmware gallium-vmware xa dri3"
 
 DATA
 
@@ -42,16 +37,12 @@ DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-xorg
 # required for funtoo profile 'X':
 media-libs/gd fontconfig jpeg truetype png
-media-libs/mesa xa gallium-vmware
 
 # required for 'lightdm':
 sys-auth/consolekit policykit
 
 # required for 'xinit':
 x11-apps/xinit -minimal
-
-# required by 'x11-drivers/xf86-video-vmware':
-x11-libs/libdrm video_cards_vmware
 
 # required for TrueType support:
 x11-terms/xterm truetype
@@ -109,21 +100,26 @@ sudo emerge -vt \
 
 cat <<'DATA' | sudo tee -a /etc/X11/xorg.conf.d/10video.conf
 # setup vmware svga video driver (VMSVGA with virtualbox):
+
 # see: https://docs.mesa3d.org/vmware-guest.html
 # see: https://www.x.org/releases/current/doc/man/man4/vmware.4.xhtml
+
 Section "Device"
   BoardName    "VirtualBox Graphics"
   Driver       "vmware"
   Identifier   "Device[0]"   # FIXME use "card[0]"?
   VendorName   "VMware"
-  Option "RenderAccel" "on"
+  Option       "RenderAccel" "on"
+  Option       "DRI"         "on"
 EndSection
 DATA
 
 cat <<'DATA' | sudo tee -a /etc/X11/xorg.conf.d/30keyboard.conf
 # setup us-international keyboard
+
 # see: https://blechtog.wordpress.com/2012/05/25/gentoo-config-for-us-international-keyboard-layout/
 # see: https://zuttobenkyou.wordpress.com/2011/08/24/xorg-using-the-us-international-altgr-intl-variant-keyboard-layout/
+
 Section "InputClass"
     Identifier "Default Keyboard"
     MatchIsKeyboard "on"
@@ -158,7 +154,7 @@ sudo emerge -vt \
 sudo sed -i 's/DISPLAYMANAGER=\"xdm\"/DISPLAYMANAGER=\"lightdm\"/g' /etc/conf.d/xdm
 
 # configure lightdm: autologin user 'vagrant'
-sudo sed -i 's/#autologin-session=default/autologin-session=fluxbox/g' /etc/lightdm/lightdm.conf
+sudo sed -i 's/#autologin-session=/autologin-session=fluxbox/g' /etc/lightdm/lightdm.conf
 sudo sed -i 's/#autologin-user=/autologin-user=vagrant/g' /etc/lightdm/lightdm.conf
 
 cat <<'DATA' | sudo tee -a ~vagrant/.dmrc
@@ -194,11 +190,11 @@ cat <<'DATA' | sudo tee -a ~vagrant/.fluxbox/startup
 # background color
 fbsetroot -solid gray23 &
 
-# Enable autoscaling client display:
-sudo /usr/bin/VBoxClient --vmsvga &
-
 # Initially start a terminal
 xterm -fullscreen &
+
+# Enable autoscaling client display:
+sudo /usr/bin/VBoxClient --vmsvga &
 
 # And last but not least we start fluxbox.
 # Because it is the last app you have to run it with ''exec'' before it.
