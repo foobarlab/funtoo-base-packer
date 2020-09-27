@@ -15,7 +15,4 @@ if [ $? -ne 0 ]; then
 fi
 
 echo ">>> Remove obsolete packages ..."
-emerge --quiet --depclean
-
-echo ">>> Rebuild preserved packages ..."
-emerge -vt @preserved-rebuild
+emerge --depclean

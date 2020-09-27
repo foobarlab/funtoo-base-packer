@@ -28,8 +28,7 @@
         ["modifyvm","{{.Name}}","--vtxvpid", "on"],
         ["modifyvm","{{.Name}}","--largepages", "on"],
         ["modifyvm","{{.Name}}","--graphicscontroller", "vmsvga"],
-        ["modifyvm","{{.Name}}","--accelerate3d", "on"],
-        ["modifyvm","{{.Name}}","--accelerate2dvideo", "on"]
+        ["modifyvm","{{.Name}}","--accelerate3d", "on"]
       ]
   }],
   "provisioners": [{

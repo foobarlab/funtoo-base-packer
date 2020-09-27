@@ -74,7 +74,6 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--largepages", "on"]
     vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
     vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
-    vb.customize ["modifyvm", :id, "--accelerate2dvideo", "on"]
   end
   config.ssh.pty = true
   config.ssh.insert_key = false
