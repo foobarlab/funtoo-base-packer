@@ -15,6 +15,8 @@ else
 	fi	
 fi
 
+# FIXME Ansible 2.10.0 fails, 2.9 is no more available (FL-7505)
+
 sudo emerge -vt app-admin/ansible
 sudo mkdir -p /etc/ansible
 cat <<'DATA' | sudo tee -a /etc/ansible/ansible.cfg
