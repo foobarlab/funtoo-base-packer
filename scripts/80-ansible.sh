@@ -19,7 +19,7 @@ fi
 # stay in 2.9 => mask 2.10
 # get 2.10 => update ebuilds, emerge 'ansible-base' + collection download (alternative: packaged both into 'ansible'?)
 
-sudo emerge -nvt app-admin/ansible
+sudo emerge -nuvtND --with-bdeps=y app-admin/ansible
 sudo mkdir -p /etc/ansible
 cat <<'DATA' | sudo tee -a /etc/ansible/ansible.cfg
 [defaults]

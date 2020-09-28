@@ -21,7 +21,7 @@ fi
 
 # ---- console mouse support
 
-sudo emerge -nvt sys-libs/gpm
+sudo emerge -nuvtND --with-bdeps=y sys-libs/gpm
 sudo rc-update add gpm default
 
 # ---- set make.conf
@@ -80,7 +80,7 @@ sudo epro list
 
 # pkg 'rust' gets pulled in by 'X' but needs a significant amount
 # of time to compile, therefore we prefer to compile pkg 'rust-bin' instead
-sudo emerge -nvt dev-lang/rust-bin
+sudo emerge -nuvtND --with-bdeps=y dev-lang/rust-bin
 
 # ---- update system
 
@@ -93,7 +93,7 @@ source /etc/profile
 
 # ---- install xorg server
 
-sudo emerge -nvt \
+sudo emerge -nuvtND --with-bdeps=y \
 	x11-base/xorg-x11 \
 	x11-apps/xinit \
 	x11-drivers/xf86-video-vmware
@@ -143,7 +143,7 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-xorg
 DATA
 
 # TODO remove 'elogind' once FL-7408 is resolved
-sudo emerge -nvt \
+sudo emerge -nuvtND --with-bdeps=y \
 	x11-misc/lightdm \
 	sys-auth/elogind \
 	x11-wm/fluxbox \
@@ -322,7 +322,7 @@ fluxbox-generate_menu -is -ds
 
 # ---- install basic utils
 
-sudo emerge -nvt \
+sudo emerge -nuvtND --with-bdeps=y \
 	x11-terms/xterm \
 	x11-apps/mesa-progs \
 	media-gfx/feh

@@ -22,7 +22,7 @@ else
 	fi
 fi
 
-sudo emerge -nvt app-admin/spectre-meltdown-checker
+sudo emerge -nuvtND --with-bdeps=y app-admin/spectre-meltdown-checker
 
 # report current Spectre/Meltdown status
 sudo mount /boot || true
