@@ -365,7 +365,6 @@ sudo chown vagrant:vagrant ~vagrant/.Xresources
 sudo eselect fontconfig enable 10-autohint.conf || true
 sudo eselect fontconfig enable 10-no-sub-pixel.conf || true
 sudo eselect fontconfig disable 10-scale-bitmap-fonts.conf || true
-sudo eselect fontconfig disable 70-no-bitmaps.conf || true
 sudo eselect fontconfig enable 70-yes-bitmaps.conf || true
 sudo eselect fontconfig enable 75-yes-terminus.conf || true
 sudo eselect fontconfig list
