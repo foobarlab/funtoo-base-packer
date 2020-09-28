@@ -44,10 +44,6 @@ app-portage/eix doc
 >=net-misc/curl-7.65.1 http2
 net-libs/nghttp2 libressl
 media-fonts/terminus-font distinct-l
-
-# FIXME move to ansible-base + collections (Ansible 2.10)
-# save some space, only support python 3.x:
-app-admin/ansible -python_targets_python2_7
 DATA
 
 sudo mkdir -p /etc/portage/package.mask
