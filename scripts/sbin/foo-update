@@ -3,6 +3,8 @@
 
 if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
 
+# TODO extra features: evaluate cmd arguments => quick (w/o extras), full (with extras)
+
 if [ ! -d "/var/git/meta-repo" ]; then
   /usr/local/sbin/foo-sync
 fi
@@ -14,5 +16,13 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo ">>> Remove obsolete packages ..."
-emerge --depclean
+# extra options:
+# TODO check Gentoo portage FAQ for correct order and possible shortcuts (detection/pretend)
+#echo ">>> Remove obsolete packages ..."
+#emerge --depclean
+#
+#echo ">>> Checking reverse package dependencies ..."
+#revdep-rebuild 
+#
+#echo ">>> Rebuilding preserved packages ..."
+#emerge -vt @preserved-rebuild 

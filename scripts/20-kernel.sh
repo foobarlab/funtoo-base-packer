@@ -25,7 +25,7 @@ if [ -f ${SCRIPTS}/scripts/kernel.config ]; then
 	sudo cp ${SCRIPTS}/scripts/kernel.config /usr/src
 fi
 
-sudo emerge -vt sys-kernel/genkernel
+sudo emerge -nuvtND --with-bdeps=y sys-kernel/genkernel
 sudo mv /etc/genkernel.conf /etc/genkernel.conf.old
 
 cat <<'DATA' | sudo tee -a /etc/genkernel.conf
@@ -77,7 +77,7 @@ sudo eselect kernel list
 sudo emerge --unmerge sys-kernel/debian-sources-lts
 sudo emerge --unmerge sys-kernel/debian-sources
 
-sudo emerge -vt sys-kernel/debian-sources
+sudo emerge -nuvtND --with-bdeps=y sys-kernel/debian-sources
 
 sudo eselect kernel list
 sudo eselect kernel set 1

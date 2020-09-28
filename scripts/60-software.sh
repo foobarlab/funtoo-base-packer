@@ -6,10 +6,10 @@ if [ -z ${BUILD_RUN:-} ]; then
 fi
 
 # add bash-completion
-sudo emerge -vt app-shells/bash-completion
+sudo emerge -nuvtND --with-bdeps=y app-shells/bash-completion
 
 # add zsh 
-sudo emerge -vt app-shells/zsh app-shells/zsh-completions app-doc/zsh-lovers
+sudo emerge -nuvtND --with-bdeps=y app-shells/zsh app-shells/zsh-completions app-doc/zsh-lovers
 
 cat <<'DATA' | sudo tee -a /root/.zshrc
 # zsh config for root user:
@@ -19,22 +19,22 @@ export PATH=$PATH:/usr/local/bin:/usr/local/sbin
 DATA
 
 # add dash
-sudo emerge -vt app-shells/dash
+sudo emerge -nuvtND --with-bdeps=y app-shells/dash
 
 # add a logging facility
-sudo emerge -vt app-admin/rsyslog
+sudo emerge -nuvtND --with-bdeps=y app-admin/rsyslog
 sudo rc-update add rsyslog default
 
 # add a cron service
-sudo emerge -vt sys-process/vixie-cron
+sudo emerge -nuvtND --with-bdeps=y sys-process/vixie-cron
 sudo rc-update add vixie-cron default
 
 # add some entropy and randomness
-sudo emerge -vt sys-apps/haveged
+sudo emerge -nuvtND --with-bdeps=y sys-apps/haveged
 sudo rc-update add haveged default
 
 # install vim and configure as default editor
-sudo emerge -vt app-editors/vim
+sudo emerge -nuvtND --with-bdeps=y app-editors/vim
 sudo eselect editor set vi
 sudo eselect visual set vi
 sudo eselect vi set vim
@@ -81,7 +81,7 @@ DATA
 sudo chown vagrant:vagrant ~vagrant/.vimrc
 
 # install Midnight Commander + custom setting
-sudo emerge -vt app-misc/mc
+sudo emerge -nuvtND --with-bdeps=y app-misc/mc
 cat <<'DATA' | sudo tee -a /root/.bashrc
 # restart mc with last used folder
 . /usr/libexec/mc/mc.sh
@@ -104,7 +104,7 @@ cat <<'DATA' | sudo tee -a ~vagrant/.zshrc
 DATA
 
 # various utils
-sudo emerge -vt \
+sudo emerge -nuvtND --with-bdeps=y \
 	sys-apps/pv \
 	sys-process/htop \
 	dev-python/scandir \
@@ -127,7 +127,7 @@ sudo emerge -vt \
 	sys-apps/most
 
 # nice console font (https://www.funtoo.org/Fonts)
-sudo emerge -vt media-fonts/terminus-font
+sudo emerge -nuvtND --with-bdeps=y media-fonts/terminus-font
 BUILD_FONT="ter-116b"
 export BUILD_FONT
 sudo sed -i 's/consolefont=\"default8x16\"/consolefont=\"'$BUILD_FONT'\"/g' /etc/conf.d/consolefont
