@@ -76,12 +76,6 @@ DATA
 sudo epro mix-ins +X +gfxcard-vmware
 sudo epro list
 
-# ---- prepare system update
-
-# pkg 'rust' gets pulled in by 'X' but needs a significant amount
-# of time to compile, therefore we prefer to compile pkg 'rust-bin' instead
-sudo emerge -nuvtND --with-bdeps=y dev-lang/rust-bin
-
 # ---- update system
 
 sudo emerge -vtuDN --with-bdeps=y @world
@@ -127,6 +121,9 @@ Section "InputClass"
     Option "XkbVariant" "altgr-intl"
 EndSection
 DATA
+
+# TODO ensure X starts in 32bpp mode (startx -bpp 32), see: https://docs.mesa3d.org/perf.html
+# TODO tweak xorg.conf a bit more => see: https://www.x.org/releases/X11R7.6/doc/man/man5/xorg.conf.5.xhtml
 
 sudo gpasswd -a vagrant video
 
