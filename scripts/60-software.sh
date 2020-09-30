@@ -103,6 +103,11 @@ cat <<'DATA' | sudo tee -a ~vagrant/.zshrc
 
 DATA
 
+# sshfs/fuse
+sudo emerge -nuvtND --with-bdeps=y \
+	sys-fs/fuse \
+	net-fs/sshfs
+
 # various utils
 sudo emerge -nuvtND --with-bdeps=y \
 	sys-apps/pv \
