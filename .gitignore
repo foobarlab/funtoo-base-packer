@@ -10,3 +10,4 @@ output-virtualbox-ovf/
 build_version
 build_number
 version
+packages/
