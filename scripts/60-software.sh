@@ -122,6 +122,8 @@ sudo emerge -nuvtND --with-bdeps=y \
 	mail-client/mutt \
 	app-portage/eix \
 	app-portage/genlop \
+	app-portage/portage-utils \
+	app-portage/gentoolkit \
 	app-portage/cpuid2cpuflags \
 	app-misc/ranger \
 	sys-apps/most
