@@ -36,11 +36,12 @@
       "source": "scripts",
       "type": "file"
   },{
-      "type": "shell-local",
-      "command": "mkdir -p /tmp/sbin"
-  },{
       "destination": "/tmp/sbin",
       "source": "scripts/sbin",
+      "type": "file"
+  },{
+      "destination": "/tmp/packages",
+      "source": "packages",
       "type": "file"
   },{
       "type": "shell",
