@@ -33,9 +33,11 @@ PORTAGE_ELOG_SYSTEM="echo save save_summary"
 
 FEATURES="buildpkg userfetch"
 
-EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --keep-going --usepkg --buildpkg-exclude 'virtual/* sys-kernel/*-sources */*-bin' --usepkg-exclude 'sys-kernel/gentoo-sources virtual/* */*-bin'"
+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg --buildpkg-exclude 'virtual/* sys-kernel/*-sources */*-bin' --usepkg-exclude 'sys-kernel/*-sources virtual/* */*-bin'"
 
 LINGUAS="en en_US"
+
+CURL_SSL="libressl"
 
 DATA
 
@@ -52,6 +54,8 @@ app-admin/rsyslog gnutls normalize
 app-misc/mc -edit -slang
 sys-apps/portage doc
 app-portage/eix doc
+net-misc/curl http2
+net-libs/nghttp2 libressl
 media-fonts/terminus-font distinct-l
 DATA
 
@@ -63,6 +67,11 @@ DATA
 sudo mkdir -p /etc/portage/package.license
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-kernel
 sys-kernel/linux-firmware linux-fw-redistributable
+DATA
+
+sudo mkdir -p /etc/portage/package.accept_keywords
+cat <<'DATA' | sudo tee -a /etc/portage/package.accept_keywords/base-libressl
+dev-libs/libressl **
 DATA
 
 sudo ego sync
