@@ -8,6 +8,8 @@ fi
 sudo env-update
 source /etc/profile
 
+sudo eclean packages
+
 sudo emerge --depclean
 
 sudo find /etc/ -name '._cfg*'				# DEBUG: list all config files needing an update
