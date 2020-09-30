@@ -37,8 +37,6 @@ EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg --buildpkg-exclude 'virtual
 
 LINGUAS="en en_US"
 
-CURL_SSL="libressl"
-
 DATA
 
 sudo mkdir -p /etc/portage/package.use
@@ -49,13 +47,11 @@ sys-kernel/debian-sources-lts -binary -custom-cflags
 sys-kernel/linux-firmware initramfs redistributable
 sys-firmware/intel-microcode initramfs
 DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-misc
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base
 app-admin/rsyslog gnutls normalize
 app-misc/mc -edit -slang
 sys-apps/portage doc
 app-portage/eix doc
-net-misc/curl http2
-net-libs/nghttp2 libressl
 media-fonts/terminus-font distinct-l
 DATA
 
@@ -67,11 +63,6 @@ DATA
 sudo mkdir -p /etc/portage/package.license
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-kernel
 sys-kernel/linux-firmware linux-fw-redistributable
-DATA
-
-sudo mkdir -p /etc/portage/package.accept_keywords
-cat <<'DATA' | sudo tee -a /etc/portage/package.accept_keywords/base-libressl
-dev-libs/libressl **
 DATA
 
 sudo ego sync
