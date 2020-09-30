@@ -3,6 +3,15 @@
 
 system("./config.sh >/dev/null")
 
+$script_export_packages = <<SCRIPT
+# clean host packages dir
+rm -rf /vagrant/packages/*
+# move guest packages to host
+mv -rf /var/cache/portage/packages/* /vagrant/packages/
+# let it settle
+sync && sleep 5
+SCRIPT
+
 $script_clean_kernel = <<SCRIPT
 # clean stale kernel files
 mount /boot || true
@@ -77,7 +86,8 @@ Vagrant.configure("2") do |config|
   end
   config.ssh.pty = true
   config.ssh.insert_key = false
-  config.vm.synced_folder '.', '/vagrant', disabled: true
+  config.vm.synced_folder '.', '/vagrant', disabled: false
+  config.vm.provision "export_packages", type: "shell", inline: $script_export_packages, privileged: true
   config.vm.provision "clean_kernel", type: "shell", inline: $script_clean_kernel, privileged: true
   config.vm.provision "cleanup", type: "shell", inline: $script_cleanup, privileged: true
 end
