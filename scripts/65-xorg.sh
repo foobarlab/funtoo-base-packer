@@ -24,6 +24,8 @@ fi
 sudo emerge -nuvtND --with-bdeps=y sys-libs/gpm
 sudo rc-update add gpm default
 
+# TODO conditional in 10-prepare for make.conf, package.*
+
 # ---- set make.conf
 
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
