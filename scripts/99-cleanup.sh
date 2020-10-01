@@ -21,6 +21,7 @@ sudo etc-update --verbose --preen			# auto-merge trivial changes
 sudo rm -f /etc/._cfg0000_boot.conf
 sudo rm -f /etc/._cfg0000_genkernel.conf
 sudo rm -f /etc/._cfg0000_updatedb.conf
+sudo rm -f /etc/ssh/._cfg0000_sshd_config
 sudo rm -f /etc/conf.d/._cfg0000_hostname
 
 sudo find /etc/ -name '._cfg*'				# DEBUG: list all remaining config files needing an update
