@@ -7,9 +7,9 @@ $script_export_packages = <<SCRIPT
 # clean host packages dir
 rm -rf /vagrant/packages/*
 # move guest packages to host
-mv -rf /var/cache/portage/packages/* /vagrant/packages/
+mv -f /var/cache/portage/packages/* /vagrant/packages/
 # let it settle
-sync && sleep 5
+sync && sleep 15
 SCRIPT
 
 $script_clean_kernel = <<SCRIPT
