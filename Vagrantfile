@@ -3,6 +3,21 @@
 
 system("./config.sh >/dev/null")
 
+$script_export_packages = <<SCRIPT
+# clean host packages dir
+rm -rf /vagrant/packages/*
+# let it settle
+sync && sleep 15
+# copy guest packages to host
+cp -rf /var/cache/portage/packages/* /vagrant/packages/
+# let it settle
+sync && sleep 15
+# clean guest packages
+rm -rf /var/cache/portage/packages/*
+# let it settle
+sync && sleep 30
+SCRIPT
+
 $script_clean_kernel = <<SCRIPT
 # clean stale kernel files
 mount /boot || true
@@ -35,8 +50,22 @@ rc-status
 /etc/init.d/dhcpcd stop
 /etc/init.d/local stop
 /etc/init.d/acpid stop
+# clean all logs
+shopt -s globstar
+truncate -s 0 /var/log/*.log
+truncate -s 0 /var/log/**/*.log
+find /var/log -type f -name '*.[0-99].gz' -exec rm {} +
+logfiles=( messages dmesg lastlog wtmp )
+for i in "${logfiles[@]}"; do
+	truncate -s 0 /var/log/$i
+done
+logfiles=( emerge emerge-fetch genkernel )
+for i in "${logfiles[@]}"; do
+	rm -f /var/log/$i.log
+done
+rm -f /var/log/portage/elog/*.log
 # let it settle
-sync && sleep 15
+sync && sleep 30
 # debug: list running services
 rc-status
 # run zerofree at last to squeeze the last bit
@@ -77,7 +106,8 @@ Vagrant.configure("2") do |config|
   end
   config.ssh.pty = true
   config.ssh.insert_key = false
-  config.vm.synced_folder '.', '/vagrant', disabled: true
+  config.vm.synced_folder '.', '/vagrant', disabled: false
+  config.vm.provision "export_packages", type: "shell", inline: $script_export_packages, privileged: true
   config.vm.provision "clean_kernel", type: "shell", inline: $script_clean_kernel, privileged: true
   config.vm.provision "cleanup", type: "shell", inline: $script_cleanup, privileged: true
 end

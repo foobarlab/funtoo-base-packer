@@ -71,8 +71,10 @@ fi
 
 . config.sh
 
+mkdir -p packages || true
 export PACKER_LOG_PATH="$PWD/packer.log"
 export PACKER_LOG="1"
+packer validate virtualbox.json
 packer build virtualbox.json
 
 echo "------------------------------------------------------------------------"

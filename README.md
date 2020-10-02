@@ -27,6 +27,7 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
     - Additional shells: *zsh, dash*
 	- Network utils for www, ftp and email: *links, ncftp, mutt*
 	- *Terminus* console font (12 to 32px)
+	- *sshfs* for alternative shared folder mechanism (e.g. use with [vagrant-sshfs](https://github.com/dustymabe/vagrant-sshfs))
     - Any additional software installed in the [stage3 box](https://github.com/foobarlab/funtoo-stage3-packer)
  - Scripts for system administration in */usr/local/sbin*:
     - *foo-sync*: wrapper to sync meta-repo and any overlays

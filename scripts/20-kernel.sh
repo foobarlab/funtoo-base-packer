@@ -40,7 +40,7 @@ SAVE_CONFIG="no"
 USECOLOR="yes"
 CLEAR_CACHE_DIR="yes"
 POSTCLEAR="1"
-#MAKEOPTS="-j2"	# better determined by Vagrantfile
+MAKEOPTS="BUILD_MAKEOPTS"
 LVM="no"
 LUKS="no"
 GPG="no"
@@ -68,6 +68,8 @@ COMPRESS_INITRD_TYPE="best"
 CMD_CALLBACK="emerge -vt @module-rebuild"
 REAL_ROOT="/dev/sda4"
 DATA
+
+sudo sed -i 's/BUILD_MAKEOPTS/'"$BUILD_MAKEOPTS"'/g' /etc/genkernel.conf
 
 sudo env-update
 source /etc/profile
