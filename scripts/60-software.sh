@@ -18,8 +18,10 @@ cat <<'DATA' | sudo tee -a /root/.zshrc
 export PATH=$PATH:/usr/local/bin:/usr/local/sbin
 DATA
 
-# add dash
+# add dash as replacement for /bin/sh
 sudo emerge -nuvtND --with-bdeps=y app-shells/dash
+sudo ln -sf /bin/dash /bin/sh
+sudo chsh -s /bin/bash   # set 'root' shell to bash
 
 # add a logging facility
 sudo emerge -nuvtND --with-bdeps=y app-admin/rsyslog
