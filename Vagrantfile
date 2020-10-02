@@ -50,6 +50,20 @@ rc-status
 /etc/init.d/dhcpcd stop
 /etc/init.d/local stop
 /etc/init.d/acpid stop
+# clean all logs
+shopt -s globstar
+truncate -s 0 /var/log/*.log
+truncate -s 0 /var/log/**/*.log
+find /var/log -type f -name '*.[0-99].gz' -exec rm {} +
+logfiles=( messages dmesg lastlog wtmp )
+for i in "${logfiles[@]}"; do
+	truncate -s 0 /var/log/$i
+done
+logfiles=( emerge emerge-fetch genkernel )
+for i in "${logfiles[@]}"; do
+	rm -f /var/log/$i.log
+done
+rm -f /var/log/portage/elog/*.log
 # let it settle
 sync && sleep 30
 # debug: list running services
