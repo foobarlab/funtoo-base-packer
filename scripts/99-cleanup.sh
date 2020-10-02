@@ -12,6 +12,9 @@ sudo eclean packages
 
 sudo emerge --depclean
 
+sudo bash -c "sed -i '/^MAKEOPTS/d' /etc/portage/make.conf"           # delete MAKEOPTS (make.conf)
+sudo bash -c "sed -i 's/^\(MAKEOPTS.*\)/#\1/g' /etc/genkernel.conf"   # comment-in MAKEOPTS (genkernel)
+
 sudo find /etc/ -name '._cfg*'				# DEBUG: list all config files needing an update
 sudo find /etc/ -name '._cfg*' -print -exec cat -n '{}' \;  # DEBUG: cat all config files needing an update
 

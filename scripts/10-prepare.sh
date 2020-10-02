@@ -33,6 +33,7 @@ cat <<'DATA' | sudo tee -a /etc/portage/make.conf
 PORTAGE_ELOG_CLASSES="info warn error log qa"
 PORTAGE_ELOG_SYSTEM="echo save save_summary"
 
+MAKEOPTS="BUILD_MAKEOPTS"
 FEATURES="buildpkg userfetch"
 
 # testing: enable binary packages
@@ -49,6 +50,7 @@ EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'virtual/* sys-kern
 #INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en@shaw"
 
 DATA
+sudo sed -i 's/BUILD_MAKEOPTS/'"$BUILD_MAKEOPTS"'/g' /etc/portage/make.conf
 
 sudo mkdir -p /etc/portage/package.use
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-kernel

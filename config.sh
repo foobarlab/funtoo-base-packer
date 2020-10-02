@@ -3,6 +3,8 @@
 export BUILD_BOX_NAME="funtoo-base"
 export BUILD_BOX_USERNAME="foobarlab"
 
+export BUILD_BOX_PROVIDER="virtualbox"
+
 export BUILD_BOX_FUNTOO_VERSION="1.4"
 export BUILD_BOX_SOURCES="https://github.com/foobarlab/funtoo-base-packer"
 
@@ -11,15 +13,12 @@ export BUILD_PARENT_BOX_VAGRANTCLOUD_NAME="$BUILD_BOX_USERNAME/$BUILD_PARENT_BOX
 
 export BUILD_GUEST_TYPE="Gentoo_64"
 
-# memory/cpus used during box creation:
-export BUILD_GUEST_CPUS="4"
-export BUILD_GUEST_MEMORY="4096"
+# number of cores used during box creation (memory is calculated automatically):
+export BUILD_CPUS="4"
 
-# memory/cpus used for final box:
+# default memory/cpus used for final created box:
 export BUILD_BOX_CPUS="2"
 export BUILD_BOX_MEMORY="2048"
-
-export BUILD_BOX_PROVIDER="virtualbox"
 
 export BUILD_FLAVOR="server"              # specify the flavor profile, see https://www.funtoo.org/Funtoo_Profiles#Flavors
 export BUILD_KERNEL=true                  # set to true to build a new kernel (Debian)
@@ -36,6 +35,11 @@ export BUILD_KEEP_MAX_CLOUD_BOXES=3       # set the maximum number of boxes to k
 
 echo $BUILD_BOX_FUNTOO_VERSION | sed -e 's/\.//g' > version    # auto set major version
 . version.sh    # determine build version
+
+let "jobs = $BUILD_CPUS + 1"       # calculate number of jobs (threads + 1)
+export BUILD_MAKEOPTS="-j${jobs}"
+let "memory = $jobs * 2048"        # recommended 2GB for each job
+export BUILD_MEMORY="${memory}"
 
 BUILD_BOX_RELEASE_NOTES="Funtoo $BUILD_BOX_FUNTOO_VERSION (x86, generic 64-bit), Debian Kernel 5.7, VirtualBox Guest Additions 6.1"     # edit this to reflect actual setup
 
