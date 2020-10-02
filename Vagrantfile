@@ -6,10 +6,16 @@ system("./config.sh >/dev/null")
 $script_export_packages = <<SCRIPT
 # clean host packages dir
 rm -rf /vagrant/packages/*
-# move guest packages to host
-mv -f /var/cache/portage/packages/* /vagrant/packages/
 # let it settle
 sync && sleep 15
+# copy guest packages to host
+cp -rf /var/cache/portage/packages/* /vagrant/packages/
+# let it settle
+sync && sleep 15
+# clean guest packages
+rm -rf /var/cache/portage/packages/*
+# let it settle
+sync && sleep 30
 SCRIPT
 
 $script_clean_kernel = <<SCRIPT
