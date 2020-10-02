@@ -51,7 +51,7 @@ rc-status
 /etc/init.d/local stop
 /etc/init.d/acpid stop
 # let it settle
-sync && sleep 15
+sync && sleep 30
 # debug: list running services
 rc-status
 # run zerofree at last to squeeze the last bit
