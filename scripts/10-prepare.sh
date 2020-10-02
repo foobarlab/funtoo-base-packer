@@ -6,11 +6,13 @@ if [ -z ${BUILD_RUN:-} ]; then
 fi
 
 # import binary packages
-sudo chown root:portage /tmp/packages
-sudo chmod 775 /tmp/packages
-sudo chown -R root:root /tmp/packages/*
+mkdir -p /tmp/packages || true
+echo "$BUILD_BOX_DESCRIPTION" >> /tmp/packages/.release_$BUILD_BOX_NAME-$BUILD_BOX_VERSION
+sudo chown -R root:root /tmp/packages
 sudo find /tmp/packages/ -type d -exec chmod 755 {} +
 sudo find /tmp/packages/ -type f -exec chmod 644 {} +
+sudo chown root:portage /tmp/packages
+sudo chmod 775 /tmp/packages
 sudo rm -rf /var/cache/portage/packages
 sudo cp -rf /tmp/packages /var/cache/portage/
 
@@ -33,9 +35,12 @@ PORTAGE_ELOG_SYSTEM="echo save save_summary"
 
 FEATURES="buildpkg userfetch"
 
-EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg --buildpkg-exclude 'virtual/* sys-kernel/*-sources */*-bin' --usepkg-exclude 'sys-kernel/*-sources virtual/* */*-bin'"
+# testing: enable binary packages
+EMERGE_DEFAULT_OPTS="--usepkg"
+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --buildpkg-exclude 'virtual/* sys-kernel/*-sources */*-bin'"
+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'virtual/* sys-kernel/*-sources */*-bin'"
 
-# testing:
+# testing: only english locales (saves some space)
 #INSTALL_MASK="/usr/share/locale -/usr/share/locale/en"
 #INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_AU"
 #INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_CA"
@@ -115,3 +120,63 @@ sudo emerge -1v portage ego
 sudo env-update
 source /etc/profile
 sudo ego sync
+
+if [ -z ${BUILD_WINDOW_SYSTEM:-} ]; then
+  echo "BUILD_WINDOW_SYSTEM was not set. Skipping ..."
+  exit 0
+else
+  if [ "$BUILD_WINDOW_SYSTEM" = false ]; then
+    echo "BUILD_WINDOW_SYSTEM set to FALSE. Skipping ..."
+    exit 0
+  fi
+fi
+
+echo "BUILD_WINDOW_SYSTEM set to True. Preparing Portage ..."
+
+# FIXME check build config for compatibility:
+# - should BUILD_KERNEL be set to 'true'?
+# - should BUILD_HEADLESS be set to 'true'?
+
+sudo epro mix-ins +X +gfxcard-vmware
+sudo epro list
+
+cat <<'DATA' | sudo tee -a /etc/portage/make.conf
+#VIDEO_CARDS="virtualbox vmware gallium-vmware xa dri3" # FIXME virtualbox/vbox-video fails on build
+VIDEO_CARDS="vmware gallium-vmware xa dri3"
+
+DATA
+
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-xorg
+# required for funtoo profile 'X':
+media-libs/gd fontconfig jpeg truetype png
+
+# required for 'lightdm':
+sys-auth/consolekit policykit
+
+# required for 'xinit':
+x11-apps/xinit -minimal
+
+# required for TrueType support:
+x11-terms/xterm truetype
+x11-libs/libXfont2 truetype
+
+DATA
+
+cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-xorg
+# required for funtoo profile 'X':
+>=media-libs/libpng-1.6.37 libpng2
+DATA
+
+# TODO try also without llvm? (mesa USE -llvm)
+cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
+>=sys-devel/llvm-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-devel/clang-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-devel/clang-common-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-libs/compiler-rt-sanitizers-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-libs/compiler-rt-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-libs/libomp-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-libs/llvm-libunwind-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-devel/lld-9.0 Apache-2.0-with-LLVM-exceptions
+>=dev-util/lldb-9.0 Apache-2.0-with-LLVM-exceptions
+DATA

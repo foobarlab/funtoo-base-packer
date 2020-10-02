@@ -15,77 +15,10 @@ else
   fi
 fi
 
-# FIXME check build config for compatibility:
-# - should BUILD_KERNEL be set to 'true'?
-# - should BUILD_HEADLESS be set to 'true'?
-
 # ---- console mouse support
 
 sudo emerge -nuvtND --with-bdeps=y sys-libs/gpm
 sudo rc-update add gpm default
-
-# TODO conditional in 10-prepare for make.conf, package.*
-
-# ---- set make.conf
-
-cat <<'DATA' | sudo tee -a /etc/portage/make.conf
-#VIDEO_CARDS="virtualbox vmware gallium-vmware xa dri3" # FIXME virtualbox/vbox-video fails on build
-VIDEO_CARDS="vmware gallium-vmware xa dri3"
-
-DATA
-
-# ---- set required USE flags
-
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-xorg
-# required for funtoo profile 'X':
-media-libs/gd fontconfig jpeg truetype png
-
-# required for 'lightdm':
-sys-auth/consolekit policykit
-
-# required for 'xinit':
-x11-apps/xinit -minimal
-
-# required for TrueType support:
-x11-terms/xterm truetype
-x11-libs/libXfont2 truetype
-
-DATA
-
-# ---- set required licenses
-
-cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-xorg
-# required for funtoo profile 'X':
->=media-libs/libpng-1.6.37 libpng2
-DATA
-
-# TODO try also without llvm? (mesa USE -llvm)
-cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
->=sys-devel/llvm-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-devel/clang-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-devel/clang-common-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-libs/compiler-rt-sanitizers-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-libs/compiler-rt-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-libs/libomp-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-libs/llvm-libunwind-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-devel/lld-9.0 Apache-2.0-with-LLVM-exceptions
->=dev-util/lldb-9.0 Apache-2.0-with-LLVM-exceptions
-DATA
-
-# ---- set 'X' profile
-
-sudo epro mix-ins +X +gfxcard-vmware
-sudo epro list
-
-# ---- update system
-
-sudo emerge -vtuDN --with-bdeps=y @world
-sudo etc-update --verbose --preen
-sudo emerge -vt @preserved-rebuild
-
-sudo env-update
-source /etc/profile
 
 # ---- install xorg server
 
