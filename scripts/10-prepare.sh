@@ -35,7 +35,13 @@ FEATURES="buildpkg userfetch"
 
 EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg --buildpkg-exclude 'virtual/* sys-kernel/*-sources */*-bin' --usepkg-exclude 'sys-kernel/*-sources virtual/* */*-bin'"
 
-LINGUAS="en en_US"
+# testing:
+#INSTALL_MASK="/usr/share/locale -/usr/share/locale/en"
+#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_AU"
+#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_CA"
+#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_GB"
+#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_US"
+#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en@shaw"
 
 DATA
 
