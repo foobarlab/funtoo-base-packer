@@ -79,6 +79,7 @@ sys-kernel/linux-firmware linux-fw-redistributable
 DATA
 
 sudo ego sync
+sudo eclean packages
 
 sudo epro mix-ins +no-systemd +console-extras
 
