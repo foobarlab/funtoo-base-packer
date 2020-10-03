@@ -25,7 +25,7 @@ export BUILD_KERNEL=true                  # set to true to build a new kernel (D
 export BUILD_GCC_VERSION=""               # experimental: specify which GCC version to install or leave empty to keep the default, e.g. "9.1.1"
 export BUILD_REBUILD_SYSTEM=false         # experimental: set to true when GCC version has changed
 export BUILD_REPORT_SPECTRE=true          # if true, report Spectre/Meltdown vulunerability status
-export BUILD_INCLUDE_ANSIBLE=false        # if true, include Ansible for automation
+export BUILD_INCLUDE_ANSIBLE=true         # if true, include Ansible for automation
 export BUILD_WINDOW_SYSTEM=true           # build X window system (X.Org)
 export BUILD_HEADLESS=false               # if false, gui will be shown
 
