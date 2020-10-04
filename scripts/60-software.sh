@@ -5,23 +5,32 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
-# add bash-completion
-sudo emerge -nuvtND --with-bdeps=y app-shells/bash-completion
+# add shells/shellutils
+sudo emerge -nuvtND --with-bdeps=y \
+	app-eselect/eselect-sh \
+	app-shells/bash-completion \
+	app-shells/zsh \
+	app-shells/zsh-completions \
+	app-doc/zsh-lovers \
+	app-shells/dash \
+	app-shells/fish \
+	app-shells/mksh
 
-# add zsh 
-sudo emerge -nuvtND --with-bdeps=y app-shells/zsh app-shells/zsh-completions app-doc/zsh-lovers
+# disable shell history (bash)
+cat <<'DATA' | sudo tee -a /etc/profile.d/history.sh
+# disable history
+set +o history
+DATA
 
+# custom .zshrc
 cat <<'DATA' | sudo tee -a /root/.zshrc
-# zsh config for root user:
-
 # add /usr/local paths
 export PATH=$PATH:/usr/local/bin:/usr/local/sbin
 DATA
-
-# add dash as replacement for /bin/sh
-sudo emerge -nuvtND --with-bdeps=y app-shells/dash
-sudo ln -sf /bin/dash /bin/sh
-sudo chsh -s /bin/bash   # set 'root' shell to bash
+cat <<'DATA' | sudo tee -a ~vagrant/.zshrc
+# add /usr/local paths
+export PATH=$PATH:/usr/local/bin
+DATA
 
 # add a logging facility
 sudo emerge -nuvtND --with-bdeps=y app-admin/rsyslog
