@@ -29,6 +29,12 @@ sed -i 's/<br>/\n/g' ~vagrant/.release_$BUILD_BOX_NAME
 
 sudo sed -i 's/USE=\"/USE="zsh-completion idn lzma tools udev syslog cacert threads pic ncurses /g' /etc/portage/make.conf
 
+BUILD_EXCLUDE_BINARIES="${BUILD_EXCLUDE_BINARIES} virtual/*"
+BUILD_EXCLUDE_BINARIES="${BUILD_EXCLUDE_BINARIES} */*-bin"
+BUILD_EXCLUDE_BINARIES="${BUILD_EXCLUDE_BINARIES} sys-apps/*"
+BUILD_EXCLUDE_BINARIES="${BUILD_EXCLUDE_BINARIES} sys-kernel/*-sources"
+BUILD_EXCLUDE_BINARIES="${BUILD_EXCLUDE_BINARIES} app-emulation/virtualbox-guest-additions"
+
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
 PORTAGE_ELOG_CLASSES="info warn error log qa"
 PORTAGE_ELOG_SYSTEM="echo save save_summary"
@@ -38,8 +44,8 @@ FEATURES="buildpkg userfetch"
 
 # testing: enable binary packages
 EMERGE_DEFAULT_OPTS="--usepkg"
-EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --buildpkg-exclude 'virtual/* sys-kernel/*-sources */*-bin'"
-EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'virtual/* sys-kernel/*-sources */*-bin'"
+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --buildpkg-exclude 'BUILD_EXCLUDE_BINARIES'"
+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'BUILD_EXCLUDE_BINARIES'"
 
 # testing: only english locales (saves some space)
 #INSTALL_MASK="/usr/share/locale -/usr/share/locale/en"
@@ -51,6 +57,7 @@ EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'virtual/* sys-kern
 
 DATA
 sudo sed -i 's/BUILD_MAKEOPTS/'"$BUILD_MAKEOPTS"'/g' /etc/portage/make.conf
+sudo sed -i 's/BUILD_EXCLUDE_BINARIES/'"$BUILD_EXCLUDE_BINARIES"'/g' /etc/portage/make.conf
 
 sudo mkdir -p /etc/portage/package.use
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-kernel
