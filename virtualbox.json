@@ -60,6 +60,7 @@
 		  "BUILD_FLAVOR={{user `flavor`}}",
 		  "BUILD_REPORT_SPECTRE={{user `report_spectre`}}",
           "BUILD_INCLUDE_ANSIBLE={{user `include_ansible`}}",
+          "BUILD_EXCLUDE_BINARIES={{user `exclude_binaries`}}",
           "BUILD_KERNEL={{user `kernel`}}",
           "BUILD_WINDOW_SYSTEM={{user `window_system`}}"
       ],
@@ -88,6 +89,7 @@
     "flavor": "{{env `BUILD_FLAVOR`}}",
     "report_spectre": "{{env `BUILD_REPORT_SPECTRE`}}",
     "include_ansible": "{{env `BUILD_INCLUDE_ANSIBLE`}}",
+    "exclude_binaries": "{{env `BUILD_EXCLUDE_BINARIES`}}",
     "kernel": "{{env `BUILD_KERNEL`}}",
     "window_system": "{{env `BUILD_WINDOW_SYSTEM`}}",
     "headless": "{{env `BUILD_HEADLESS`}}",
