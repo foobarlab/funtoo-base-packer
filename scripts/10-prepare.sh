@@ -139,6 +139,7 @@ VIDEO_CARDS="vmware gallium-vmware xa dri3"
 
 DATA
 
+sudo mkdir -p /etc/portage/package.use
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-xorg
 # required for funtoo profile 'X':
 media-libs/gd fontconfig jpeg truetype png
@@ -155,11 +156,11 @@ x11-libs/libXfont2 truetype
 
 DATA
 
+sudo mkdir -p /etc/portage/package.license
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-xorg
 # required for funtoo profile 'X':
 >=media-libs/libpng-1.6.37 libpng2
 DATA
-
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
 >=sys-devel/llvm-9.0 Apache-2.0-with-LLVM-exceptions
 >=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
