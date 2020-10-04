@@ -36,17 +36,10 @@ PORTAGE_ELOG_SYSTEM="echo save save_summary"
 MAKEOPTS="BUILD_MAKEOPTS"
 FEATURES="buildpkg userfetch"
 
-# excluded binary packages
-BUILD_EXCLUDE_BINARIES="${BUILD_EXCLUDE_BINARIES} virtual/*"
-BUILD_EXCLUDE_BINARIES="${BUILD_EXCLUDE_BINARIES} */*-bin"
-BUILD_EXCLUDE_BINARIES="${BUILD_EXCLUDE_BINARIES} sys-apps/*"
-BUILD_EXCLUDE_BINARIES="${BUILD_EXCLUDE_BINARIES} sys-kernel/*-sources"
-BUILD_EXCLUDE_BINARIES="${BUILD_EXCLUDE_BINARIES} app-emulation/virtualbox-guest-additions"
-
-# enable binary packages
+# enable binary packages with excludes
 EMERGE_DEFAULT_OPTS="--usepkg"
-EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --buildpkg-exclude '${BUILD_EXCLUDE_BINARIES}'"
-EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude '${BUILD_EXCLUDE_BINARIES}'"
+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --buildpkg-exclude 'virtual/* */*-bin sys-apps/* sys-kernel/*-sources app-emulation/virtualbox-guest-additions'"
+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'virtual/* */*-bin sys-apps/* sys-kernel/*-sources app-emulation/virtualbox-guest-additions'"
 
 # testing: only english locales (saves some space)
 #INSTALL_MASK="/usr/share/locale -/usr/share/locale/en"
