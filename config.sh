@@ -31,8 +31,6 @@ export BUILD_HEADLESS=false               # if false, gui will be shown
 
 export BUILD_KEEP_MAX_CLOUD_BOXES=1       # set the maximum number of boxes to keep in Vagrant Cloud
 
-export BUILD_EXCLUDE_BINARIES=""          # experimental: additional package patterns to force building from source 
-
 # ----------------------------! do not edit below this line !----------------------------
 
 echo $BUILD_BOX_FUNTOO_VERSION | sed -e 's/\.//g' > version    # auto set major version
