@@ -8,13 +8,13 @@ fi
 # import binary packages
 mkdir -p /tmp/packages || true
 echo "$BUILD_BOX_DESCRIPTION" >> /tmp/packages/.release_$BUILD_BOX_NAME-$BUILD_BOX_VERSION
-sudo chown -R root:root /tmp/packages
-sudo find /tmp/packages/ -type d -exec chmod 755 {} +
-sudo find /tmp/packages/ -type f -exec chmod 644 {} +
-sudo chown root:portage /tmp/packages
-sudo chmod 775 /tmp/packages
-sudo rm -rf /var/cache/portage/packages
-sudo cp -rf /tmp/packages /var/cache/portage/
+sudo mkdir -p /var/cache/portage/packages || true # TODO check if needed, set with rsync?
+sudo rsync -urv /tmp/packages /var/cache/portage/
+sudo chown -R root:root /var/cache/portage/packages
+sudo find /var/cache/portage/packages/ -type d -exec chmod 755 {} +
+sudo find /var/cache/portage/packages/ -type f -exec chmod 644 {} +
+sudo chown root:portage /var/cache/portage/packages
+sudo chmod 775 /var/cache/portage/packages
 
 # install /usr/local scripts
 sudo chown root:root /tmp/sbin/*
@@ -79,6 +79,7 @@ sys-kernel/linux-firmware linux-fw-redistributable
 DATA
 
 sudo ego sync
+sudo eclean packages
 
 sudo epro mix-ins +no-systemd +console-extras
 

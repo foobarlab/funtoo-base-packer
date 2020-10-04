@@ -8,10 +8,8 @@ $script_export_packages = <<SCRIPT
 rm -rf /vagrant/packages/*
 # let it settle
 sync && sleep 15
-# copy guest packages to host
-cp -rf /var/cache/portage/packages/* /vagrant/packages/
-# let it settle
-sync && sleep 15
+# sync any guest packages to host (vboxsf)
+rsync -urv /var/cache/portage/packages/* /vagrant/packages/
 # clean guest packages
 rm -rf /var/cache/portage/packages/*
 # let it settle
