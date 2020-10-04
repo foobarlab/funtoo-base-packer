@@ -100,7 +100,7 @@ Vagrant.configure("2") do |config|
   end
   config.ssh.pty = true
   config.ssh.insert_key = false
-  config.vm.synced_folder '.', '/vagrant', disabled: false
+  config.vm.synced_folder '.', '/vagrant', disabled: false, automount: true
   config.vm.provision "export_packages", type: "shell", inline: $script_export_packages, privileged: true
   config.vm.provision "clean_kernel", type: "shell", inline: $script_clean_kernel, privileged: true
   config.vm.provision "cleanup", type: "shell", inline: $script_cleanup, privileged: true
