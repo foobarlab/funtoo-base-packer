@@ -4,10 +4,6 @@
 system("./config.sh >/dev/null")
 
 $script_export_packages = <<SCRIPT
-# clean host packages dir
-rm -rf /vagrant/packages/*
-# let it settle
-sync && sleep 15
 # sync any guest packages to host (vboxsf)
 rsync -urv /var/cache/portage/packages/* /vagrant/packages/
 # clean guest packages
