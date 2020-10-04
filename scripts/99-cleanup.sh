@@ -37,6 +37,7 @@ sudo eclean-kernel -l
 sudo ego boot update
 
 sudo eix-update
+sudo eix-test-obsolete
 
 sudo rm -f /etc/resolv.conf
 sudo rm -f /etc/resolv.conf.bak

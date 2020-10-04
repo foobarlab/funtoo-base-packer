@@ -57,7 +57,7 @@ fi
 
 if [[ -n "$BUILD_INCLUDE_ANSIBLE" ]]; then
     if [ "$BUILD_INCLUDE_ANSIBLE" = true ]; then
-        BUILD_BOX_RELEASE_NOTES="${BUILD_BOX_RELEASE_NOTES}, Ansible 2.10"     # edit this to reflect actual setup
+        BUILD_BOX_RELEASE_NOTES="${BUILD_BOX_RELEASE_NOTES}, Ansible 2.9"     # edit this to reflect actual setup
     fi
 fi
 
