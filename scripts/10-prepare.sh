@@ -11,10 +11,10 @@ echo "$BUILD_BOX_DESCRIPTION" >> /tmp/packages/.release_$BUILD_BOX_NAME-$BUILD_B
 sudo mkdir -p /var/cache/portage/packages || true # TODO check if needed, set with rsync?
 sudo rsync -urv /tmp/packages /var/cache/portage/
 sudo chown -R root:root /var/cache/portage/packages
-sudo find /var/cache/portage/packages/packages/ -type d -exec chmod 755 {} +
-sudo find /var/cache/portage/packages/packages/ -type f -exec chmod 644 {} +
+sudo find /var/cache/portage/packages/ -type d -exec chmod 755 {} +
+sudo find /var/cache/portage/packages/ -type f -exec chmod 644 {} +
 sudo chown root:portage /var/cache/portage/packages
-sudo chmod 775 /var/cache/portage/packages/packages
+sudo chmod 775 /var/cache/portage/packages
 
 # install /usr/local scripts
 sudo chown root:root /tmp/sbin/*
