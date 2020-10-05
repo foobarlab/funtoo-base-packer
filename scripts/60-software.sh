@@ -16,12 +16,6 @@ sudo emerge -nuvtND --with-bdeps=y \
 	app-shells/fish \
 	app-shells/mksh
 
-# disable shell history (bash)
-cat <<'DATA' | sudo tee -a /etc/profile.d/history.sh
-# disable history
-set +o history
-DATA
-
 # custom .zshrc
 cat <<'DATA' | sudo tee -a /root/.zshrc
 # add /usr/local paths
