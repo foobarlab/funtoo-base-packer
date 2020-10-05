@@ -64,10 +64,10 @@ sync && sleep 30
 rc-status
 # run zerofree at last to squeeze the last bit
 # /boot
-mount -o remount,ro /dev/sda1
+mount -v -n -o remount,ro /dev/sda1
 zerofree -v /dev/sda1
 # /
-mount -o remount,ro /dev/sda4
+mount -v -n -o remount,ro /dev/sda4
 zerofree -v /dev/sda4
 # swap
 swapoff -v /dev/sda3

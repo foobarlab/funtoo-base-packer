@@ -68,16 +68,6 @@ app-portage/eix doc
 media-fonts/terminus-font distinct-l
 DATA
 
-sudo mkdir -p /etc/portage/package.mask
-cat <<'DATA' | sudo tee -a /etc/portage/package.mask/base-ansible
->=app-admin/ansible-2.10.0
-DATA
-
-sudo mkdir -p /etc/portage/package.license
-cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-kernel
-sys-kernel/linux-firmware linux-fw-redistributable
-DATA
-
 sudo ego sync
 sudo eclean packages
 
@@ -149,6 +139,7 @@ VIDEO_CARDS="vmware gallium-vmware xa dri3"
 
 DATA
 
+sudo mkdir -p /etc/portage/package.use
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-xorg
 # required for funtoo profile 'X':
 media-libs/gd fontconfig jpeg truetype png
@@ -165,21 +156,12 @@ x11-libs/libXfont2 truetype
 
 DATA
 
+sudo mkdir -p /etc/portage/package.license
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-xorg
 # required for funtoo profile 'X':
 >=media-libs/libpng-1.6.37 libpng2
 DATA
-
-# TODO try also without llvm? (mesa USE -llvm)
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
 >=sys-devel/llvm-9.0 Apache-2.0-with-LLVM-exceptions
 >=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-devel/clang-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-devel/clang-common-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-libs/compiler-rt-sanitizers-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-libs/compiler-rt-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-libs/libomp-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-libs/llvm-libunwind-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-devel/lld-9.0 Apache-2.0-with-LLVM-exceptions
->=dev-util/lldb-9.0 Apache-2.0-with-LLVM-exceptions
 DATA
