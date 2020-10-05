@@ -23,13 +23,13 @@ echo ">>> Syncing I/O ..."
 sync
 
 echo ">>> Mounting boot partition 'read-only' ..."
-mount -n -o ro /dev/sda1 || true
+mount -v -n -o ro /dev/sda1 || true
 
 echo ">>> Zero-filling free space on boot partition ..."
 zerofree -v /dev/sda1 || true
 
 echo ">>> Mounting root partition 'read-only' ..."
-mount -n -o remount,ro /dev/sda4 || true
+mount -v -n -o remount,ro /dev/sda4 || true
 
 echo ">>> Zero-filling free space on root partition ..."
 zerofree -v /dev/sda4 || true
