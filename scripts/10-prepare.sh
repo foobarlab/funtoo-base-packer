@@ -37,7 +37,7 @@ MAKEOPTS="BUILD_MAKEOPTS"
 FEATURES="buildpkg userfetch"
 
 # enable binary packages with excludes
-EMERGE_DEFAULT_OPTS="--usepkg"
+EMERGE_DEFAULT_OPTS="--usepkg --binpkg-respect-use=y"
 EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --buildpkg-exclude 'virtual/* */*-bin sys-apps/* sys-kernel/*-sources app-emulation/virtualbox-guest-additions'"
 EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'virtual/* */*-bin sys-apps/* sys-kernel/*-sources app-emulation/virtualbox-guest-additions'"
 
