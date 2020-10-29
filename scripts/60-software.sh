@@ -11,10 +11,7 @@ sudo emerge -nuvtND --with-bdeps=y \
 	app-shells/bash-completion \
 	app-shells/zsh \
 	app-shells/zsh-completions \
-	app-doc/zsh-lovers \
-	app-shells/dash \
-	app-shells/fish \
-	app-shells/mksh
+	app-doc/zsh-lovers
 
 # custom .zshrc
 cat <<'DATA' | sudo tee -a /root/.zshrc
