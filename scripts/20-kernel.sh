@@ -76,8 +76,10 @@ source /etc/profile
 
 sudo eclean-kernel -l
 sudo eselect kernel list
-sudo emerge --unmerge sys-kernel/debian-sources-lts
-sudo emerge --unmerge sys-kernel/debian-sources
+
+# unmerge any existing kernel sources:
+#sudo emerge --unmerge sys-kernel/debian-sources-lts
+#sudo emerge --unmerge sys-kernel/debian-sources
 
 sudo emerge -nuvtND --with-bdeps=y sys-kernel/debian-sources
 
