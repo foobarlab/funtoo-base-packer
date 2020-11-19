@@ -100,9 +100,6 @@ sudo mv -f /etc/issue /etc/issue.old
 cat <<'DATA' | sudo tee -a /etc/issue
 This is a Funtoo GNU/Linux Vagrant Box (BUILD_BOX_USERNAME/BUILD_BOX_NAME BUILD_BOX_VERSION)
 
-IP addresses for eth0: \4{eth0} \6{eth0}
-IP addresses for eth1: \4{eth1} \6{eth1}
-
 DATA
 sudo sed -i 's/BUILD_BOX_VERSION/'$BUILD_BOX_VERSION'/g' /etc/issue
 sudo sed -i 's/BUILD_BOX_NAME/'$BUILD_BOX_NAME'/g' /etc/issue
