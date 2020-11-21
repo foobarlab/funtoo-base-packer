@@ -36,14 +36,14 @@ rc-status
 /etc/init.d/xdm-setup stop || true
 /etc/init.d/elogind stop || true
 /etc/init.d/gpm stop || true
-/etc/init.d/rsyslog stop
-/etc/init.d/dbus -D stop
-/etc/init.d/haveged stop
-/etc/init.d/udev stop
-/etc/init.d/vixie-cron stop
-/etc/init.d/dhcpcd stop
-/etc/init.d/local stop
-/etc/init.d/acpid stop
+/etc/init.d/rsyslog stop || true
+/etc/init.d/dbus -D stop || true
+/etc/init.d/haveged stop || true
+/etc/init.d/udev stop || true
+/etc/init.d/vixie-cron stop || true
+/etc/init.d/dhcpcd stop || true
+/etc/init.d/local stop || true
+/etc/init.d/acpid stop || true
 # clean all logs
 shopt -s globstar
 truncate -s 0 /var/log/*.log
@@ -98,8 +98,8 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
     vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
   end
-  config.ssh.pty = true
   config.ssh.insert_key = false
+  config.ssh.connect_timeout = 60
   config.vm.synced_folder '.', '/vagrant', disabled: false, automount: true
   config.vm.provision "export_packages", type: "shell", inline: $script_export_packages, privileged: true
   config.vm.provision "clean_kernel", type: "shell", inline: $script_clean_kernel, privileged: true
