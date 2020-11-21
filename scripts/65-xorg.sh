@@ -285,11 +285,11 @@ cat <<'DATA' | sudo tee -a ~vagrant/.Xresources
  *color15:    #eeeeec
 
 ! xterm settings
-! FIXME: terminus font not set in xterm
 
  xterm*utf8: 1
- xterm*faceName: Terminus
- xterm*faceSize: 10
+ xterm*faceName: xos4 Terminus:style=Regular
+ xterm*geometry: 80x25
+ xterm*faceSize: 12
  xterm*renderFont: true
  
 DATA
