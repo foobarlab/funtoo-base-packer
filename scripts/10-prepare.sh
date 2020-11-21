@@ -23,6 +23,7 @@ sudo cp -f /tmp/sbin/* /usr/local/sbin/
 
 echo "$BUILD_BOX_DESCRIPTION" >> ~vagrant/.release_$BUILD_BOX_NAME
 sed -i 's/<br>/\n/g' ~vagrant/.release_$BUILD_BOX_NAME
+sed -i 's/<a .*a>/'$BUILD_GIT_COMMIT_ID'/g' ~vagrant/.release_$BUILD_BOX_NAME
 
 # TODO experimental
 #sudo sed -i 's/USE=\"/USE="gold /g' /etc/portage/make.conf
