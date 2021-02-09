@@ -259,6 +259,15 @@ sudo emerge -nuvtND --with-bdeps=y \
 	x11-apps/mesa-progs \
 	media-gfx/feh
 
+# ---- install additional fonts
+
+sudo emerge -nuvtND --with-bdeps=y \
+  media-fonts/liberation-fonts \
+  media-fonts/dina \
+  media-fonts/clearsans
+
+# ---- configure xorg defaults
+
 cat <<'DATA' | sudo tee -a ~vagrant/.Xresources
 ! Custom settings for X
 ! see also http://fluxbox-wiki.org/Xdefaults_setup.html
