@@ -157,6 +157,12 @@ x11-libs/libXfont2 truetype
 
 DATA
 
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-fixes
+# fix: disable Python 2.7
+dev-python/importlib_metadata -python_targets_python2_7
+
+DATA
+
 sudo mkdir -p /etc/portage/package.license
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-xorg
 # required for funtoo profile 'X':
