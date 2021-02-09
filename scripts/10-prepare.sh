@@ -81,6 +81,7 @@ fi
 sudo epro list
 
 sudo eselect python list
+sudo eselect python cleanup
 sudo eselect python set python3.7
 sudo eselect python list
 
@@ -110,7 +111,7 @@ sudo locale-gen
 sudo eselect locale set en_US.UTF-8
 source /etc/profile
 
-sudo emerge -1v portage ego
+#sudo emerge -1v portage ego	# disabled, currently needs world update first
 sudo env-update
 source /etc/profile
 sudo ego sync
@@ -154,12 +155,6 @@ x11-apps/xinit -minimal
 # required for TrueType support:
 x11-terms/xterm truetype
 x11-libs/libXfont2 truetype
-
-DATA
-
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-fixes
-# fix: disable Python 2.7
-dev-python/importlib_metadata -python_targets_python2_7
 
 DATA
 
