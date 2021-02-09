@@ -81,6 +81,7 @@ fi
 sudo epro list
 
 sudo eselect python list
+sudo eselect python cleanup
 sudo eselect python set python3.7
 sudo eselect python list
 
@@ -110,7 +111,7 @@ sudo locale-gen
 sudo eselect locale set en_US.UTF-8
 source /etc/profile
 
-sudo emerge -1v portage ego
+#sudo emerge -1v portage ego	# disabled, currently needs world update first
 sudo env-update
 source /etc/profile
 sudo ego sync
