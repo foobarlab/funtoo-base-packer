@@ -136,8 +136,7 @@ sudo epro mix-ins +X +gfxcard-vmware
 sudo epro list
 
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
-#VIDEO_CARDS="virtualbox vmware gallium-vmware xa dri3" # FIXME virtualbox/vbox-video fails on build
-VIDEO_CARDS="vmware gallium-vmware xa dri3"
+VIDEO_CARDS="virtualbox vmware gallium-vmware xa dri3"
 
 DATA
 
