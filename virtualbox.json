@@ -29,7 +29,7 @@
         ["modifyvm","{{.Name}}","--largepages", "on"],
         ["modifyvm","{{.Name}}","--graphicscontroller", "vmsvga"],
         ["modifyvm","{{.Name}}","--accelerate3d", "on"],
-        ["sharedfolder","add',{{.Name}}","--name=/vagrant","--hostpath=.","--automount"]
+        ["sharedfolder","add","{{.Name}}","--name=/vagrant","--hostpath=.","--automount"]
       ]
   }],
   "provisioners": [{
