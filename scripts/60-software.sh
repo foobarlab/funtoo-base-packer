@@ -146,3 +146,6 @@ sudo rc-update add consolefont boot
 cat <<'DATA' | sudo tee -a /etc/conf.d/local
 rc_verbose=yes
 DATA
+
+# sync any guest packages to host (via shared folder)
+sudo rsync -urv /var/cache/portage/packages/* /vagrant/packages/

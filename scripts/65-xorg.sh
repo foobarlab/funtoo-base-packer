@@ -310,3 +310,6 @@ sudo eselect fontconfig disable 10-scale-bitmap-fonts.conf || true
 sudo eselect fontconfig enable 70-yes-bitmaps.conf || true
 sudo eselect fontconfig enable 75-yes-terminus.conf || true
 sudo eselect fontconfig list
+
+# sync any guest packages to host (via shared folder)
+sudo rsync -urv /var/cache/portage/packages/* /vagrant/packages/

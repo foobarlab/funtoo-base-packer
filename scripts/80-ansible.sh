@@ -24,3 +24,6 @@ interpreter_python = auto_silent	# Python discovery, see: https://docs.ansible.c
 [ssh_connection]
 ssh_args = -o ControlMaster=auto -o ControlPersist=60s -o UserKnownHostsFile=/dev/null -o IdentitiesOnly=yes
 DATA
+
+# sync any guest packages to host (via shared folder)
+sudo rsync -urv /var/cache/portage/packages/* /vagrant/packages/

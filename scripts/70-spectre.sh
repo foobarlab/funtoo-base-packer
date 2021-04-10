@@ -27,3 +27,6 @@ sudo emerge -nuvtND --with-bdeps=y app-admin/spectre-meltdown-checker
 # report current Spectre/Meltdown status
 sudo mount /boot || true
 sudo spectre-meltdown-checker -v --explain 2>/dev/null || true
+
+# sync any guest packages to host (via shared folder)
+sudo rsync -urv /var/cache/portage/packages/* /vagrant/packages/

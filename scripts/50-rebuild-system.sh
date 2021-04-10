@@ -41,3 +41,6 @@ fi
 
 sudo env-update
 source /etc/profile
+
+# sync any guest packages to host (via shared folder)
+sudo rsync -urv /var/cache/portage/packages/* /vagrant/packages/
