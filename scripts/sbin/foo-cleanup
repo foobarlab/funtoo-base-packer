@@ -37,7 +37,6 @@ eclean-kernel -l
 eclean-kernel -n 2	# keep 2 kernels maximum
 
 echo ">>> Cleaning binary packages ..."
-# TODO remove completely?
 eclean-pkg
 
 echo ">>> Sync I/O ..."
