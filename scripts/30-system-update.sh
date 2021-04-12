@@ -21,4 +21,5 @@ sudo env-update
 source /etc/profile
 
 # sync any guest packages to host (via shared folder)
-sudo rsync -urv /var/cache/portage/packages/* /vagrant/packages/
+sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
+sudo rsync -urv /var/cache/portage/packages/* $sf_vagrant/packages/
