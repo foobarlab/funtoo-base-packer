@@ -91,10 +91,11 @@ sudo eclean-kernel -l
 cd /usr/src/linux
 
 # apply 'make olddefconfig' on 'kernel.config' in case kernel config is outdated
+sudo cp -f /usr/src/kernel.config /usr/src/kernel.config.bak
 sudo mv -f /usr/src/kernel.config /usr/src/linux/.config
 sudo make olddefconfig
 sudo mv -f /usr/src/linux/.config /usr/src/kernel.config
-sudo cp /usr/src/kernel.config /usr/src/kernel.config.base-dist
+sudo cp -f /usr/src/kernel.config /usr/src/kernel.config.base-dist
 
 sudo genkernel all
 
