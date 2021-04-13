@@ -5,7 +5,8 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
-# import binary packages
+# ---- import binary packages
+
 sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
 mkdir -p $sf_vagrant/packages || true
 sudo mkdir -p /var/cache/portage/packages || true
@@ -16,17 +17,19 @@ sudo find /var/cache/portage/packages/ -type f -exec chmod 644 {} +
 sudo chown root:portage /var/cache/portage/packages
 sudo chmod 775 /var/cache/portage/packages
 
-# install /usr/local scripts
+# ---- install /usr/local scripts
+
 sudo chown root:root /tmp/sbin/*
 sudo chmod 750 /tmp/sbin/*
 sudo cp -f /tmp/sbin/* /usr/local/sbin/
+
+# ---- box name
 
 echo "$BUILD_BOX_DESCRIPTION" >> ~vagrant/.release_$BUILD_BOX_NAME
 sed -i 's/<br>/\n/g' ~vagrant/.release_$BUILD_BOX_NAME
 sed -i 's/<a .*a>/'$BUILD_GIT_COMMIT_ID'/g' ~vagrant/.release_$BUILD_BOX_NAME
 
-# TODO experimental
-#sudo sed -i 's/USE=\"/USE="gold /g' /etc/portage/make.conf
+# ---- make.conf
 
 sudo sed -i 's/USE=\"/USE="zsh-completion idn lzma tools udev syslog cacert threads pic ncurses /g' /etc/portage/make.conf
 
@@ -53,6 +56,8 @@ EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'virtual/* */*-bin 
 DATA
 sudo sed -i 's/BUILD_MAKEOPTS/'"${BUILD_MAKEOPTS}"'/g' /etc/portage/make.conf
 
+# ---- package.use
+
 sudo mkdir -p /etc/portage/package.use
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-kernel
 sys-kernel/genkernel -cryptsetup
@@ -69,8 +74,12 @@ app-portage/eix doc
 media-fonts/terminus-font distinct-l
 DATA
 
+# ---- re-sync and clean binary packages
+
 sudo ego sync
 sudo eclean packages
+
+# ---- set profiles
 
 sudo epro mix-ins +no-systemd +console-extras
 
@@ -80,10 +89,14 @@ fi
 
 sudo epro list
 
+# ---- cleanup python
+
 sudo eselect python list
 sudo eselect python cleanup
 sudo eselect python set python3.7
 sudo eselect python list
+
+# ---- /etc/motd and /etc/issue
 
 sudo rm -f /etc/motd
 cat <<'DATA' | sudo tee -a /etc/motd
@@ -97,7 +110,7 @@ sudo sed -i 's/BUILD_BOX_VERSION/'"$BUILD_BOX_VERSION"'/g' /etc/motd
 sudo sed -i 's/BUILD_TIMESTAMP/'"$BUILD_TIMESTAMP"'/g' /etc/motd
 sudo cat /etc/motd
 
-sudo mv -f /etc/issue /etc/issue.old
+sudo rm -f /etc/issue
 cat <<'DATA' | sudo tee -a /etc/issue
 This is a Funtoo GNU/Linux Vagrant Box (BUILD_BOX_USERNAME/BUILD_BOX_NAME BUILD_BOX_VERSION)
 
@@ -107,15 +120,19 @@ sudo sed -i 's/BUILD_BOX_NAME/'$BUILD_BOX_NAME'/g' /etc/issue
 sudo sed -i 's/BUILD_BOX_USERNAME/'"$BUILD_BOX_USERNAME"'/g' /etc/issue
 sudo cat /etc/issue
 
+# ---- set locales
+
 sudo locale-gen
 sudo eselect locale set en_US.UTF-8
 source /etc/profile
 
-#sudo emerge -1v portage ego	# disabled, currently needs world update first
+# ---- re-sync meta-repo and overlays
+
 sudo env-update
 source /etc/profile
 sudo ego sync
-sudo emaint binhost --fix
+
+# ---- build X11?
 
 if [ -z ${BUILD_WINDOW_SYSTEM:-} ]; then
   echo "BUILD_WINDOW_SYSTEM was not set. Skipping ..."
@@ -163,6 +180,7 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-xorg
 # required for funtoo profile 'X':
 >=media-libs/libpng-1.6.37 libpng2
 DATA
+# FIXME needed when not building X11?
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
 >=sys-devel/llvm-9.0 Apache-2.0-with-LLVM-exceptions
 >=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
