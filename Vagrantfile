@@ -48,24 +48,25 @@ rc-status
 /etc/init.d/dhcpcd stop || true
 /etc/init.d/local stop || true
 /etc/init.d/acpid stop || true
-# clean all logs
-shopt -s globstar
-truncate -s 0 /var/log/*.log
-truncate -s 0 /var/log/**/*.log
-find /var/log -type f -name '*.[0-99].gz' -exec rm {} +
-logfiles=( messages dmesg lastlog wtmp )
-for i in "${logfiles[@]}"; do
-	truncate -s 0 /var/log/$i
-done
+# let it settle
+sync && sleep 10
+# run cleanup script (from funtoo-base box)
+/usr/local/sbin/foo-cleanup
+# delete some logfiles
 logfiles=( emerge emerge-fetch genkernel )
 for i in "${logfiles[@]}"; do
-	rm -f /var/log/$i.log
+    rm -f /var/log/$i.log
 done
 rm -f /var/log/portage/elog/*.log
 # let it settle
-sync && sleep 30
+sync && sleep 10
 # debug: list running services
 rc-status
+# clean shell history
+set +o history
+rm -f /home/vagrant/.bash_history
+rm -f /root/.bash_history
+sync
 # run zerofree at last to squeeze the last bit
 # /boot
 mount -v -n -o remount,ro /dev/sda1
