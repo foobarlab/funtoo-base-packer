@@ -4,19 +4,19 @@
 if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
 
 echo ">>> Removing temporary files ..."
-rm -rf /usr/tmp/*
+rm -rf /usr/tmp/* || die
 
 echo ">>> Removing distfiles ..."
-rm -rf /var/cache/portage/distfiles/*
+rm -rf /var/cache/portage/distfiles/* || die
 
 echo ">>> Removing meta-repo ..."
-rm -rf /var/git/meta-repo
+rm -rf /var/git/meta-repo || die
 
 echo ">>> Clean logs ..."
 shopt -s globstar
 truncate -s 0 /var/log/*.log
 truncate -s 0 /var/log/**/*.log
-find /var/log -type f -name '*.[0-99].gz' -exec rm {} +
+find /var/log -type f -name '*.[0-99].gz' -exec rm {} + || die
 logfiles=( messages dmesg lastlog wtmp )
 for i in "${logfiles[@]}"; do
 	truncate -s 0 /var/log/$i
@@ -24,7 +24,7 @@ done
 
 echo ">>> Clean home dirs ..."
 bash -c 'cat /dev/null > ~/.bash_history && history -c && exit'
-rm -rf ~vagrant/.bash_history
+rm -rf ~vagrant/.bash_history || die
 
 echo ">>> Clean kernel sources ..."
 cd /usr/src/linux

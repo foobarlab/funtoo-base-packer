@@ -9,7 +9,7 @@ if [ ! -d "/var/git/meta-repo" ]; then
   /usr/local/sbin/foo-sync
 fi
 
-emerge -avtuDN --with-bdeps=y @world
+emerge -avtuDN --color=n --with-bdeps=y @world
 
 if [ $? -ne 0 ]; then
   echo "Failure during update: user cancelled or an error ocurred. Please run 'foo-sync' and try again." >&2
