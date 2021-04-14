@@ -24,6 +24,8 @@ echo "Drop build version ..."
 rm -f build_version || true
 echo "Drop major version ..."
 rm -f version || true
+echo "Drop build runtime ..."
+rm -f build_time || true
 echo "Deleting any box file ..."
 rm -f *.box || true
 echo "Cleanup old logs ..."
