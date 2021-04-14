@@ -114,7 +114,6 @@ display {
     kernel kernel[-v]
     initrd initramfs[-v]
     params += root=auto rootfstype=auto
-    params += nomodeset
 }
 DATA
 
