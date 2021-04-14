@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+start=`date +%s`
+
 echo "Executing $0 ..."
 
 export BUILD_PARENT_BOX_CHECK=true
@@ -101,3 +103,11 @@ else
     echo "There is no box file '$BUILD_OUTPUT_FILE_TEMP' in the current directory."
     exit 1
 fi
+
+end=`date +%s`
+runtime=$((end-start))
+hours=$((runtime / 3600));
+minutes=$(( (runtime % 3600) / 60 ));
+seconds=$(( (runtime % 3600) % 60 ));
+echo "$hours hours $minutes minutes $seconds seconds" >> build_time
+echo "Total build runtime was $hours hours $minutes minutes $seconds seconds."

@@ -21,11 +21,12 @@ command -v jq >/dev/null 2>&1 || { echo "Command 'jq' required but it's not inst
 echo "This script is marked as EXPERIMENTAL! Use at your own risk."
 echo "This script will upload the current build box to Vagrant Cloud."
 echo
-echo "User:     $BUILD_BOX_USERNAME"
-echo "Box:      $BUILD_BOX_NAME"
-echo "Provider: $BUILD_BOX_PROVIDER"
-echo "Version:  $BUILD_BOX_VERSION"
-echo "File:     $BUILD_OUTPUT_FILE"
+echo "User:       $BUILD_BOX_USERNAME"
+echo "Box:        $BUILD_BOX_NAME"
+echo "Provider:   $BUILD_BOX_PROVIDER"
+echo "Version:    $BUILD_BOX_VERSION"
+echo "File:       $BUILD_OUTPUT_FILE"
+echo "Build time: $BUILD_RUNTIME"
 echo
 echo "Please verify if above information is correct."
 echo

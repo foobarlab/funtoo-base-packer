@@ -66,7 +66,7 @@ COMPRESS_INITRD="yes"
 COMPRESS_INITRD_TYPE="best"
 #NETBOOT="1"
 CMD_CALLBACK="emerge -vt @module-rebuild"
-REAL_ROOT="/dev/sda4"
+#REAL_ROOT="/dev/sda4"
 DATA
 
 sudo sed -i 's/BUILD_MAKEOPTS/'"$BUILD_MAKEOPTS"'/g' /etc/genkernel.conf
@@ -76,10 +76,6 @@ source /etc/profile
 
 sudo eclean-kernel -l
 sudo eselect kernel list
-
-# unmerge any existing kernel sources:
-#sudo emerge --unmerge sys-kernel/debian-sources-lts
-#sudo emerge --unmerge sys-kernel/debian-sources
 
 sudo emerge -nuvtND --with-bdeps=y sys-kernel/debian-sources
 
@@ -117,7 +113,7 @@ display {
 "Funtoo Linux" {
     kernel kernel[-v]
     initrd initramfs[-v]
-    params += real_root=/dev/sda4 root=PARTLABEL=rootfs rootfstype=ext4
+    params += root=auto rootfstype=auto
 }
 DATA
 
