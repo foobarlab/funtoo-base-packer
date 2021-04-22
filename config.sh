@@ -15,9 +15,6 @@ export BUILD_PARENT_BOX_VAGRANTCLOUD_NAME="$BUILD_BOX_USERNAME/$BUILD_PARENT_BOX
 
 export BUILD_GUEST_TYPE="Gentoo_64"
 
-# number of cores used during box creation (memory is calculated automatically):
-export BUILD_CPUS="4"
-
 # default memory/cpus used for final created box:
 export BUILD_BOX_CPUS="2"
 export BUILD_BOX_MEMORY="2048"
@@ -38,9 +35,12 @@ export BUILD_KEEP_MAX_CLOUD_BOXES=1       # set the maximum number of boxes to k
 echo $BUILD_BOX_FUNTOO_VERSION | sed -e 's/\.//g' > version    # auto set major version
 . version.sh    # determine build version
 
+# detect number of system cpus available (always select maximum for best performance)
+export BUILD_CPUS=`grep -c ^processor /proc/cpuinfo`
+
 let "jobs = $BUILD_CPUS + 1"       # calculate number of jobs (threads + 1)
 export BUILD_MAKEOPTS="-j${jobs}"
-let "memory = $jobs * 2048"        # recommended 2GB for each job
+let "memory = $BUILD_CPUS * 2048"  # recommended 2GB for each cpu
 export BUILD_MEMORY="${memory}"
 
 BUILD_BOX_RELEASE_NOTES="Funtoo $BUILD_BOX_FUNTOO_VERSION (x86, intel64-nehalem), Debian Kernel 5.10, VirtualBox Guest Additions 6.1"     # edit this to reflect actual setup
