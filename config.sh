@@ -1,6 +1,7 @@
 #!/bin/bash
 
 command -v git >/dev/null 2>&1 || { echo "Command 'git' required but it's not installed.  Aborting." >&2; exit 1; }
+command -v nproc >/dev/null 2>&1 || { echo "Command 'nproc' from coreutils required but it's not installed.  Aborting." >&2; exit 1; }
 
 export BUILD_BOX_NAME="funtoo-base"
 export BUILD_BOX_USERNAME="foobarlab"
