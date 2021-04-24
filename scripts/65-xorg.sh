@@ -246,8 +246,7 @@ borderColor:                    #666666
 DATA
 sudo chown vagrant:vagrant ~vagrant/.fluxbox/overlay
 
-# TODO customize fluxbox usermenu
-
+# generate initial fluxbox menu
 fluxbox-generate_menu -is -ds
 
 #sudo rc-update add xdm default   # enable just for debugging
@@ -266,12 +265,6 @@ sudo emerge -nuvtND --with-bdeps=y \
   media-fonts/dina \
   media-fonts/clearsans \
   media-fonts/inconsolata
-
-# ---- install additional editors
-
-sudo emerge -nuvtND --with-bdeps=y \
-    app-editors/gvim \
-    app-editors/leafpad
 
 # ---- configure xorg defaults
 
