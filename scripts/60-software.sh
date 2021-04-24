@@ -110,7 +110,7 @@ sudo emerge -nuvtND --with-bdeps=y \
 	sys-fs/fuse \
 	net-fs/sshfs
 
-# various utils
+# various cmdline utils
 sudo emerge -nuvtND --with-bdeps=y \
 	sys-apps/pv \
 	sys-process/htop \

@@ -246,7 +246,7 @@ borderColor:                    #666666
 DATA
 sudo chown vagrant:vagrant ~vagrant/.fluxbox/overlay
 
-# TODO customize usermenu
+# TODO customize fluxbox usermenu
 
 fluxbox-generate_menu -is -ds
 
@@ -264,7 +264,8 @@ sudo emerge -nuvtND --with-bdeps=y \
 sudo emerge -nuvtND --with-bdeps=y \
   media-fonts/liberation-fonts \
   media-fonts/dina \
-  media-fonts/clearsans
+  media-fonts/clearsans \
+  media-fonts/inconsolata
 
 # ---- configure xorg defaults
 
