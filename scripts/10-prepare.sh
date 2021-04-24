@@ -174,6 +174,10 @@ x11-terms/xterm truetype
 x11-libs/libXfont2 truetype
 
 DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-audio
+>=media-plugins/alsa-plugins-1.2.2 pulseaudio
+
+DATA
 
 sudo mkdir -p /etc/portage/package.license
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-xorg
