@@ -81,7 +81,7 @@ sudo eclean packages
 
 # ---- set profiles
 
-sudo epro mix-ins +no-systemd +console-extras
+sudo epro mix-ins +no-systemd +console-extras +audio
 
 if [[ -n "$BUILD_FLAVOR" ]]; then
     sudo epro flavor $BUILD_FLAVOR
