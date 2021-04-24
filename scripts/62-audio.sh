@@ -9,3 +9,7 @@ fi
 
 sudo emerge -nuvtND --with-bdeps=y \
     media-sound/pulseaudio
+
+# sync any guest packages to host (via shared folder)
+sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
+sudo rsync -urv /var/cache/portage/packages/* $sf_vagrant/packages/
