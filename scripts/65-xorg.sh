@@ -267,6 +267,12 @@ sudo emerge -nuvtND --with-bdeps=y \
   media-fonts/clearsans \
   media-fonts/inconsolata
 
+# ---- install additional editors
+
+sudo emerge -nuvtND --with-bdeps=y \
+    app-editors/gvim \
+    app-editors/leafpad
+
 # ---- configure xorg defaults
 
 cat <<'DATA' | sudo tee -a ~vagrant/.Xresources
