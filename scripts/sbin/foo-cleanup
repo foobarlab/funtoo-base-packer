@@ -30,6 +30,8 @@ echo ">>> Clean kernel sources ..."
 cd /usr/src/linux
 make distclean
 cp /usr/src/kernel.config /usr/src/linux/.config
+make olddefconfig
+make modules_prepare
 
 echo ">>> Cleaning installed kernels ..."
 mount /boot || true
