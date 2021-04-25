@@ -6,10 +6,8 @@ system("./config.sh >/dev/null")
 $script_export_packages = <<SCRIPT
 # remove obsolete binary packages
 eclean-pkg
-# clean target directory
-rm -rf /vagrant/packages/*
 # sync any guest packages to host (vboxsf)
-rsync -urv /var/cache/portage/packages/* /vagrant/packages/
+rsync -avzh --delete /var/cache/portage/packages /vagrant/packages
 # clean guest packages
 rm -rf /var/cache/portage/packages/*
 # let it settle
