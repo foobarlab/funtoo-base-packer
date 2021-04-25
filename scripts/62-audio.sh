@@ -10,7 +10,12 @@ fi
 sudo emerge -nuvtND --with-bdeps=y \
     media-sound/pulseaudio \
     media-sound/alsa-tools \
-    media-sound/alsa-utils
+    media-sound/alsa-utils \
+    media-sound/paprefs \
+    media-sound/pavucontrol \
+    media-sound/pasystray \
+    media-sound/pavumeter \
+    media-sound/pamix
 
 # sync any guest packages to host (via shared folder)
 sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
