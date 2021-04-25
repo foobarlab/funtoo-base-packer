@@ -127,6 +127,7 @@ sudo emerge -nuvtND --with-bdeps=y \
 	www-client/links \
 	net-ftp/ncftp \
 	mail-client/mutt \
+	net-irc/irssi \
 	app-portage/eix \
 	app-portage/genlop \
 	app-portage/portage-utils \
