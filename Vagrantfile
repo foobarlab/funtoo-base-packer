@@ -7,11 +7,11 @@ $script_export_packages = <<SCRIPT
 # remove obsolete binary packages
 eclean-pkg
 # clean target directory
-rm -f /vagrant/packages/*
+rm -rf /vagrant/packages/*
 # sync any guest packages to host (vboxsf)
 rsync -urv /var/cache/portage/packages/* /vagrant/packages/
 # clean guest packages
-rm -f /var/cache/portage/packages/*
+rm -rf /var/cache/portage/packages/*
 # let it settle
 sync && sleep 30
 SCRIPT
