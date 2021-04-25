@@ -132,6 +132,23 @@ sudo env-update
 source /etc/profile
 sudo ego sync
 
+# ---- non-x11 flags
+
+sudo mkdir -p /etc/portage/package.use
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-audio
+media-plugins/alsa-plugins pulseaudio
+DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-ansible
+# skip python 2.7 support for Ansible to save some space
+>=app-admin/ansible -python_targets_python2_7
+DATA
+
+sudo mkdir -p /etc/portage/package.license
+cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
+>=sys-devel/llvm-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
+DATA
+
 # ---- build X11?
 
 if [ -z ${BUILD_WINDOW_SYSTEM:-} ]; then
@@ -158,7 +175,6 @@ VIDEO_CARDS="virtualbox vmware gallium-vmware xa dri3"
 
 DATA
 
-sudo mkdir -p /etc/portage/package.use
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-xorg
 # required for funtoo profile 'X':
 media-libs/gd fontconfig jpeg truetype png
@@ -174,18 +190,8 @@ x11-terms/xterm truetype
 x11-libs/libXfont2 truetype
 
 DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-audio
->=media-plugins/alsa-plugins-1.2.2 pulseaudio
 
-DATA
-
-sudo mkdir -p /etc/portage/package.license
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-xorg
 # required for funtoo profile 'X':
 >=media-libs/libpng-1.6.37 libpng2
-DATA
-# FIXME needed when not building X11?
-cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
->=sys-devel/llvm-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
 DATA
