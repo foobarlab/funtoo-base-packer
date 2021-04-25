@@ -8,7 +8,7 @@ fi
 sudo env-update
 source /etc/profile
 
-sudo eclean packages
+sudo eclean packages --deep
 
 sudo emerge --depclean
 sudo emerge -vt @preserved-rebuild
