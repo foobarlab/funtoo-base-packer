@@ -122,6 +122,12 @@ cat <<'DATA' | sudo tee -a ~vagrant/.fluxbox/startup
 # background color
 fbsetroot -solid gray23 &
 
+# volume control
+/usr/bin/pasystray &
+
+# networkmanager, see: https://wiki.gentoo.org/wiki/NetworkManager
+#/usr/bin/nm-applet &
+
 # Initially start a terminal
 xterm -fullscreen &
 
@@ -249,7 +255,8 @@ sudo chown vagrant:vagrant ~vagrant/.fluxbox/overlay
 # generate initial fluxbox menu
 fluxbox-generate_menu -is -ds
 
-#sudo rc-update add xdm default   # enable just for debugging
+# xdm not started by default
+#sudo rc-update add xdm default
 
 # ---- install basic utils
 
@@ -257,6 +264,17 @@ sudo emerge -nuvtND --with-bdeps=y \
 	x11-terms/xterm \
 	x11-apps/mesa-progs \
 	media-gfx/feh
+	
+# ---- networking
+
+sudo emerge -nuvtND --with-bdeps=y \
+  gnome-extra/nm-applet \
+  net-vpn/networkmanager-openvpn
+
+sudo gpasswd -a vagrant plugdev
+
+# networkmanager not started by default
+#sudo rc-update add NetworkManager default
 
 # ---- install additional fonts
 
