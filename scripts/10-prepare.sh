@@ -140,7 +140,7 @@ media-plugins/alsa-plugins pulseaudio
 DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-ansible
 # skip python 2.7 support for Ansible to save some space
->=app-admin/ansible -python_targets_python2_7
+app-admin/ansible -python_targets_python2_7
 DATA
 
 sudo mkdir -p /etc/portage/package.license
