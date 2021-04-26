@@ -4,8 +4,6 @@
 system("./config.sh >/dev/null")
 
 $script_export_packages = <<SCRIPT
-# remove obsolete binary packages
-eclean-pkg
 # sync any guest packages to host (vboxsf)
 rsync -avzh --delete /var/cache/portage/packages /vagrant/packages
 # clean guest packages
