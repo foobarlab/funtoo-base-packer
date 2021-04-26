@@ -167,7 +167,7 @@ echo "BUILD_WINDOW_SYSTEM set to True. Preparing Portage ..."
 # - should BUILD_KERNEL be set to 'true'?
 # - should BUILD_HEADLESS be set to 'true'?
 
-sudo epro mix-ins +X +gfxcard-vmware
+sudo epro mix-ins +X +gfxcard-vmware +gnome
 sudo epro list
 
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
@@ -188,6 +188,14 @@ x11-apps/xinit -minimal
 # required for TrueType support:
 x11-terms/xterm truetype
 x11-libs/libXfont2 truetype
+
+DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-gnome
+# needed for 'nm-applet':
+#>=app-crypt/pinentry-1.1.1 gnome-keyring
+
+# needed for gnome profile:
+>=net-libs/libpsl-0.20.2 -idn -icu idn2
 
 DATA
 

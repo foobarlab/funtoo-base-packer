@@ -122,6 +122,15 @@ cat <<'DATA' | sudo tee -a ~vagrant/.fluxbox/startup
 # background color
 fbsetroot -solid gray23 &
 
+# volume control
+/usr/bin/pasystray &
+
+# networkmanager
+/usr/bin/nm-applet &
+
+# bluetooth
+#/usr/bin/blueberry-tray &
+
 # Initially start a terminal
 xterm -fullscreen &
 
@@ -257,6 +266,12 @@ sudo emerge -nuvtND --with-bdeps=y \
 	x11-terms/xterm \
 	x11-apps/mesa-progs \
 	media-gfx/feh
+	
+# ---- networking utils
+
+sudo emerge -nuvtND --with-bdeps=y \
+	gnome-extra/nm-applet \
+	net-wireless/blueberry	
 
 # ---- install additional fonts
 
