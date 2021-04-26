@@ -17,8 +17,10 @@ for script in \
   30-system-update \
   40-gcc-upgrade \
   50-rebuild-system \
-  60-software \
+  60-cmdline-tools \
+  62-audio \
   65-xorg \
+  67-editor \
   70-spectre \
   80-ansible \
   90-postprocess \

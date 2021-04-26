@@ -6,12 +6,10 @@ system("./config.sh >/dev/null")
 $script_export_packages = <<SCRIPT
 # remove obsolete binary packages
 eclean-pkg
-# clean target directory
-rm -f /vagrant/packages/*
 # sync any guest packages to host (vboxsf)
-rsync -urv /var/cache/portage/packages/* /vagrant/packages/
+rsync -avzh --delete /var/cache/portage/packages /vagrant/packages
 # clean guest packages
-rm -f /var/cache/portage/packages/*
+rm -rf /var/cache/portage/packages/*
 # let it settle
 sync && sleep 30
 SCRIPT
@@ -90,8 +88,13 @@ Vagrant.configure("2") do |config|
     vb.cpus = "#{ENV['BUILD_BOX_CPUS']}"
     # customize VirtualBox settings, see also 'virtualbox.json'
     vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
-    vb.customize ["modifyvm", :id, "--audio", "none"]
-    vb.customize ["modifyvm", :id, "--usb", "off"]
+    vb.customize ["modifyvm", :id, "--audio", "pulse"]
+    vb.customize ["modifyvm", :id, "--audiocontroller", "hda"]
+    vb.customize ["modifyvm", :id, "--audioin", "on"]
+    vb.customize ["modifyvm", :id, "--audioout", "on"]
+    vb.customize ["modifyvm", :id, "--usb", "on"]
+    vb.customize ["modifyvm", :id, "--usbehci", "on"]
+    vb.customize ["modifyvm", :id, "--usbxhci", "on"]
     vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
     vb.customize ["modifyvm", :id, "--chipset", "ich9"]
     vb.customize ["modifyvm", :id, "--vram", "64"]
@@ -99,9 +102,12 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--hpet", "on"]
     vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
     vb.customize ["modifyvm", :id, "--vtxvpid", "on"]
+    vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     vb.customize ["modifyvm", :id, "--largepages", "on"]
+    vb.customize ["modifyvm", :id, "--spec-ctrl", "off"]
     vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
     vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+    vb.customize ["modifyvm", :id, "--clipboard-mode", "bidirectional"]
   end
   config.ssh.insert_key = false
   config.ssh.connect_timeout = 60

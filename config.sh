@@ -1,6 +1,7 @@
 #!/bin/bash
 
 command -v git >/dev/null 2>&1 || { echo "Command 'git' required but it's not installed.  Aborting." >&2; exit 1; }
+command -v nproc >/dev/null 2>&1 || { echo "Command 'nproc' from coreutils required but it's not installed.  Aborting." >&2; exit 1; }
 
 export BUILD_BOX_NAME="funtoo-base"
 export BUILD_BOX_USERNAME="foobarlab"
@@ -36,7 +37,7 @@ echo $BUILD_BOX_FUNTOO_VERSION | sed -e 's/\.//g' > version    # auto set major 
 . version.sh    # determine build version
 
 # detect number of system cpus available (always select maximum for best performance)
-export BUILD_CPUS=`grep -c ^processor /proc/cpuinfo`
+export BUILD_CPUS=`nproc --all`
 
 let "jobs = $BUILD_CPUS + 1"       # calculate number of jobs (threads + 1)
 export BUILD_MAKEOPTS="-j${jobs}"
