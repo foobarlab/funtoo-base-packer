@@ -29,6 +29,30 @@ echo "$BUILD_BOX_DESCRIPTION" >> ~vagrant/.release_$BUILD_BOX_NAME
 sed -i 's/<br>/\n/g' ~vagrant/.release_$BUILD_BOX_NAME
 sed -i 's/<a .*a>/'$BUILD_GIT_COMMIT_ID'/g' ~vagrant/.release_$BUILD_BOX_NAME
 
+# ---- /etc/motd and /etc/issue
+
+sudo rm -f /etc/motd
+cat <<'DATA' | sudo tee -a /etc/motd
+
+Funtoo GNU/Linux Vagrant Box (BUILD_BOX_USERNAME/BUILD_BOX_NAME) - release BUILD_BOX_VERSION build BUILD_TIMESTAMP
+
+DATA
+sudo sed -i 's/BUILD_BOX_NAME/'"$BUILD_BOX_NAME"'/g' /etc/motd
+sudo sed -i 's/BUILD_BOX_USERNAME/'"$BUILD_BOX_USERNAME"'/g' /etc/motd
+sudo sed -i 's/BUILD_BOX_VERSION/'"$BUILD_BOX_VERSION"'/g' /etc/motd
+sudo sed -i 's/BUILD_TIMESTAMP/'"$BUILD_TIMESTAMP"'/g' /etc/motd
+sudo cat /etc/motd
+
+sudo rm -f /etc/issue
+cat <<'DATA' | sudo tee -a /etc/issue
+This is a Funtoo GNU/Linux Vagrant Box (BUILD_BOX_USERNAME/BUILD_BOX_NAME-BUILD_BOX_VERSION)
+
+DATA
+sudo sed -i 's/BUILD_BOX_VERSION/'$BUILD_BOX_VERSION'/g' /etc/issue
+sudo sed -i 's/BUILD_BOX_NAME/'$BUILD_BOX_NAME'/g' /etc/issue
+sudo sed -i 's/BUILD_BOX_USERNAME/'"$BUILD_BOX_USERNAME"'/g' /etc/issue
+sudo cat /etc/issue
+
 # ---- custom overlay
 
 if [ "$BUILD_CUSTOM_OVERLAY" = true ]; then
@@ -120,30 +144,6 @@ sudo eselect python list
 sudo eselect python cleanup
 sudo eselect python set python3.7
 sudo eselect python list
-
-# ---- /etc/motd and /etc/issue
-
-sudo rm -f /etc/motd
-cat <<'DATA' | sudo tee -a /etc/motd
-
-Funtoo GNU/Linux Vagrant Box (BUILD_BOX_USERNAME/BUILD_BOX_NAME) - release BUILD_BOX_VERSION build BUILD_TIMESTAMP
-
-DATA
-sudo sed -i 's/BUILD_BOX_NAME/'"$BUILD_BOX_NAME"'/g' /etc/motd
-sudo sed -i 's/BUILD_BOX_USERNAME/'"$BUILD_BOX_USERNAME"'/g' /etc/motd
-sudo sed -i 's/BUILD_BOX_VERSION/'"$BUILD_BOX_VERSION"'/g' /etc/motd
-sudo sed -i 's/BUILD_TIMESTAMP/'"$BUILD_TIMESTAMP"'/g' /etc/motd
-sudo cat /etc/motd
-
-sudo rm -f /etc/issue
-cat <<'DATA' | sudo tee -a /etc/issue
-This is a Funtoo GNU/Linux Vagrant Box (BUILD_BOX_USERNAME/BUILD_BOX_NAME BUILD_BOX_VERSION)
-
-DATA
-sudo sed -i 's/BUILD_BOX_VERSION/'$BUILD_BOX_VERSION'/g' /etc/issue
-sudo sed -i 's/BUILD_BOX_NAME/'$BUILD_BOX_NAME'/g' /etc/issue
-sudo sed -i 's/BUILD_BOX_USERNAME/'"$BUILD_BOX_USERNAME"'/g' /etc/issue
-sudo cat /etc/issue
 
 # ---- set locales
 
