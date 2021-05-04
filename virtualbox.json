@@ -67,7 +67,11 @@
           "BUILD_REPORT_SPECTRE={{user `report_spectre`}}",
           "BUILD_INCLUDE_ANSIBLE={{user `include_ansible`}}",
           "BUILD_KERNEL={{user `kernel`}}",
-          "BUILD_WINDOW_SYSTEM={{user `window_system`}}"
+          "BUILD_WINDOW_SYSTEM={{user `window_system`}}",
+          "BUILD_CUSTOM_OVERLAY={{user `custom_overlay`}}",
+          "BUILD_CUSTOM_OVERLAY_NAME={{user `custom_overlay_name`}}",
+          "BUILD_CUSTOM_OVERLAY_URL={{user `custom_overlay_url`}}",
+          "BUILD_CUSTOM_OVERLAY_BRANCH={{user `custom_overlay_branch`}}"
       ],
       "expect_disconnect": false
   }],
@@ -97,6 +101,10 @@
     "include_ansible": "{{env `BUILD_INCLUDE_ANSIBLE`}}",
     "kernel": "{{env `BUILD_KERNEL`}}",
     "window_system": "{{env `BUILD_WINDOW_SYSTEM`}}",
+    "custom_overlay": "{{env `BUILD_CUSTOM_OVERLAY`}}",
+    "custom_overlay_name": "{{env `BUILD_CUSTOM_OVERLAY_NAME`}}",
+    "custom_overlay_url": "{{env `BUILD_CUSTOM_OVERLAY_URL`}}",
+    "custom_overlay_branch": "{{env `BUILD_CUSTOM_OVERLAY_BRANCH`}}",
     "headless": "{{env `BUILD_HEADLESS`}}",
     "username": "vagrant",
     "password": "vagrant"

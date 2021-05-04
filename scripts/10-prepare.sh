@@ -29,6 +29,31 @@ echo "$BUILD_BOX_DESCRIPTION" >> ~vagrant/.release_$BUILD_BOX_NAME
 sed -i 's/<br>/\n/g' ~vagrant/.release_$BUILD_BOX_NAME
 sed -i 's/<a .*a>/'$BUILD_GIT_COMMIT_ID'/g' ~vagrant/.release_$BUILD_BOX_NAME
 
+# ---- custom overlay
+
+if [ "$BUILD_CUSTOM_OVERLAY" = true ]; then
+    cd /var/git
+    sudo mkdir -p overlay
+    cd overlay
+    # example: git clone --depth 1 -b development "https://github.com/foobarlab/foobarlab-overlay.git" ./foobarlab
+    sudo git clone --depth 1 -b $BUILD_CUSTOM_OVERLAY_BRANCH "$BUILD_CUSTOM_OVERLAY_URL" ./$BUILD_CUSTOM_OVERLAY_NAME
+    cd ./$BUILD_CUSTOM_OVERLAY_NAME
+    # set default strategy:
+    #sudo git config pull.rebase true  # merge
+    sudo git config pull.ff only       # fast forward only (recommended)
+    sudo chown -R portage.portage /var/git/overlay
+    cat <<'DATA' | sudo tee -a /etc/portage/repos.conf/$BUILD_CUSTOM_OVERLAY_NAME
+[DEFAULT]
+main-repo = core-kit
+
+[BUILD_CUSTOM_OVERLAY_NAME]
+location = /var/git/overlay/BUILD_CUSTOM_OVERLAY_NAME
+auto-sync = no
+priority = 10
+DATA
+    sudo sed -i 's/BUILD_CUSTOM_OVERLAY_NAME/'"$BUILD_CUSTOM_OVERLAY_NAME"'/g' /etc/portage/repos.conf/$BUILD_CUSTOM_OVERLAY_NAME
+fi
+
 # ---- make.conf
 
 sudo sed -i 's/USE=\"/USE="zsh-completion idn lzma tools udev syslog cacert threads pic ncurses /g' /etc/portage/make.conf

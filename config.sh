@@ -20,6 +20,11 @@ export BUILD_GUEST_TYPE="Gentoo_64"
 export BUILD_BOX_CPUS="2"
 export BUILD_BOX_MEMORY="2048"
 
+export BUILD_CUSTOM_OVERLAY=true
+export BUILD_CUSTOM_OVERLAY_NAME="foobarlab"
+export BUILD_CUSTOM_OVERLAY_URL="https://github.com/foobarlab/foobarlab-overlay.git"
+export BUILD_CUSTOM_OVERLAY_BRANCH="main"   # set to 'development' for most current (or 'main' for more stable)
+
 export BUILD_FLAVOR="server"              # specify the flavor profile, see https://www.funtoo.org/Funtoo_Profiles#Flavors
 export BUILD_KERNEL=true                  # set to true to build a new kernel (Debian)
 export BUILD_GCC_VERSION=""               # experimental: specify which GCC version to install or leave empty to keep the default, e.g. "9.1.1"
