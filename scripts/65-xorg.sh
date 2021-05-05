@@ -267,11 +267,13 @@ sudo emerge -nuvtND --with-bdeps=y \
 	
 # ---- networking
 
-sudo emerge -nuvtND --with-bdeps=y \
-  gnome-extra/nm-applet \
-  net-vpn/networkmanager-openvpn
-
+# allow user access for pluggable devices
 sudo gpasswd -a vagrant plugdev
+
+# networkmanager not installed by default
+#sudo emerge -nuvtND --with-bdeps=y \
+#  gnome-extra/nm-applet \
+#  net-vpn/networkmanager-openvpn
 
 # networkmanager not started by default
 #sudo rc-update add NetworkManager default
