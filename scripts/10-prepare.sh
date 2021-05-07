@@ -94,16 +94,19 @@ EMERGE_DEFAULT_OPTS="--usepkg --binpkg-respect-use=y"
 EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --buildpkg-exclude 'virtual/* */*-bin sys-apps/* sys-kernel/*-sources app-emulation/virtualbox-guest-additions'"
 EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'virtual/* */*-bin sys-apps/* sys-kernel/*-sources app-emulation/virtualbox-guest-additions'"
 
-# testing: only english locales (saves some space)
-#INSTALL_MASK="/usr/share/locale -/usr/share/locale/en"
-#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_AU"
-#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_CA"
-#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_GB"
-#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_US"
-#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en@shaw"
+# testing: only install english locales (saves some space)
+INSTALL_MASK="/usr/share/locale -/usr/share/locale/en"
+INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_AU"
+INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_CA"
+INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_GB"
+INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_US"
+INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en@shaw"
 
 DATA
 sudo sed -i 's/BUILD_MAKEOPTS/'"${BUILD_MAKEOPTS}"'/g' /etc/portage/make.conf
+
+# disable 'doc' globally to save some space
+sudo sed -i 's/USE=\"/USE="-doc /g' /etc/portage/make.conf
 
 # ---- package.use
 
