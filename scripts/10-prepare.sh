@@ -78,6 +78,9 @@ DATA
     sudo sed -i 's/BUILD_CUSTOM_OVERLAY_NAME/'"$BUILD_CUSTOM_OVERLAY_NAME"'/g' /etc/portage/repos.conf/$BUILD_CUSTOM_OVERLAY_NAME
 fi
 
+# remove foobarlab-stage3 repo
+sudo rm -rf /var/git/overlay/foobarlab-stage3
+
 # ---- make.conf
 
 sudo sed -i 's/USE=\"/USE="zsh-completion idn lzma tools udev syslog cacert threads pic ncurses /g' /etc/portage/make.conf
