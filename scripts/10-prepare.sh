@@ -80,6 +80,7 @@ fi
 
 # remove foobarlab-stage3 repo
 sudo rm -rf /var/git/overlay/foobarlab-stage3
+sudo rm -f /etc/portage/repos.conf/foobarlab-stage3
 
 # ---- make.conf
 
