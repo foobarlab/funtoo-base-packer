@@ -109,9 +109,6 @@ INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en@shaw"
 DATA
 sudo sed -i 's/BUILD_MAKEOPTS/'"${BUILD_MAKEOPTS}"'/g' /etc/portage/make.conf
 
-# disable 'doc' globally to save some space
-sudo sed -i 's/USE=\"/USE="-doc /g' /etc/portage/make.conf
-
 # ---- package.use
 
 sudo mkdir -p /etc/portage/package.use
