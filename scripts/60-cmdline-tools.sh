@@ -135,9 +135,7 @@ sudo emerge -nuvtND --with-bdeps=y \
 	app-portage/cpuid2cpuflags \
 	app-misc/resolve-march-native \
 	app-misc/ranger \
-	sys-apps/most \
-	app-eselect/eselect-awk \
-    sys-apps/gawk
+	sys-apps/most
 
 # nice console font (https://www.funtoo.org/Fonts)
 sudo emerge -nuvtND --with-bdeps=y media-fonts/terminus-font
