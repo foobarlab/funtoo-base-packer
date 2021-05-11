@@ -78,6 +78,10 @@ DATA
     sudo sed -i 's/BUILD_CUSTOM_OVERLAY_NAME/'"$BUILD_CUSTOM_OVERLAY_NAME"'/g' /etc/portage/repos.conf/$BUILD_CUSTOM_OVERLAY_NAME
 fi
 
+# remove foobarlab-stage3 repo
+sudo rm -rf /var/git/overlay/foobarlab-stage3
+sudo rm -f /etc/portage/repos.conf/foobarlab-stage3
+
 # ---- make.conf
 
 sudo sed -i 's/USE=\"/USE="zsh-completion idn lzma tools udev syslog cacert threads pic ncurses /g' /etc/portage/make.conf
@@ -94,13 +98,13 @@ EMERGE_DEFAULT_OPTS="--usepkg --binpkg-respect-use=y"
 EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --buildpkg-exclude 'virtual/* */*-bin sys-apps/* sys-kernel/*-sources app-emulation/virtualbox-guest-additions'"
 EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'virtual/* */*-bin sys-apps/* sys-kernel/*-sources app-emulation/virtualbox-guest-additions'"
 
-# testing: only english locales (saves some space)
-#INSTALL_MASK="/usr/share/locale -/usr/share/locale/en"
-#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_AU"
-#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_CA"
-#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_GB"
-#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_US"
-#INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en@shaw"
+# testing: only install english locales (saves some space)
+INSTALL_MASK="/usr/share/locale -/usr/share/locale/en"
+INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_AU"
+INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_CA"
+INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_GB"
+INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_US"
+INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en@shaw"
 
 DATA
 sudo sed -i 's/BUILD_MAKEOPTS/'"${BUILD_MAKEOPTS}"'/g' /etc/portage/make.conf

@@ -5,7 +5,7 @@ system("./config.sh >/dev/null")
 
 $script_export_packages = <<SCRIPT
 # sync any guest packages to host (vboxsf)
-rsync -avzh --delete /var/cache/portage/packages /vagrant/packages
+rsync -avzh --delete /var/cache/portage/packages/* /vagrant/packages/
 # clean guest packages
 rm -rf /var/cache/portage/packages/*
 # let it settle
@@ -26,6 +26,8 @@ cp -f /usr/src/kernel.config /usr/src/linux/.config
 # prepare for module compiles
 make olddefconfig
 make modules_prepare
+# let it settle
+sync && sleep 5
 SCRIPT
 
 $script_cleanup = <<SCRIPT
@@ -45,7 +47,7 @@ rc-status
 /etc/init.d/local stop || true
 /etc/init.d/acpid stop || true
 # let it settle
-sync && sleep 10
+sync && sleep 15
 # run cleanup script (from funtoo-base box)
 /usr/local/sbin/foo-cleanup
 # delete some logfiles
@@ -55,14 +57,14 @@ for i in "${logfiles[@]}"; do
 done
 rm -f /var/log/portage/elog/*.log
 # let it settle
-sync && sleep 10
+sync && sleep 15
 # debug: list running services
 rc-status
 # clean shell history
 set +o history
 rm -f /home/vagrant/.bash_history
 rm -f /root/.bash_history
-sync
+sync && sleep 5
 # run zerofree at last to squeeze the last bit
 # /boot
 mount -v -n -o remount,ro /dev/sda1
