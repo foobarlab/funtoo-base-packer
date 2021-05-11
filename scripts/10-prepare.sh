@@ -5,6 +5,15 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
+# ---- copy pre-downloaded distfiles (if any)
+
+sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
+if [[ -d "$sf_vagrant/distfiles" ]]; then
+    sudo rsync -urv $sf_vagrant/distfiles /var/cache/portage/
+    sudo chown portage:portage /var/cache/portage/distfiles/*
+    sudo chmod 664 /var/cache/portage/distfiles/*
+fi
+
 # ---- import binary packages
 
 sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
