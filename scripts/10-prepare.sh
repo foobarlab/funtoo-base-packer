@@ -25,6 +25,7 @@ sudo find /var/cache/portage/packages/ -type d -exec chmod 755 {} +
 sudo find /var/cache/portage/packages/ -type f -exec chmod 644 {} +
 sudo chown root:portage /var/cache/portage/packages
 sudo chmod 775 /var/cache/portage/packages
+sudo ego sync
 sudo emaint binhost --fix
 
 # ---- install /usr/local scripts
