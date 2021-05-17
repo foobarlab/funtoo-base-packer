@@ -25,6 +25,7 @@ sudo find /var/cache/portage/packages/ -type d -exec chmod 755 {} +
 sudo find /var/cache/portage/packages/ -type f -exec chmod 644 {} +
 sudo chown root:portage /var/cache/portage/packages
 sudo chmod 775 /var/cache/portage/packages
+sudo emaint binhost --fix
 
 # ---- install /usr/local scripts
 
@@ -104,8 +105,8 @@ FEATURES="buildpkg userfetch"
 
 # enable binary packages with excludes
 EMERGE_DEFAULT_OPTS="--usepkg --binpkg-respect-use=y"
-EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --buildpkg-exclude 'virtual/* */*-bin sys-apps/* sys-kernel/*-sources app-emulation/virtualbox-guest-additions'"
-EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'virtual/* */*-bin sys-apps/* sys-kernel/*-sources app-emulation/virtualbox-guest-additions'"
+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --buildpkg-exclude 'virtual/* sys-kernel/*-sources'"
+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'virtual/* sys-kernel/*-sources'"
 
 # testing: only install english locales (saves some space)
 INSTALL_MASK="/usr/share/locale -/usr/share/locale/en"
