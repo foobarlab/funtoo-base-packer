@@ -5,11 +5,25 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
-# ---- basic audio stuff
+# ---- basic audio stuff (non-gui)
+
+sudo emerge -nuvtND --with-bdeps=y \
+    media-sound/alsa-utils
+
+# ---- desktop audio stuff
+
+if [ -z ${BUILD_WINDOW_SYSTEM:-} ]; then
+  echo "BUILD_WINDOW_SYSTEM was not set. Skipping ..."
+  exit 0
+else
+  if [ "$BUILD_WINDOW_SYSTEM" = false ]; then
+    echo "BUILD_WINDOW_SYSTEM set to FALSE. Skipping ..."
+    exit 0
+  fi
+fi
 
 sudo emerge -nuvtND --with-bdeps=y \
     media-sound/pulseaudio \
-    media-sound/alsa-utils \
     media-sound/paprefs \
     media-sound/pavucontrol \
     media-sound/pasystray \

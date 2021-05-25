@@ -18,8 +18,8 @@ for script in \
   40-gcc-upgrade \
   50-rebuild-system \
   60-cmdline-tools \
-  62-audio \
   65-xorg \
+  66-audio \
   67-editor \
   70-spectre \
   80-ansible \
