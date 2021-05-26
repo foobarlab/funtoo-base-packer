@@ -5,10 +5,11 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
-# ---- basic audio stuff (non-gui)
+# ---- basic audio stuff
 
 sudo emerge -nuvtND --with-bdeps=y \
-    media-sound/alsa-utils
+    media-sound/alsa-utils \
+    media-sound/pulseaudio
 
 # ---- desktop audio stuff
 
@@ -23,7 +24,6 @@ else
 fi
 
 sudo emerge -nuvtND --with-bdeps=y \
-    media-sound/pulseaudio \
     media-sound/paprefs \
     media-sound/pavucontrol \
     media-sound/pasystray \
