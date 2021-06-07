@@ -106,8 +106,8 @@ FEATURES="buildpkg userfetch"
 
 # enable binary packages with excludes
 EMERGE_DEFAULT_OPTS="--usepkg --binpkg-respect-use=y"
-EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --buildpkg-exclude 'virtual/* sys-kernel/*-sources'"
-EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'virtual/* sys-kernel/*-sources'"
+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --buildpkg-exclude 'virtual/* sys-kernel/*-sources app-emulation/virtualbox*'"
+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'virtual/* sys-kernel/*-sources app-emulation/virtualbox*'"
 
 # testing: only install english locales (saves some space)
 INSTALL_MASK="/usr/share/locale -/usr/share/locale/en"
