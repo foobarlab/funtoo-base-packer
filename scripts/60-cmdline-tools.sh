@@ -105,6 +105,11 @@ cat <<'DATA' | sudo tee -a ~vagrant/.zshrc
 
 DATA
 
+# nftables/iptables
+sudo emerge -nuvtND --with-bdeps=y \
+  net-firewall/iptables \
+  net-firewall/nftables
+
 # sshfs/fuse
 sudo emerge -nuvtND --with-bdeps=y \
 	sys-fs/fuse \
