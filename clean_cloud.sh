@@ -18,15 +18,19 @@ echo "Box:      $BUILD_BOX_NAME"
 echo "Provider: $BUILD_BOX_PROVIDER"
 
 CLOUD_BOX_INFO=$( \
-curl -sS \
+curl -sS -f \
   --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
   https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME \
 )
 
-# FIXME: handle curl exit code
-#echo "curl exit code: $?"
-
 LATEST_CLOUD_VERSION=$(echo $CLOUD_BOX_INFO | jq .current_version.version | tr -d '"')
+if [ $LATEST_CLOUD_VERSION = "null" ]; then
+	echo
+	echo "Successful request, but no boxes were found."
+	echo "Nothing to remove. Please upload a box first."
+	exit 0
+fi
+
 echo
 echo "Current version (will always be kept):"
 echo "$LATEST_CLOUD_VERSION"
@@ -36,6 +40,22 @@ echo
 echo "All found versions:"
 echo "$EXISTING_CLOUD_VERSIONS"
 echo
+
+COUNT=0
+for ITEM in $EXISTING_CLOUD_VERSIONS; do
+	COUNT=$((COUNT+1))
+done
+
+if [ $COUNT -eq 0 ]; then
+	echo "No box found. Nothing todo."
+	exit 0
+fi
+if [ $COUNT -eq 1 ]; then
+	echo "Found a single box. Nothing todo."
+	exit 0
+fi
+
+echo "Total ${COUNT} boxes found.
 
 read -p "Continue (Y/n)? " choice
 case "$choice" in 
@@ -86,13 +106,10 @@ done
 
 # re-read box infos, show summary
 CLOUD_BOX_INFO=$( \
-curl -sS \
+curl -sS -f \
   --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
   https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME \
 )
-
-# FIXME: handle curl exit code
-#echo "curl exit code: $?"
 
 EXISTING_CLOUD_VERSIONS=$(echo $CLOUD_BOX_INFO | jq .versions[] | jq .version | tr -d '"' | sort -r)
 echo
