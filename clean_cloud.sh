@@ -55,7 +55,7 @@ if [ $COUNT -eq 1 ]; then
 	exit 0
 fi
 
-echo "Total ${COUNT} boxes found.
+echo "Total ${COUNT} boxes found."
 
 read -p "Continue (Y/n)? " choice
 case "$choice" in 
