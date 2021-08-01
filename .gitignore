@@ -3,14 +3,14 @@ packer_cache/
 /*.box
 .project
 packer.log
-packer.log.*
 /keys
 vagrant-cloud-*
 output-virtualbox-ovf/
-build_version
 build_number
+build_version
 build_time
 version
 temp/
 packages/
 distfiles/
+/*.checksum
