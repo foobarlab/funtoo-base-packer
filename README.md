@@ -54,7 +54,7 @@ Get the latest build from Vagrant Cloud: [foobarlab/funtoo-base](https://app.vag
 
  - Run ```./test.sh```
 
-#### Upload the box to Vagrant Cloud (experimental)
+#### Upload the box to Vagrant Cloud (account required)
 
  - Run ```./upload.sh```
 
