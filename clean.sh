@@ -1,36 +1,40 @@
-#!/bin/bash -ue
-
-command -v vagrant >/dev/null 2>&1 || { echo "Command 'vagrant' required but it's not installed.  Aborting." >&2; exit 1; }
+#!/bin/bash -e
 
 . config.sh quiet
 
-echo "------------------------------------------------------------------------------"
-echo "  CURRENT BOX CLEANUP"
-echo "------------------------------------------------------------------------------"
+title "CLEANUP"
 
-echo ">>> Suspending any running instances ..."
-vagrant suspend && true
-echo ">>> Destroying current box ..."
-vagrant destroy -f || true
-echo ">>> Removing box '$BUILD_BOX_NAME' ..."
-vagrant box remove -f "$BUILD_BOX_NAME" 2>/dev/null || true
-echo ">>> Cleaning .vagrant dir ..."
+. clean_box.sh
+
+highlight "Cleaning sources ..."
+
+step "Cleaning .vagrant dir ..."
 rm -rf .vagrant/ || true
-echo ">>> Cleaning packer_cache ..."
+step "Cleaning packer_cache ..."
 rm -rf packer_cache/ || true
-echo ">>> Cleaning packer output dir ..."
+step "Cleaning packer output dir ..."
 rm -rf output-virtualbox-ovf/ || true
-echo ">>> Drop build version ..."
+step "Drop build version ..."
 rm -f build_version || true
-echo ">>> Drop major version ..."
+step "Drop major version ..."
 rm -f version || true
-echo ">>> Drop build runtime ..."
+step "Drop build runtime ..."
 rm -f build_time || true
-echo ">>> Deleting any box file ..."
+step "Deleting any box file ..."
 rm -f *.box || true
-echo ">>> Cleanup old logs ..."
+step "Cleanup scripts dir ..."
+rm -f scripts/*.tar.xz || true
+rm -f scripts/.release_$BUILD_BOX_NAME || true
+step "Cleanup old logs ..."
 rm -f *.log || true
-echo ">>> Cleanup broken wget downloads ..."
+step "Cleanup old release info ..."
+rm -f release || true
+step "Dropping build version ..."
+rm -f build_version || true
+step "Dropping build runtime ..."
+rm -f build_time || true
+step "Cleanup broken wget downloads ..."
 rm -f download || true
-echo
-echo "All done. You may now run './build.sh' to build a fresh box."
+step "Cleanup checksum files ..."
+rm -f *.checksum || true
+final "All done. You may now run './build.sh' to build a fresh box."

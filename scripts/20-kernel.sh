@@ -17,12 +17,12 @@ else
     fi
 fi
 
-if [ -f ${SCRIPTS}/scripts/kernel.config ]; then
+if [ -f ${scripts}/scripts/kernel.config ]; then
 	if [ -f /usr/src/kernel.config ]; then
 		KERNEL_RELEASE=$(uname -r)
 		sudo mv -f /usr/src/kernel.config /usr/src/kernel.config.${KERNEL_RELEASE}
 	fi
-	sudo cp ${SCRIPTS}/scripts/kernel.config /usr/src
+	sudo cp ${scripts}/scripts/kernel.config /usr/src
 fi
 
 sudo emerge -nuvtND --with-bdeps=y sys-kernel/genkernel

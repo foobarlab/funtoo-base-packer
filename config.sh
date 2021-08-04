@@ -1,7 +1,12 @@
 #!/bin/bash
 
-command -v git >/dev/null 2>&1 || { echo "Command 'git' required but it's not installed.  Aborting." >&2; exit 1; }
-command -v nproc >/dev/null 2>&1 || { echo "Command 'nproc' from coreutils required but it's not installed.  Aborting." >&2; exit 1; }
+# imports
+. ./lib/functions.sh
+require_commands git nproc
+
+set -a
+
+# ----------------------------!  edit settings below  !----------------------------
 
 export BUILD_BOX_NAME="funtoo-base"
 export BUILD_BOX_USERNAME="foobarlab"
@@ -12,7 +17,7 @@ export BUILD_BOX_FUNTOO_VERSION="1.4"
 export BUILD_BOX_SOURCES="https://github.com/foobarlab/funtoo-base-packer"
 
 export BUILD_PARENT_BOX_NAME="funtoo-stage3"
-export BUILD_PARENT_BOX_VAGRANTCLOUD_NAME="$BUILD_BOX_USERNAME/$BUILD_PARENT_BOX_NAME"
+export BUILD_PARENT_BOX_CLOUD_NAME="$BUILD_BOX_USERNAME/$BUILD_PARENT_BOX_NAME"
 
 export BUILD_GUEST_TYPE="Gentoo_64"
 
@@ -36,18 +41,25 @@ export BUILD_HEADLESS=false               # if false, gui will be shown
 
 export BUILD_KEEP_MAX_CLOUD_BOXES=1       # set the maximum number of boxes to keep in Vagrant Cloud
 
-# ----------------------------! do not edit below this line !----------------------------
+# ----------------------------!  do not edit below this line  !----------------------------
 
 echo $BUILD_BOX_FUNTOO_VERSION | sed -e 's/\.//g' > version    # auto set major version
 . version.sh    # determine build version
 
-# detect number of system cpus available (always select maximum for best performance)
-export BUILD_CPUS=`nproc --all`
-
+# detect number of system cpus available (select half of cpus for best performance)
+export BUILD_CPUS=$((`nproc --all` / 2))
 let "jobs = $BUILD_CPUS + 1"       # calculate number of jobs (threads + 1)
 export BUILD_MAKEOPTS="-j${jobs}"
-let "memory = $BUILD_CPUS * 2048"  # recommended 2GB for each cpu
-export BUILD_MEMORY="${memory}"
+
+# determine ram available (select min and max)
+BUILD_MEMORY_MIN=4096 # we want at least 4G ram for our build
+# calculate max memory (set to 1/2 of available memory)
+BUILD_MEMORY_MAX=$(((`grep MemTotal /proc/meminfo | awk '{print $2}'` / 1024 / 1024 / 2 + 1 ) * 1024))
+let "memory = $BUILD_CPUS * 1024"   # calculate 1G ram for each cpu
+BUILD_MEMORY="${memory}"
+BUILD_MEMORY=$(($BUILD_MEMORY < $BUILD_MEMORY_MIN ? $BUILD_MEMORY_MIN : $BUILD_MEMORY)) # lower limit (min)
+BUILD_MEMORY=$(($BUILD_MEMORY > $BUILD_MEMORY_MAX ? $BUILD_MEMORY_MAX : $BUILD_MEMORY)) # upper limit (max)
+export BUILD_MEMORY
 
 BUILD_BOX_RELEASE_NOTES="Funtoo $BUILD_BOX_FUNTOO_VERSION (x86, intel64-nehalem), Debian Kernel 5.10, VirtualBox Guest Additions 6.1"     # edit this to reflect actual setup
 
@@ -106,7 +118,11 @@ export BUILD_OUTPUT_FILE_TEMP="$BUILD_BOX_NAME.tmp.box"
 
 if [ $# -eq 0 ]; then
 	echo "Executing $0 ..."
-	echo "=== Build settings ============================================================="
-	env | grep BUILD_ | sort
-	echo "================================================================================"
+	title "BUILD SETTINGS"
+	if [ "$ANSI" = "true" ]; then
+		env | grep BUILD_ | sort | awk -F"=" '{ printf("'${white}${bold}'%.40s '${default}'%s\n",  $1 "'${dark_grey}'........................................'${default}'" , $2) }'
+	else
+	  env | grep BUILD_ | sort | awk -F"=" '{ printf("%.40s %s\n",  $1 "........................................" , $2) }'
+	fi
+	title_divider
 fi

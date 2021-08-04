@@ -137,6 +137,10 @@ sys-apps/portage doc
 app-portage/eix doc
 media-fonts/terminus-font distinct-l
 DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-firewall
+net-firewall/iptables conntrack netlink nftables pcap
+net-firewall/nftables json
+DATA
 
 # ---- re-sync and clean binary packages
 

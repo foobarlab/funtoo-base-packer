@@ -1,37 +1,67 @@
 #!/bin/bash -ue
 
-VBOXMACHINEFOLDER="~/.VirtualBox/Machines"
-
-VBOXMANAGE=VBoxManage
-command -v $VBOXMANAGE >/dev/null 2>&1 || VBOXMANAGE=vboxmanage   # try alternative
-
-command -v vagrant >/dev/null 2>&1 || { echo "Command 'vagrant' required but it's not installed.  Aborting." >&2; exit 1; }
-command -v $VBOXMANAGE >/dev/null 2>&1 || { echo "Command '$VBOXMANAGE' required but it's not installed.  Aborting." >&2; exit 1; }
+vboxmanage=VBoxManage
+command -v $vboxmanage >/dev/null 2>&1 || vboxmanage=vboxmanage   # try alternative
 
 . config.sh quiet
 
-echo "------------------------------------------------------------------------------"
-echo "  ENVIRONMENT CLEANUP"
-echo "------------------------------------------------------------------------------"
+require_commands vagrant $vboxmanage
 
-# do some more system cleanup:
-# => suspend all VMs as seen by the current user
-# => delete temporary files as seen by the current user
-echo ">>> Suspend any running Vagrant VMs ..."
-vagrant global-status | awk '/running/{print $1}' | xargs -r -d '\n' -n 1 -- vagrant suspend
-echo ">>> Prune invalid Vagrant entries ..."
+title "ENVIRONMENT CLEANUP"
+
+highlight "Housekeeping Vagrant environment ..."
+step "Prune invalid Vagrant entries ..."
 vagrant global-status --prune >/dev/null
-echo ">>> Delete temporary Vagrant files ..."
-rm -rf ~/.vagrant.d/tmp/*
-echo ">>> Forcibly shutdown any running VirtualBox VMs ..."
-$VBOXMANAGE list runningvms | sed -r 's/.*\{(.*)\}/\1/' | awk '{print "$VBOXMANAGE controlvm "$1" acpipowerbutton\0"}' | xargs -0 >/dev/null
-$VBOXMANAGE list runningvms | sed -r 's/.*\{(.*)\}/\1/' | awk '{print "$VBOXMANAGE controlvm "$1" poweroff\0"}' | xargs -0 >/dev/null
-echo ">>> Delete all inaccessible VMs ..."
-$VBOXMANAGE list vms | grep "<inaccessible>" | sed -r 's/.*\{(.*)\}/\1/' | awk '{print "$VBOXMANAGE unregistervm --delete "$1"\0"}' | xargs -0 >/dev/null
-echo ">>> Force remove of appliance from VirtualBox machine folder ..."
-# FIXME assumed path ~/.VirtualBox/Machines/ might be incorrect, better get this from VirtualBox config somehow
-rm -rf $VBOXMACHINEFOLDER/$BUILD_BOX_NAME/ || true
-echo ">>> Drop build number ..."
+step "Delete temporary Vagrant files ..."
+rm -rf ~/.vagrant.d/tmp/* || true
+
+highlight "Housekeeping VirtualBox environment ..."
+step "Forcibly shutdown any running VirtualBox VM named '$BUILD_BOX_NAME' ..."
+vbox_running_id=$( $vboxmanage list runningvms | grep "\"$BUILD_BOX_NAME\"" | sed -r 's/.*\{(.*)\}/\1/' )
+$vboxmanage controlvm "$vbox_running_id" acpipowerbutton >/dev/null 2>&1 || true
+$vboxmanage controlvm "$vbox_running_id" poweroff >/dev/null 2>&1 || true
+
+step "Searching for VirtualBox named '$BUILD_BOX_NAME' ..."
+vbox_machine_id=$( $vboxmanage list vms | grep $BUILD_BOX_NAME | grep -Eo '{[0-9a-f\-]+}' | sed -n 's/[{}]//p' || echo )
+if [[ -z "$vbox_machine_id" || "$vbox_machine_id" = "" ]]; then
+  info "No machine named '$BUILD_BOX_NAME' found."
+else
+  warn "Found machine UUID for '$BUILD_BOX_NAME': { $vbox_machine_id }"
+  step "Deleting machine ..."
+  $vboxmanage unregistervm --delete $vbox_machine_id >/dev/null 2>&1 || true
+fi
+step "Delete all inaccessible VMs named '$BUILD_BOX_NAME' ..."
+vbox_inaccessible_id=$( $vboxmanage list vms | grep "<inaccessible>" | grep "$BUILD_BOX_NAME" | sed -r 's/.*\{(.*)\}/\1/' )
+if [[ -z "$vbox_inaccessible_id" || "$vbox_inaccessible_id" = "" ]]; then
+  info "No inaccessible machine named '$BUILD_BOX_NAME' found."
+else
+  warn "Found inaccessible machine UUID for '$BUILD_BOX_NAME': { vbox_inaccessible_id }"
+  $vboxmanage unregistervm --delete "$vbox_inaccessible_id" >/dev/null 2>&1 || true
+fi
+step "Force remove of appliance from VirtualBox machine folder ..."
+vboxmachinefolder=$( $vboxmanage list systemproperties | grep "Default machine folder" | cut -d ':' -f2 | sed -e 's/^\s*//g' )
+rm -rf "$vboxmachinefolder/$BUILD_BOX_NAME/" || true
+# TODO check if this is needed:
+step "Searching for forgotten VirtualBox HDDS named '${BUILD_BOX_NAME}.vdi' ..."
+vbox_hdd_found=$( $vboxmanage list hdds | grep "${BUILD_BOX_NAME}.vdi" || echo )
+if [[ -z "$vbox_hdd_found" || "$vbox_hdd_found" = "" ]]; then
+  info "No HDDs named '${BUILD_BOX_NAME}.vdi' found."
+else
+  vbox_found_hdd_count=$( $vboxmanage list hdds | grep -o "^UUID" | wc -l )
+  warn "Found $vbox_found_hdd_count hdd(s)."
+  todo "Searching for HDD UUID ..."
+  # DEBUG:
+  $vboxmanage list hdds
+  #$vboxmanage list hdds | grep -on "^UUID.*"
+  #$vboxmanage list hdds | grep -on "^State:.*"
+  #$vboxmanage list hdds | grep -on "^Location:.*"
+  todo "Removing HDD from Media Manager ..."
+  #$vboxmanage closemedium disk $vbox_hdd_id --delete
+fi
+
+highlight "Housekeeping sources ..."
+
+step "Dropping build number ..."
 rm -f build_number || true
 
 # basic cleanup
