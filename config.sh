@@ -131,7 +131,6 @@ export BUILD_OUTPUT_FILE_TEMP="$BUILD_BOX_NAME.tmp.box"
 . parent_version.sh
 
 if [ $# -eq 0 ]; then
-	echo "Executing $0 ..."
 	title "BUILD SETTINGS"
 	if [ "$ANSI" = "true" ]; then
 		env | grep BUILD_ | sort | awk -F"=" '{ printf("'${white}${bold}'%.40s '${default}'%s\n",  $1 "'${dark_grey}'........................................'${default}'" , $2) }'

@@ -2,8 +2,6 @@
 
 start=`date +%s`
 
-echo "Executing $0 ..."
-
 export BUILD_PARENT_BOX_CHECK=true
 
 . config.sh quiet
