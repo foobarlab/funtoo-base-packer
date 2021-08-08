@@ -37,7 +37,7 @@ else
 	BUILD_BOX_VERSION=$BUILD_MAJOR_VERSION.$BUILD_MINOR_VERSION.$BUILD_NUMBER
 fi
 
-result "build version => $BUILD_BOX_VERSION"
+#result "build version => $BUILD_BOX_VERSION"
 
 # store in env var
 export BUILD_BOX_VERSION
