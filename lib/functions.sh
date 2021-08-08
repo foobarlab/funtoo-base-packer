@@ -137,7 +137,7 @@ bg_white="${ANSI_START}${ANSI_RESET};${ANSI_BG_WHITE}${ANSI_END}"
 require_commands() {
   local command;
   for command in $@; do
-    command -v $command >/dev/null 2>&1 || { echo "Command '${command}' required but it's not installed.  Aborting." >&2; exit 1; }
+    command -v $command >/dev/null 2>&1 || { error "Command '${command}' required but it's not installed.  Aborting." >&2; exit 1; }
   done
 }
 
@@ -239,11 +239,11 @@ note() {
   local text="$*"
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${light_yellow}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${white}"; fi
     text=`bracket_to_bold "${text}"`
-    echo -e "${color} *  ${text}${default}"
+    echo -e "${color} #  ${text}${default}"
   else
-    echo " *  ${text}"
+    echo " #  ${text}"
   fi
 }
 
@@ -332,39 +332,13 @@ remove_ansi() {
   echo -e "${text}"
 }
 
-#center_ansi() {
-#  local x
-#  local y
-#  local width=80
-#  text="$*"
-#  # remove any previous formatting
-#  #echo "$text -> length=${#text}"
-#  text2=`printf "$text" | sed -re "s/\\x1b\\[[0-9;]*[A-Za-z]//g"`
-#  #echo "$text2 -> length=${#text2}"
-#  #echo ".........|.........|.........|.........|.........|.........|.........|.........|"
-#  x=$(( ($width - ${#text2}) / 2))
-#  if [ $x -lt 0 ]; then x=0; fi
-#  #echo -ne "\E[6n";read -sdR y; y=$(echo -ne "${y#*[}" | cut -d';' -f1)
-#  #echo -ne "\033[${y};${x}f$*"
-#  #echo
-#  #echo -ne "\E[6n";
-#  echo -ne "\033[6n";
-#  read -sdR y;
-#  y=$( echo -ne "${y#*[}" | cut -d';' -f1 )
-#  echo -ne "\033[${y};${x}f$*"
-#  #echo "[ pos=$x length=$((${#text2})) formula=$((${#text2}))+$(($x * 2))=$(($x * 2 + ${#text2} )) ]"
-#  #echo "text  => $text -> ${#text}"
-#  #echo "text2 => $text2 -> ${#text2}"
-#  echo
-#}
-
 bracket_to_bold() {
   local text="$*"
   local bold="\\\0033[1m"
   #local default="\\\0033[0;39m"
   color="\\${color}"
-  text=`echo $text | sed -re "/\'/ s/(^|\s|\.|:)+[\']/\1\'$bold/g"`
-  text=`echo $text | sed -re "/\'/ s/[\'](\.|:|\s|$)/$color\'\1/g"`
+  text=`echo $text | sed -re "/\'/ s/(^|\s|\.|:)+[\']/\0$bold/g"`
+  text=`echo $text | sed -re "/\'/ s/[\'](\.|:|\s|$)/$color\0\1/g"`
   echo `echo $text`
 }
 
@@ -453,21 +427,19 @@ test_formatting() {
   result "This is a 'result'."
   final "Done."
   echo
+  
+  note "User.......: 'test'"
+  note "Box........: 'box'"
+  note "Provider...: 'provider'"
+  
+  # test formatting
+  ANSI=true
+  ANSI_COLOR=false
+  
+  note "User.......: 'test'"
+  note "Box........: 'box'"
+  note "Provider...: 'provider'"
+  
 }
 
 #test_formatting
-
-#echo `bracket_to_bold "This is a 'test' ..."`
-#echo `bracket_to_bold "This is a 'test' and another one 'here' ..."`
-#echo `bracket_to_bold "'Starting' test ..."`
-#echo `bracket_to_bold "Test 'Ending'"`
-
-#echo ".........|.........|.........|.........|.........|.........|.........|.........|"
-#center_ansi "This is a test"
-##center_ansi "1234567890"
-##center_ansi "123456789012345"
-##center_ansi "12345678901234567890123456789012345678901234567890123456789012345678901234567890"
-#center_ansi "This ${default}${blue}is${reset}${expand} a ${bold}test${default}"
-##center_ansi ".........|.........|.........|.........|.........|.........|.........|.........|"
-##center_ansi "A very long text which is longer than expected, e.g. longer than eighty characters in this sequence."
-#center_ansi "${red}This is a ${bold}test${red} preserving bold and color.${default}"

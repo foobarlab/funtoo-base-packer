@@ -17,7 +17,8 @@ if [ -f "$BUILD_OUTPUT_FILE" ]; then
 	step "Adding '$BUILD_BOX_NAME' ..."
 	vagrant box add --name "$BUILD_BOX_NAME" "$BUILD_OUTPUT_FILE"
 else
-	error "There is no box file '$BUILD_OUTPUT_FILE' in the current directory. Please run './build.sh' to build a box."
+	error "There is no box file '$BUILD_OUTPUT_FILE' in the current directory."
+	result "Please run './build.sh' to build a box."
 	exit 1
 fi
 
