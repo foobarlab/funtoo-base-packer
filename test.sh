@@ -18,7 +18,7 @@ then
 	step "Adding '$BUILD_BOX_NAME' ..."
 	vagrant box add --name "$BUILD_BOX_NAME" "$BUILD_OUTPUT_FILE"
 	step "Powerup '$BUILD_BOX_NAME' ..."
-	vagrant up --no-provision || { echo "Failed to startup '$BUILD_BOX_NAME'. Test failed!"; exit 1; } 
+	vagrant up --no-provision || { echo "Failed to startup '$BUILD_BOX_NAME'. Test failed!"; exit 1; }
 	step "Suspending '$BUILD_BOX_NAME' ..."
 	vagrant suspend
 else
@@ -27,7 +27,7 @@ else
 		exit 1	# exit with error when running without param
 	else
 		exit 0	# silently exit when running with param
-	fi 
+	fi
 fi
 
 result "Test passed."

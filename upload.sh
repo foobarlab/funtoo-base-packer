@@ -12,7 +12,7 @@ else
 		exit 1	# exit with error when running without param
 	else
 		exit 0	# silently exit when running with param
-	fi 
+	fi
 fi
 
 require_commands curl jq sha1sum pv
@@ -31,7 +31,7 @@ echo "Please verify if above information is correct."
 echo
 
 read -p "Continue (Y/n)? " choice
-case "$choice" in 
+case "$choice" in
   n|N ) echo "User cancelled."
   		exit 0
         ;;
@@ -68,7 +68,7 @@ echo "Latest cloud version: $LATEST_CLOUD_VERSION"
 
 if [[ $BUILD_BOX_VERSION = $LATEST_CLOUD_VERSION ]]; then
   echo "Same version already exists."
-else 
+else
   echo "Looks like we got a new version to provide."
 fi
 
@@ -127,10 +127,10 @@ else
 fi
 
 # create hash checksum, supported values: md5, sha1, sha256, sha384 and sha512
-echo "Creating checksum ..." 
+echo "Creating checksum ..."
 UPLOAD_CHECKSUM_CALC=`pv $BUILD_OUTPUT_FILE | sha1sum`
 UPLOAD_CHECKSUM=`echo $UPLOAD_CHECKSUM_CALC | cut -d " " -f1`
-echo -e "\033[1A$BUILD_OUTPUT_FILE: SHA-1 [' $UPLOAD_CHECKSUM' ]                        " 
+echo -e "\033[1A$BUILD_OUTPUT_FILE: SHA-1 [' $UPLOAD_CHECKSUM' ]                        "
 
 # Create a new provider
 echo "Trying to create a new provider '$BUILD_BOX_PROVIDER' ..."
@@ -161,14 +161,14 @@ if [ $UPLOAD_NEW_PROVIDER_SUCCESS == 'false' ]; then
       if [ "$UPLOAD_PROVIDER_CHECKSUM" == "$UPLOAD_CHECKSUM" ]; then
         echo "Checksum matched. The box seems already up-to-date."
         # FIXME ask to delete the provider? check if there is a hosted file ... download and compare checksums?
-        
+
         # DEBUG:
         echo $UPLOAD_PROVIDER | jq
-        
+
         # TODO make a head request => if 404 the file was not uploaded yet, if 200 then ???
-        
+
         exit 0
-        
+
       else
         echo "Checksum mismatch ..."
         echo "Local : '$UPLOAD_CHECKSUM'"
