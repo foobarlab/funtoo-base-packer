@@ -5,8 +5,11 @@
 # versioning format: major.minor.buildnumber
 # as required by Vagrant
 
+# imports
+. ./lib/functions.sh
+
 if [ ! -f version ]; then
-	echo "Missing file 'version'! Please run 'config.sh' for default major version numbering."
+	error "Missing file 'version'! Please run 'config.sh' for default major version numbering."
 	exit 1
 fi
 
@@ -34,7 +37,7 @@ else
 	BUILD_BOX_VERSION=$BUILD_MAJOR_VERSION.$BUILD_MINOR_VERSION.$BUILD_NUMBER
 fi
 
-echo "build version => $BUILD_BOX_VERSION"
+result "build version => $BUILD_BOX_VERSION"
 
 # store in env var
 export BUILD_BOX_VERSION

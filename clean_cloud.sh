@@ -67,9 +67,10 @@ if [ $COUNT -eq 1 ]; then
 	exit 0
 fi
 
-result "Total ${COUNT} boxes found."
-
-read -p "Continue (Y/n)? " choice
+echo
+warn "Total ${COUNT} boxes found. Will keep no more than ${BUILD_KEEP_MAX_CLOUD_BOXES} box(es)."
+echo
+read -p "    Continue (Y/n)? " choice
 case "$choice" in
   n|N ) echo
   		warn "User cancelled."
