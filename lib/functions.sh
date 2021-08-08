@@ -279,15 +279,11 @@ title() {
     text=`bracket_to_bold "${text}"`  # FIXME
     if [ "${ANSI_COLOR}" = "true" ]; then color="${dark_grey}"; text="${white}${bold}${text}${default}"; fi
     title_divider
-    echo
     echo -e "${color}  ${text}${default}"
-    echo
     title_divider
   else
     title_divider
-    echo
     remove_ansi "  ${text}"
-    echo
     title_divider
   fi
 }
@@ -338,7 +334,7 @@ bracket_to_bold() {
   #local default="\\\0033[0;39m"
   color="\\${color}"
   text=`echo $text | sed -re "/\'/ s/(^|\s|\.|:)+[\']/\0$bold/g"`
-  text=`echo $text | sed -re "/\'/ s/[\'](\.|:|\s|$)/$color\0\1/g"`
+  text=`echo $text | sed -re "/\'/ s/[\'](\.|:|\s|$)/$color\0/g"`
   echo `echo $text`
 }
 
@@ -371,7 +367,7 @@ test_formatting() {
   # test formatting
   ANSI=true
   ANSI_COLOR=true
-  
+
   header "1234567890123456789012345678901234567890123456789012345678901234567890123456"
   header "123456789012345678901234567890"
   header "Build ansi color test header"
@@ -387,11 +383,11 @@ test_formatting() {
   result "This is a 'result'."
   final "Done."
   echo
-  
+
   # test formatting
   ANSI=true
   ANSI_COLOR=false
-  
+
   header "1234567890123456789012345678901234567890123456789012345678901234567890123456"
   header "123456789012345678901234567890"
   header "Build ansi color test header"
@@ -407,11 +403,11 @@ test_formatting() {
   result "This is a 'result'."
   final "Done."
   echo
-  
+
   # test formatting
   ANSI=false
   ANSI_COLOR=false
-  
+
   header "1234567890123456789012345678901234567890123456789012345678901234567890123456"
   header "123456789012345678901234567890"
   header "Build ansi color test header"
@@ -427,19 +423,19 @@ test_formatting() {
   result "This is a 'result'."
   final "Done."
   echo
-  
+
   note "User.......: 'test'"
   note "Box........: 'box'"
   note "Provider...: 'provider'"
-  
+
   # test formatting
   ANSI=true
   ANSI_COLOR=false
-  
+
   note "User.......: 'test'"
   note "Box........: 'box'"
   note "Provider...: 'provider'"
-  
+
 }
 
 #test_formatting

@@ -34,14 +34,24 @@ if [ $LATEST_CLOUD_VERSION = "null" ]; then
 	exit 0
 fi
 
-highlight "Current version (will always be kept):"
+highlight "Latest version (will always be kept):"
 info "$LATEST_CLOUD_VERSION"
 
-EXISTING_CLOUD_VERSIONS=$(echo $CLOUD_BOX_INFO | jq .versions[] | jq .version | tr -d '"' | sort -r)
-echo
-highlight "All found versions:"
-info "$EXISTING_CLOUD_VERSIONS"
-echo
+EXISTING_CLOUD_VERSIONS=$(echo $CLOUD_BOX_INFO | jq .versions[] | jq .version | tr -d '"' | sort -r )
+
+if [ "$EXISTING_CLOUD_VERSIONS" = "$LATEST_CLOUD_VERSION" ]; then
+	:
+else
+	echo
+	highlight "Additional found versions:"
+	while IFS= read -r line; do
+		if [ "$line" = "$LATEST_CLOUD_VERSION" ]; then
+			:
+		else
+			info "$line"
+		fi
+	done <<< "$EXISTING_CLOUD_VERSIONS"
+fi
 
 COUNT=0
 for ITEM in $EXISTING_CLOUD_VERSIONS; do
@@ -49,21 +59,20 @@ for ITEM in $EXISTING_CLOUD_VERSIONS; do
 done
 
 if [ $COUNT -eq 0 ]; then
-	result "No box found. Nothing todo."
-	echo
+	final "No box found. Nothing todo."
 	exit 0
 fi
 if [ $COUNT -eq 1 ]; then
-	result "Found a single box. Nothing todo."
-	echo
+	final "Found a single box. Nothing todo."
 	exit 0
 fi
 
 result "Total ${COUNT} boxes found."
 
 read -p "Continue (Y/n)? " choice
-case "$choice" in 
-  n|N ) warn "User cancelled."
+case "$choice" in
+  n|N ) echo
+  		warn "User cancelled."
   		echo
   		exit 0
         ;;
