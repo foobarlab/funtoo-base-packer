@@ -123,7 +123,6 @@ else
   export BUILD_BOX_DESCRIPTION="$BUILD_BOX_DESCRIPTION<br>This build is not version controlled yet.<br>$BUILD_RUNTIME_FANCY"
 fi
 
-
 export BUILD_OUTPUT_FILE="$BUILD_BOX_NAME-$BUILD_BOX_VERSION.box"
 export BUILD_OUTPUT_FILE_TEMP="$BUILD_BOX_NAME.tmp.box"
 
