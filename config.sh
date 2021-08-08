@@ -101,13 +101,6 @@ else
 	export BUILD_RUNTIME_FANCY="Total build runtime was not logged."
 fi
 
-#export BUILD_GIT_COMMIT_BRANCH=`git rev-parse --abbrev-ref HEAD`
-#export BUILD_GIT_COMMIT_ID=`git rev-parse HEAD`
-#export BUILD_GIT_COMMIT_ID_SHORT=`git rev-parse --short HEAD`
-#export BUILD_GIT_COMMIT_ID_HREF="${BUILD_BOX_SOURCES}/tree/${BUILD_GIT_COMMIT_ID}"
-#
-#export BUILD_BOX_DESCRIPTION="$BUILD_BOX_RELEASE_NOTES<br><br>$BUILD_BOX_DESCRIPTION<br>created @$BUILD_TIMESTAMP<br><br>Source code: $BUILD_BOX_SOURCES<br>This build is based on branch $BUILD_GIT_COMMIT_BRANCH (commit id <a href=\\\"$BUILD_GIT_COMMIT_ID_HREF\\\">$BUILD_GIT_COMMIT_ID_SHORT</a>)<br>$BUILD_RUNTIME_FANCY"
-
 BUILD_BOX_DESCRIPTION="$BUILD_BOX_RELEASE_NOTES<br><br>$BUILD_BOX_DESCRIPTION<br>created @$BUILD_TIMESTAMP<br>"
 
 # check if in git environment and collect git data (if any)

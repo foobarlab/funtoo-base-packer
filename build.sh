@@ -18,17 +18,19 @@ BUILD_PARENT_BOX_CLOUD_OVF="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHN
 
 if [ -f $BUILD_PARENT_BOX_OVF ]; then
 	export BUILD_PARENT_OVF=$BUILD_PARENT_BOX_OVF
-	warn "An existing local '$BUILD_PARENT_BOX_NAME' box was detected. Skipping download ..."
+	warn "An existing local '$BUILD_PARENT_BOX_NAME' parent box was detected. Skipping download ..."
 else
 	export BUILD_PARENT_OVF=$BUILD_PARENT_BOX_CLOUD_OVF
 	if [ -f $BUILD_PARENT_BOX_CLOUD_OVF ]; then
-		warn "An existing '$BUILD_PARENT_BOX_CLOUD_NAME' box download with version '$BUILD_PARENT_BOX_CLOUD_VERSION' was detected."
-		read -p "Do you want to delete it and download again (y/N)? " choice
+		echo
+		warn "The '$BUILD_PARENT_BOX_CLOUD_NAME' parent box with version '$BUILD_PARENT_BOX_CLOUD_VERSION' has been previously downloaded."
+		echo
+		read -p "    Do you want to delete it and download again (y/N)? " choice
 		case "$choice" in 
-		  y|Y ) step "Deleting existing '$BUILD_PARENT_BOX_CLOUD_NAME' box ..."
+		  y|Y ) step "Deleting existing '$BUILD_PARENT_BOX_CLOUD_NAME' parent box ..."
 		  		vagrant box remove $BUILD_PARENT_BOX_CLOUD_NAME --box-version $BUILD_PARENT_BOX_CLOUD_VERSION
 		  ;;
-		  * ) step "Will keep existing '$BUILD_PARENT_BOX_CLOUD_NAME' box.";;
+		  * ) result "Will keep existing '$BUILD_PARENT_BOX_CLOUD_NAME' parent box.";;
 		esac
 	fi
 	
@@ -41,14 +43,14 @@ else
 fi
 
 if [ -d "keys" ]; then
-	success "Ok, key dir exists."
+	info "Ok, key dir exists."
 else
 	step "Creating key dir ..."
 	mkdir -p keys
 fi
 
 if [ -f "keys/vagrant" ]; then
-	success "Ok, private key exists."
+	info "Ok, private key exists."
 else
 	step "Downloading default private key ..."
 	wget -c https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant -O keys/vagrant
@@ -59,7 +61,7 @@ else
 fi
 
 if [ -f "keys/vagrant.pub" ]; then
-	success "Ok, public key exists."
+	info "Ok, public key exists."
 else
 	step "Downloading default public key ..."
 	wget -c https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub -O keys/vagrant.pub

@@ -27,7 +27,7 @@ if [[ -z "$vbox_machine_id" || "$vbox_machine_id" = "" ]]; then
   info "No machine named '$BUILD_BOX_NAME' found."
 else
   warn "Found machine UUID for '$BUILD_BOX_NAME': { $vbox_machine_id }"
-  step "Deleting machine ..."
+  result "Deleting machine ..."
   $vboxmanage unregistervm --delete $vbox_machine_id >/dev/null 2>&1 || true
 fi
 step "Delete all inaccessible VMs named '$BUILD_BOX_NAME' ..."
