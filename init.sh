@@ -11,7 +11,7 @@ if [ -f "$BUILD_OUTPUT_FILE" ]; then
   highlight "Initializing a fresh '$BUILD_BOX_NAME' box ..."
     step "Suspending any running instances ..."
     vagrant suspend
-    step"Destroying current box ..."
+    step "Destroying current box ..."
     vagrant destroy -f || true
     step "Removing '$BUILD_BOX_NAME' ..."
     vagrant box remove -f "$BUILD_BOX_NAME" 2>/dev/null || true
