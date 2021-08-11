@@ -1,4 +1,5 @@
 #!/bin/bash -uex
+# vim: ts=2 sw=2 et
 
 if [ -z ${BUILD_RUN:-} ]; then
   echo "This script can not be run directly! Aborting."
@@ -6,23 +7,23 @@ if [ -z ${BUILD_RUN:-} ]; then
 fi
 
 if [ -z ${BUILD_KERNEL:-} ]; then
-    echo "BUILD_KERNEL was not set. Skipping kernel build."
-    exit 0
+  echo "BUILD_KERNEL was not set. Skipping kernel build."
+  exit 0
 else
-    if [ "$BUILD_KERNEL" = false ]; then
-        echo ">>> Skipping kernel build."
-        exit 0
-    else
-        echo ">>> Building kernel ..."
-    fi
+  if [ "$BUILD_KERNEL" = false ]; then
+    echo ">>> Skipping kernel build."
+    exit 0
+  else
+    echo ">>> Building kernel ..."
+  fi
 fi
 
 if [ -f ${scripts}/scripts/kernel.config ]; then
-	if [ -f /usr/src/kernel.config ]; then
-		KERNEL_RELEASE=$(uname -r)
-		sudo mv -f /usr/src/kernel.config /usr/src/kernel.config.${KERNEL_RELEASE}
-	fi
-	sudo cp ${scripts}/scripts/kernel.config /usr/src
+  if [ -f /usr/src/kernel.config ]; then
+    KERNEL_RELEASE=$(uname -r)
+    sudo mv -f /usr/src/kernel.config /usr/src/kernel.config.${KERNEL_RELEASE}
+  fi
+  sudo cp ${scripts}/scripts/kernel.config /usr/src
 fi
 
 sudo emerge -nuvtND --with-bdeps=y sys-kernel/genkernel
@@ -53,7 +54,7 @@ ISCSI="no"
 UNIONFS="no"
 BTRFS="no"
 DISKLABEL="yes"
-BOOTLOADER=""	# 'grub' value not needed here, we will use ego boot update command
+BOOTLOADER="" # 'grub' value not needed here, we will use ego boot update command
 BOOTDIR="/boot"
 GK_SHARE="${GK_SHARE:-/usr/share/genkernel}"
 CACHE_DIR="/usr/share/genkernel"
@@ -103,17 +104,17 @@ source /etc/profile
 sudo mv /etc/boot.conf /etc/boot.conf.old
 cat <<'DATA' | sudo tee -a /etc/boot.conf
 boot {
-    generate grub
-    default "Funtoo Linux"
-    timeout 1
+  generate grub
+  default "Funtoo Linux"
+  timeout 1
 }
 display {
-	gfxmode 800x600
+  gfxmode 800x600
 }
 "Funtoo Linux" {
-    kernel kernel[-v]
-    initrd initramfs[-v]
-    params += root=auto rootfstype=auto
+  kernel kernel[-v]
+  initrd initramfs[-v]
+  params += root=auto rootfstype=auto
 }
 DATA
 

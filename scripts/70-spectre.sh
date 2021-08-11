@@ -1,4 +1,5 @@
 #!/bin/bash -uex
+# vim: ts=2 sw=2 et
 
 if [ -z ${BUILD_RUN:-} ]; then
   echo "This script can not be run directly! Aborting."
@@ -6,20 +7,20 @@ if [ -z ${BUILD_RUN:-} ]; then
 fi
 
 if [ -z ${BUILD_REPORT_SPECTRE:-} ]; then
-	echo "BUILD_REPORT_SPECTRE was not set. Skipping ..."
-	exit 0
+  echo "BUILD_REPORT_SPECTRE was not set. Skipping ..."
+  exit 0
 else
-	if [ "$BUILD_REPORT_SPECTRE" = "false" ]; then
-		echo "BUILD_REPORT_SPECTRE set to FALSE. Skipping ..."
-		exit 0
-	else
-		echo "BUILD_REPORT_SPECTRE set to TRUE. Checking GCC version ..."
-		gcc_version=`gcc -dumpversion`
-		major=`echo $gcc_version | cut -d. -f1`
-		minor=`echo $gcc_version | cut -d. -f2`
-		revision=`echo $gcc_version | cut -d. -f3`
-		echo "You have GCC $major.$minor.$revision installed." 
-	fi
+  if [ "$BUILD_REPORT_SPECTRE" = "false" ]; then
+    echo "BUILD_REPORT_SPECTRE set to FALSE. Skipping ..."
+    exit 0
+  else
+    echo "BUILD_REPORT_SPECTRE set to TRUE. Checking GCC version ..."
+    gcc_version=`gcc -dumpversion`
+    major=`echo $gcc_version | cut -d. -f1`
+    minor=`echo $gcc_version | cut -d. -f2`
+    revision=`echo $gcc_version | cut -d. -f3`
+    echo "You have GCC $major.$minor.$revision installed."
+  fi
 fi
 
 sudo emerge -nuvtND --with-bdeps=y app-admin/spectre-meltdown-checker

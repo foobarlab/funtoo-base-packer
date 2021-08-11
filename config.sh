@@ -1,4 +1,5 @@
 #!/bin/bash
+# vim: ts=4 sw=4 et
 
 . ./lib/functions.sh
 require_commands git nproc
@@ -94,11 +95,11 @@ else
 fi
 
 if [[ -f ./build_time && -s build_time ]]; then
-	export BUILD_RUNTIME=`cat build_time`
-	export BUILD_RUNTIME_FANCY="Total build runtime was $BUILD_RUNTIME."
+    export BUILD_RUNTIME=`cat build_time`
+    export BUILD_RUNTIME_FANCY="Total build runtime was $BUILD_RUNTIME."
 else
-	export BUILD_RUNTIME="unknown"
-	export BUILD_RUNTIME_FANCY="Total build runtime was not logged."
+    export BUILD_RUNTIME="unknown"
+    export BUILD_RUNTIME_FANCY="Total build runtime was not logged."
 fi
 
 BUILD_BOX_DESCRIPTION="$BUILD_BOX_RELEASE_NOTES<br><br>$BUILD_BOX_DESCRIPTION<br>created @$BUILD_TIMESTAMP<br>"
@@ -130,11 +131,11 @@ export BUILD_OUTPUT_FILE_TEMP="$BUILD_BOX_NAME.tmp.box"
 . parent_version.sh
 
 if [ $# -eq 0 ]; then
-	title "BUILD SETTINGS"
-	if [ "$ANSI" = "true" ]; then
-		env | grep BUILD_ | sort | awk -F"=" '{ printf("'${white}${bold}'%.40s '${default}'%s\n",  $1 "'${dark_grey}'........................................'${default}'" , $2) }'
-	else
-	  env | grep BUILD_ | sort | awk -F"=" '{ printf("%.40s %s\n",  $1 "........................................" , $2) }'
-	fi
-	title_divider
+    title "BUILD SETTINGS"
+    if [ "$ANSI" = "true" ]; then
+        env | grep BUILD_ | sort | awk -F"=" '{ printf("'${white}${bold}'%.40s '${default}'%s\n",  $1 "'${dark_grey}'........................................'${default}'" , $2) }'
+    else
+      env | grep BUILD_ | sort | awk -F"=" '{ printf("%.40s %s\n",  $1 "........................................" , $2) }'
+    fi
+    title_divider
 fi

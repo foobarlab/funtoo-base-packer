@@ -1,4 +1,5 @@
 #!/bin/bash
+# vim: ts=4 sw=4 et
 # simple system update script
 
 if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
@@ -22,7 +23,7 @@ fi
 #emerge --depclean
 #
 #echo ">>> Checking reverse package dependencies ..."
-#revdep-rebuild 
+#revdep-rebuild
 #
 #echo ">>> Rebuilding preserved packages ..."
-#emerge -vt @preserved-rebuild 
+#emerge -vt @preserved-rebuild

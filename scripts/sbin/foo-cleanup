@@ -1,4 +1,5 @@
 #!/bin/bash
+# vim: ts=4 sw=4 et
 # simple script to cleanup the system (delete temporary files, logs, portage tree, etc)
 
 if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
@@ -19,7 +20,7 @@ truncate -s 0 /var/log/**/*.log
 find /var/log -type f -name '*.[0-99].gz' -exec rm {} + || die
 logfiles=( messages dmesg lastlog wtmp )
 for i in "${logfiles[@]}"; do
-	truncate -s 0 /var/log/$i
+    truncate -s 0 /var/log/$i
 done
 
 echo ">>> Clean home dirs ..."
@@ -36,7 +37,7 @@ make modules_prepare
 echo ">>> Cleaning installed kernels ..."
 mount /boot || true
 eclean-kernel -l
-eclean-kernel -n 2	# keep 2 kernels maximum
+eclean-kernel -n 2  # keep 2 kernels maximum
 
 echo ">>> Sync I/O ..."
 sync

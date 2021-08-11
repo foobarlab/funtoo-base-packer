@@ -1,4 +1,5 @@
 #!/bin/bash
+# vim: ts=4 sw=4 et
 # simple script to modify global 'make.conf' to allow any license and restrict distribution
 
 if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
@@ -34,14 +35,14 @@ echo "==========================================================================
 echo
 
 read -p "Modify licensing configuration and accept all implied restrictions (y/N)? " choice
-case "$choice" in 
+case "$choice" in
   y|Y ) echo
         echo "User accepted."
         ;;
   * )   echo
         echo "User cancelled."
-  		exit 0
-  		;;
+        exit 0
+        ;;
 esac
 
 echo

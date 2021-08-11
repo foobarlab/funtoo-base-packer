@@ -1,4 +1,5 @@
 #!/bin/bash -e
+# vim: ts=4 sw=4 et
 
 . config.sh quiet
 

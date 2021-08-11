@@ -1,4 +1,5 @@
 #!/bin/bash -ue
+# vim: ts=4 sw=4 et
 
 start=`date +%s`
 
@@ -15,58 +16,58 @@ BUILD_PARENT_BOX_CLOUD_PATHNAME=`echo "$BUILD_PARENT_BOX_CLOUD_NAME" | sed "s|/|
 BUILD_PARENT_BOX_CLOUD_OVF="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHNAME/$BUILD_PARENT_BOX_CLOUD_VERSION/virtualbox/box.ovf"
 
 if [ -f $BUILD_PARENT_BOX_OVF ]; then
-	export BUILD_PARENT_OVF=$BUILD_PARENT_BOX_OVF
-	warn "An existing local '$BUILD_PARENT_BOX_NAME' parent box was detected. Skipping download ..."
+    export BUILD_PARENT_OVF=$BUILD_PARENT_BOX_OVF
+    warn "An existing local '$BUILD_PARENT_BOX_NAME' parent box was detected. Skipping download ..."
 else
-	export BUILD_PARENT_OVF=$BUILD_PARENT_BOX_CLOUD_OVF
-	if [ -f $BUILD_PARENT_BOX_CLOUD_OVF ]; then
-		echo
-		warn "The '$BUILD_PARENT_BOX_CLOUD_NAME' parent box with version '$BUILD_PARENT_BOX_CLOUD_VERSION' has been previously downloaded."
-		echo
-		read -p "    Do you want to delete it and download again (y/N)? " choice
-		case "$choice" in 
-		  y|Y ) step "Deleting existing '$BUILD_PARENT_BOX_CLOUD_NAME' parent box ..."
-		  		vagrant box remove $BUILD_PARENT_BOX_CLOUD_NAME --box-version $BUILD_PARENT_BOX_CLOUD_VERSION
-		  ;;
-		  * ) result "Will keep existing '$BUILD_PARENT_BOX_CLOUD_NAME' parent box.";;
-		esac
-	fi
-	
-	if [ -f $BUILD_PARENT_BOX_CLOUD_OVF ]; then
-		step "'$BUILD_PARENT_BOX_CLOUD_NAME' box already present, no need for download."
-	else
-		step "Downloading '$BUILD_PARENT_BOX_CLOUD_NAME' box with version '$BUILD_PARENT_BOX_CLOUD_VERSION' ..."
-		vagrant box add -f $BUILD_PARENT_BOX_CLOUD_NAME --box-version $BUILD_PARENT_BOX_CLOUD_VERSION --provider virtualbox
-	fi
+    export BUILD_PARENT_OVF=$BUILD_PARENT_BOX_CLOUD_OVF
+    if [ -f $BUILD_PARENT_BOX_CLOUD_OVF ]; then
+        echo
+        warn "The '$BUILD_PARENT_BOX_CLOUD_NAME' parent box with version '$BUILD_PARENT_BOX_CLOUD_VERSION' has been previously downloaded."
+        echo
+        read -p "    Do you want to delete it and download again (y/N)? " choice
+        case "$choice" in
+          y|Y ) step "Deleting existing '$BUILD_PARENT_BOX_CLOUD_NAME' parent box ..."
+                vagrant box remove $BUILD_PARENT_BOX_CLOUD_NAME --box-version $BUILD_PARENT_BOX_CLOUD_VERSION
+          ;;
+          * ) result "Will keep existing '$BUILD_PARENT_BOX_CLOUD_NAME' parent box.";;
+        esac
+    fi
+
+    if [ -f $BUILD_PARENT_BOX_CLOUD_OVF ]; then
+        step "'$BUILD_PARENT_BOX_CLOUD_NAME' box already present, no need for download."
+    else
+        step "Downloading '$BUILD_PARENT_BOX_CLOUD_NAME' box with version '$BUILD_PARENT_BOX_CLOUD_VERSION' ..."
+        vagrant box add -f $BUILD_PARENT_BOX_CLOUD_NAME --box-version $BUILD_PARENT_BOX_CLOUD_VERSION --provider virtualbox
+    fi
 fi
 
 if [ -d "keys" ]; then
-	info "Ok, key dir exists."
+    info "Ok, key dir exists."
 else
-	step "Creating key dir ..."
-	mkdir -p keys
+    step "Creating key dir ..."
+    mkdir -p keys
 fi
 
 if [ -f "keys/vagrant" ]; then
-	info "Ok, private key exists."
+    info "Ok, private key exists."
 else
-	step "Downloading default private key ..."
-	wget -c https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant -O keys/vagrant
-	if [ $? -ne 0 ]; then
-    	error "Could not download the private key. Exit code from wget was $?."
-    	exit 1
+    step "Downloading default private key ..."
+    wget -c https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant -O keys/vagrant
+    if [ $? -ne 0 ]; then
+        error "Could not download the private key. Exit code from wget was $?."
+        exit 1
     fi
 fi
 
 if [ -f "keys/vagrant.pub" ]; then
-	info "Ok, public key exists."
+    info "Ok, public key exists."
 else
-	step "Downloading default public key ..."
-	wget -c https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub -O keys/vagrant.pub
-	if [ $? -ne 0 ]; then
+    step "Downloading default public key ..."
+    wget -c https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub -O keys/vagrant.pub
+    if [ $? -ne 0 ]; then
         error "Could not download the public key. Exit code from wget was $?."
-		exit 1
-	fi
+        exit 1
+    fi
 fi
 
 # TODO include version info from file (copy to scripts?)

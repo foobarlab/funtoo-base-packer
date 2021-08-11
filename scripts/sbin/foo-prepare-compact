@@ -1,4 +1,5 @@
 #!/bin/bash
+# vim: ts=4 sw=4 et
 # simple script to prepare this box to compact the hdd image (zerofree)
 
 if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
@@ -35,4 +36,4 @@ echo ">>> Zero-filling free space on root partition ..."
 zerofree -v /dev/sda4 || die
 
 echo "Your system is prepared for compaction. Power off in 5 secs."
-shutdown -h -t 5 now "System ready for compaction." 
+shutdown -h -t 5 now "System ready for compaction."

@@ -1,4 +1,5 @@
 #!/bin/bash -uex
+# vim: ts=2 sw=2 et
 
 if [ -z ${BUILD_RUN:-} ]; then
   echo "This script can not be run directly! Aborting."
@@ -8,8 +9,8 @@ fi
 # ---- basic audio stuff
 
 sudo emerge -nuvtND --with-bdeps=y \
-    media-sound/alsa-utils \
-    media-sound/pulseaudio
+  media-sound/alsa-utils \
+  media-sound/pulseaudio
 
 # ---- desktop audio stuff
 
@@ -24,11 +25,11 @@ else
 fi
 
 sudo emerge -nuvtND --with-bdeps=y \
-    media-sound/paprefs \
-    media-sound/pavucontrol \
-    media-sound/pasystray \
-    media-sound/pavumeter \
-    media-sound/pamix
+  media-sound/paprefs \
+  media-sound/pavucontrol \
+  media-sound/pasystray \
+  media-sound/pavumeter \
+  media-sound/pamix
 
 # TODO add media-sound/alsa-tools?
 

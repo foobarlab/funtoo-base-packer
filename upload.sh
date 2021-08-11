@@ -1,19 +1,20 @@
 #!/bin/bash -e
+# vim: ts=4 sw=4 et
 # NOTE: Vagrant Cloud API see: https://www.vagrantup.com/docs/vagrant-cloud/api.html
 
 . config.sh quiet
 
 title "UPLOAD BOX"
 if [ -f "$BUILD_OUTPUT_FILE" ]; then
-	result "Found box file '$BUILD_OUTPUT_FILE' in the current directory."
+    result "Found box file '$BUILD_OUTPUT_FILE' in the current directory."
 else
-	error "There is no box file '$BUILD_OUTPUT_FILE' in the current directory."
-	result "Please run './build.sh' to build a box."
-	if [ $# -eq 0 ]; then
-		exit 1	# exit with error when running without param
-	else
-		exit 0	# silently exit when running with param
-	fi
+    error "There is no box file '$BUILD_OUTPUT_FILE' in the current directory."
+    result "Please run './build.sh' to build a box."
+    if [ $# -eq 0 ]; then
+        exit 1  # exit with error when running without param
+    else
+        exit 0  # silently exit when running with param
+    fi
 fi
 
 require_commands curl jq sha1sum pv
@@ -35,12 +36,12 @@ echo
 read -p "    Continue (Y/n)? " choice
 case "$choice" in
   n|N ) echo
-		warn "User cancelled."
-		echo
-		exit 0
+        warn "User cancelled."
+        echo
+        exit 0
         ;;
   * ) echo
-  		;;
+        ;;
 esac
 
 . vagrant_cloud_token.sh
@@ -88,19 +89,19 @@ curl -sS \
 
 UPLOAD_CREATE_BOX_SUCCESS=`echo $UPLOAD_CREATE_BOX | jq '.success'`
 if [ $UPLOAD_CREATE_BOX_SUCCESS == 'false' ]; then
-	# we get an error if the box name already exists so we can most likely ignore that error silently
-	UPLOAD_BOX_NAME_ALREADY_TAKEN=`echo $UPLOAD_CREATE_BOX | jq '.errors' | jq 'contains(["Type has already been taken"])'`
-	if [ $UPLOAD_BOX_NAME_ALREADY_TAKEN == 'true' ]; then
-		result "OK, the box name '$BUILD_BOX_NAME' seems already taken. No need to create a new box name."
-	else
-		error "Error response from API:"
-		echo $UPLOAD_CREATE_BOX | jq '.errors'
-		exit 1
-	fi
+    # we get an error if the box name already exists so we can most likely ignore that error silently
+    UPLOAD_BOX_NAME_ALREADY_TAKEN=`echo $UPLOAD_CREATE_BOX | jq '.errors' | jq 'contains(["Type has already been taken"])'`
+    if [ $UPLOAD_BOX_NAME_ALREADY_TAKEN == 'true' ]; then
+        result "OK, the box name '$BUILD_BOX_NAME' seems already taken. No need to create a new box name."
+    else
+        error "Error response from API:"
+        echo $UPLOAD_CREATE_BOX | jq '.errors'
+        exit 1
+    fi
 else
-	result "OK, we created a new box named '$BUILD_BOX_NAME'."
-	#info "Response from API:"
-	#echo $UPLOAD_CREATE_BOX | jq
+    result "OK, we created a new box named '$BUILD_BOX_NAME'."
+    #info "Response from API:"
+    #echo $UPLOAD_CREATE_BOX | jq
 fi
 
 # Create a new version
@@ -115,19 +116,19 @@ curl -sS \
 
 UPLOAD_NEW_VERSION_SUCCESS=`echo $UPLOAD_NEW_VERSION | jq '.success'`
 if [ $UPLOAD_NEW_VERSION_SUCCESS == 'false' ]; then
-	# we get an error if the box version already exists so we can most likely ignore that error silently
-	UPLOAD_BOX_VERSION_ALREADY_TAKEN=`echo $UPLOAD_NEW_VERSION | jq '.errors' | jq 'contains(["Version has already been taken"])'`
-	if [ $UPLOAD_BOX_VERSION_ALREADY_TAKEN == 'true' ]; then
-		result "OK, the box version '$BUILD_BOX_VERSION' seems already taken. No need to create a new version."
-	else
-		error "Error response from API:"
-		echo $UPLOAD_NEW_VERSION | jq '.errors'
-		exit 1
-	fi
+    # we get an error if the box version already exists so we can most likely ignore that error silently
+    UPLOAD_BOX_VERSION_ALREADY_TAKEN=`echo $UPLOAD_NEW_VERSION | jq '.errors' | jq 'contains(["Version has already been taken"])'`
+    if [ $UPLOAD_BOX_VERSION_ALREADY_TAKEN == 'true' ]; then
+        result "OK, the box version '$BUILD_BOX_VERSION' seems already taken. No need to create a new version."
+    else
+        error "Error response from API:"
+        echo $UPLOAD_NEW_VERSION | jq '.errors'
+        exit 1
+    fi
 else
-	result "OK, we created a new version '$BUILD_BOX_VERSION'."
-	#info "Response from API:"
-	#echo $UPLOAD_NEW_VERSION | jq
+    result "OK, we created a new version '$BUILD_BOX_VERSION'."
+    #info "Response from API:"
+    #echo $UPLOAD_NEW_VERSION | jq
 fi
 
 # create hash checksum, supported values: md5, sha1, sha256, sha384 and sha512
@@ -149,10 +150,10 @@ curl -sS \
 
 UPLOAD_NEW_PROVIDER_SUCCESS=`echo $UPLOAD_NEW_PROVIDER | jq '.success'`
 if [ $UPLOAD_NEW_PROVIDER_SUCCESS == 'false' ]; then
-	# we get an error if the provider already exists so we can most likely ignore that error silently
-	UPLOAD_PROVIDER_ALREADY_EXISTS=`echo $UPLOAD_NEW_PROVIDER | jq '.errors' | jq 'contains(["Metadata provider must be unique for version"])'`
-	if [ $UPLOAD_PROVIDER_ALREADY_EXISTS == 'true' ]; then
-		result "OK, the provider '$BUILD_BOX_PROVIDER' seems already taken. No need to create a new provider."
+    # we get an error if the provider already exists so we can most likely ignore that error silently
+    UPLOAD_PROVIDER_ALREADY_EXISTS=`echo $UPLOAD_NEW_PROVIDER | jq '.errors' | jq 'contains(["Metadata provider must be unique for version"])'`
+    if [ $UPLOAD_PROVIDER_ALREADY_EXISTS == 'true' ]; then
+        result "OK, the provider '$BUILD_BOX_PROVIDER' seems already taken. No need to create a new provider."
     # Check if upload is needed
     UPLOAD_PROVIDER=$( \
       curl -sS \
@@ -167,16 +168,16 @@ if [ $UPLOAD_NEW_PROVIDER_SUCCESS == 'false' ]; then
         # DEBUG:
         #echo $UPLOAD_PROVIDER | jq
 
-		# FIXME ask to delete the provider? check if there is a hosted file ... download and compare checksums?
-		UPLOAD_CHECK_DOWNLOAD_URL=`echo $UPLOAD_PROVIDER | jq ".download_url" | tr -d '"'`
-		UPLOAD_CHECK_DOWNLOAD_HTTP_CODE=$( curl -sS -I -L -w "%{http_code}" -o /dev/null $UPLOAD_CHECK_DOWNLOAD_URL )
-		result "Got response HTTP code: $UPLOAD_CHECK_DOWNLOAD_HTTP_CODE"
+        # FIXME ask to delete the provider? check if there is a hosted file ... download and compare checksums?
+        UPLOAD_CHECK_DOWNLOAD_URL=`echo $UPLOAD_PROVIDER | jq ".download_url" | tr -d '"'`
+        UPLOAD_CHECK_DOWNLOAD_HTTP_CODE=$( curl -sS -I -L -w "%{http_code}" -o /dev/null $UPLOAD_CHECK_DOWNLOAD_URL )
+        result "Got response HTTP code: $UPLOAD_CHECK_DOWNLOAD_HTTP_CODE"
 
-		case "$UPLOAD_CHECK_DOWNLOAD_HTTP_CODE" in
-		  200) final "The box seems already up-to-date."; exit 0 ;;
-		  404) warn "Unable to download box file." ;;
-		  *) error "Unhandled status code while trying to download existing box, aborting.\n"; exit 1 ;;
-		esac
+        case "$UPLOAD_CHECK_DOWNLOAD_HTTP_CODE" in
+          200) final "The box seems already up-to-date."; exit 0 ;;
+          404) warn "Unable to download box file." ;;
+          *) error "Unhandled status code while trying to download existing box, aborting.\n"; exit 1 ;;
+        esac
 
       else
         warn "Checksum mismatch ..."
@@ -187,14 +188,14 @@ if [ $UPLOAD_NEW_PROVIDER_SUCCESS == 'false' ]; then
       warn "Upstream checksum type '$UPLOAD_PROVIDER_CHECKSUM_TYPE' not recognized! Forcing upload ..."
     fi
   else
-	error "Error response from API:"
-	echo $UPLOAD_NEW_PROVIDER | jq '.errors'
-	exit 1
+    error "Error response from API:"
+    echo $UPLOAD_NEW_PROVIDER | jq '.errors'
+    exit 1
   fi
 else
-	result "OK, provider did not exist yet, creating a new provider '$BUILD_BOX_PROVIDER' ..."
-	#info "Response from API:"
-	#echo $UPLOAD_NEW_PROVIDER | jq
+    result "OK, provider did not exist yet, creating a new provider '$BUILD_BOX_PROVIDER' ..."
+    #info "Response from API:"
+    #echo $UPLOAD_NEW_PROVIDER | jq
 fi
 
 # Prepare the provider for upload/get an upload URL
@@ -207,11 +208,11 @@ curl -sS \
 
 UPLOAD_PREPARE_UPLOADURL_SUCCESS=`echo $UPLOAD_PREPARE_UPLOADURL | jq '.success'`
 if [ $UPLOAD_PREPARE_UPLOADURL_SUCCESS == 'false' ]; then
-	error "Error response from API:"
-	echo $UPLOAD_PREPARE_UPLOADURL | jq '.errors'
-	exit 1
+    error "Error response from API:"
+    echo $UPLOAD_PREPARE_UPLOADURL | jq '.errors'
+    exit 1
 else
-	result "OK, we received an upload url and finalize callback."
+    result "OK, we received an upload url and finalize callback."
 fi
 
 # Extract the upload URL and finalize callback from the response
