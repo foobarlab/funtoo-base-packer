@@ -1,4 +1,5 @@
 #!/bin/bash -ea
+# vim: ts=4 sw=4 et
 
 ANSI=true         # ANSI codes enabled (bold, underline, ...)
 ANSI_COLOR=true   # ANSI color codes enabled

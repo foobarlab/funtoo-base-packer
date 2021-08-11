@@ -1,5 +1,5 @@
 # -*- mode: ruby -*-
-# vim: ts=2 sw=2 et ft=ruby :
+# vim: ts=2 sw=2 et ft=ruby
 
 system("./config.sh >/dev/null")
 
