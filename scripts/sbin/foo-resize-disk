@@ -1,0 +1,9 @@
+#!/bin/bash
+# vim: ts=4 sw=4 et
+# simple script to extend the disksize of this box
+
+if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
+
+echo ">>> Resizing disk ..."
+
+echo "TODO
