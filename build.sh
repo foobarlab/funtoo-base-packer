@@ -11,10 +11,6 @@ require_commands vagrant packer wget
 
 header "Building box '$BUILD_BOX_NAME'"
 
-BUILD_PARENT_BOX_OVF="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_NAME/0/virtualbox/box.ovf"
-BUILD_PARENT_BOX_CLOUD_PATHNAME=`echo "$BUILD_PARENT_BOX_CLOUD_NAME" | sed "s|/|-VAGRANTSLASH-|"`
-BUILD_PARENT_BOX_CLOUD_OVF="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHNAME/$BUILD_PARENT_BOX_CLOUD_VERSION/virtualbox/box.ovf"
-
 if [ -f $BUILD_PARENT_BOX_OVF ]; then
     export BUILD_PARENT_OVF=$BUILD_PARENT_BOX_OVF
     warn "An existing local '$BUILD_PARENT_BOX_NAME' parent box was detected. Skipping download ..."
@@ -115,4 +111,4 @@ hours=$((runtime / 3600));
 minutes=$(( (runtime % 3600) / 60 ));
 seconds=$(( (runtime % 3600) % 60 ));
 echo "$hours hours $minutes minutes $seconds seconds" >> build_time
-echo "Total build runtime was $hours hours $minutes minutes $seconds seconds."
+result "Total build runtime was $hours hours $minutes minutes $seconds seconds."

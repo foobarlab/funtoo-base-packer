@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ue
 # vim: ts=4 sw=4 et
 
 # get the lastest version number for a parent box from Vagrant Cloud

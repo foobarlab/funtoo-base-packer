@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ue
 # vim: ts=4 sw=4 et
 
 . ./lib/functions.sh
@@ -15,14 +15,16 @@ export BUILD_BOX_PROVIDER="virtualbox"
 export BUILD_BOX_FUNTOO_VERSION="1.4"
 export BUILD_BOX_SOURCES="https://github.com/foobarlab/funtoo-base-packer"
 
+export BUILD_PARENT_BOX_USERNAME="foobarlab"
 export BUILD_PARENT_BOX_NAME="funtoo-stage3"
-export BUILD_PARENT_BOX_CLOUD_NAME="$BUILD_BOX_USERNAME/$BUILD_PARENT_BOX_NAME"
+export BUILD_PARENT_BOX_CLOUD_NAME="$BUILD_PARENT_BOX_USERNAME/$BUILD_PARENT_BOX_NAME"
 
 export BUILD_GUEST_TYPE="Gentoo_64"
 
 # default memory/cpus used for final created box:
 export BUILD_BOX_CPUS="2"
 export BUILD_BOX_MEMORY="2048"
+export BUILD_BOX_DISKSIZE="50000" # resize disk in MB
 
 export BUILD_CUSTOM_OVERLAY=true
 export BUILD_CUSTOM_OVERLAY_NAME="foobarlab"
@@ -127,8 +129,16 @@ fi
 export BUILD_OUTPUT_FILE="$BUILD_BOX_NAME-$BUILD_BOX_VERSION.box"
 export BUILD_OUTPUT_FILE_TEMP="$BUILD_BOX_NAME.tmp.box"
 
+export BUILD_PARENT_BOX_CHECK=true
+
 # get the latest parent version from Vagrant Cloud API call:
 . parent_version.sh
+
+export BUILD_PARENT_BOX_OVF="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_NAME/0/virtualbox/box.ovf"
+export BUILD_PARENT_BOX_CLOUD_PATHNAME=`echo "$BUILD_PARENT_BOX_CLOUD_NAME" | sed "s|/|-VAGRANTSLASH-|"`
+export BUILD_PARENT_BOX_CLOUD_OVF="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHNAME/$BUILD_PARENT_BOX_CLOUD_VERSION/virtualbox/box.ovf"
+export BUILD_PARENT_BOX_CLOUD_VMDK="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHNAME/$BUILD_PARENT_BOX_CLOUD_VERSION/virtualbox/box-disk001.vmdk"
+export BUILD_PARENT_BOX_CLOUD_VDI="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHNAME/$BUILD_PARENT_BOX_CLOUD_VERSION/virtualbox/box-disk001.vdi"
 
 if [ $# -eq 0 ]; then
     title "BUILD SETTINGS"

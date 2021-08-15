@@ -23,7 +23,8 @@ then
     step "Suspending '$BUILD_BOX_NAME' ..."
     vagrant suspend
 else
-    error "There is no box file '$BUILD_OUTPUT_FILE' in the current directory. Please place the box file here or use './build.sh' to create a box file."
+    error "There is no box file '$BUILD_OUTPUT_FILE' in the current directory."
+    info "Please place the box file here or use './build.sh' to create a box file."
     if [ $# -eq 0 ]; then
         exit 1  # exit with error when running without param
     else
