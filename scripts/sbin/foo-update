@@ -17,13 +17,13 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# extra options:
-# TODO check Gentoo portage FAQ for correct order and possible shortcuts (detection/pretend)
-#echo ">>> Remove obsolete packages ..."
-#emerge --depclean
-#
-#echo ">>> Checking reverse package dependencies ..."
-#revdep-rebuild
-#
-#echo ">>> Rebuilding preserved packages ..."
-#emerge -vt @preserved-rebuild
+# extra options: comment-in to disable
+
+echo ">>> Remove obsolete packages ..."
+emerge --depclean
+
+echo ">>> Rebuilding preserved packages ..."
+emerge -vt @preserved-rebuild
+
+echo ">>> Checking reverse package dependencies ..."
+revdep-rebuild
