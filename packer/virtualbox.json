@@ -37,10 +37,20 @@
         ["modifyvm","{{.Name}}","--accelerate3d","on"],
         ["modifyvm","{{.Name}}","--spec-ctrl","off"],
         ["modifyvm","{{.Name}}","--clipboard-mode","bidirectional"],
-        ["sharedfolder","add","{{.Name}}","--name=/vagrant","--hostpath=.","--automount"]
+        ["sharedfolder","add","{{.Name}}","--name=/vagrant","--hostpath=.","--automount"],
+        ["storageattach", "{{.Name}}","--storagectl","SATA Controller","--port","0","--device","0","--nonrotational","on","--discard","on","--type", "hdd","--medium","{{user `vdi_path`}}"]
       ]
   }],
   "provisioners": [{
+      "type": "shell",
+      "script": "resize.sh",
+      "expect_disconnect": true,
+      "pause_before": "1s",
+      "pause_after": "30s",
+      "timeout": "10m",
+      "environment_vars": [ "BUILD_RUN=true" ],
+      "valid_exit_codes": [ 0 ]
+  },{
       "destination": "/tmp",
       "source": "scripts",
       "type": "file"
@@ -77,12 +87,17 @@
   }],
   "description": "{{user `box_description`}}",
   "post-processors": [{
-    "type": "vagrant",
-    "keep_input_artifact": false,
-    "output": "{{user `output_file`}}"
+      "type": "checksum",
+      "checksum_types": [ "sha1" ],
+      "output": "packer_{{.BuildName}}_{{.ChecksumType}}.checksum"
+    },{
+      "type": "vagrant",
+      "keep_input_artifact": false,
+      "output": "{{user `output_file`}}"
   }],
   "variables": {
     "source_path": "{{env `BUILD_PARENT_OVF`}}",
+    "vdi_path": "{{env `BUILD_PARENT_BOX_CLOUD_VDI`}}",
     "output_file": "{{env `BUILD_OUTPUT_FILE_TEMP`}}",
     "box_description": "{{env `BUILD_BOX_DESCRIPTION`}}",
     "guest_os_type": "{{env `BUILD_GUEST_TYPE`}}",

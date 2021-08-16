@@ -4,6 +4,15 @@
 
 if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
 
-echo ">>> Resizing disk ..."
+echo ">>> Current disk partition layout:"
+fdisk -l || true
 
-echo "TODO
+echo ">>> Resizing disk ..."
+growpart /dev/sda 4 || true
+resize2fs /dev/sda4 || true
+
+echo ">>> Resize result:"
+fdisk -l || true
+
+echo
+echo "Done. Please consider rebooting."
