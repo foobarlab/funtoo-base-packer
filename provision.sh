@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ue
 # vim: ts=2 sw=2 et
 
 if [ -z ${BUILD_RUN:-} ]; then

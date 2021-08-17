@@ -1,4 +1,4 @@
-#!/bin/bash -ea
+#!/bin/bash -uea
 # vim: ts=4 sw=4 et
 
 ANSI=true         # ANSI codes enabled (bold, underline, ...)
