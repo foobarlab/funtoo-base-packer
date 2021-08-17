@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ue
 # vim: ts=4 sw=4 et
 # NOTE: Vagrant Cloud API see: https://www.vagrantup.com/docs/vagrant-cloud/api.html
 
