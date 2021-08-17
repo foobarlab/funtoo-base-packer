@@ -25,6 +25,7 @@ check_sum() {
     done > checksums.log
 }
 
+# FIXME setup list of downloadable distfiles, skip when empty or non-existant
 #highlight "Creating distfiles dir ..."
 #mkdir -p "$PWD/distfiles" || true
 
@@ -46,5 +47,5 @@ if [[ -d "$PWD/distfiles" ]]; then
     check_sum "distfiles"
     cat "$PWD/checksums.log"
 else
-    warn "No distfiles dir found."
+    result "No distfiles dir found."
 fi
