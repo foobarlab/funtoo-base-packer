@@ -60,27 +60,27 @@ for (( i=0; i<$vbox_found_hdd_count; i++ )); do
         if [[ "${vbox_hdd_states[$i]}" = "inaccessible" ]]; then
             highlight "Removing hdd from Media Manager ..."
             $vboxmanage closemedium disk ${vbox_hdd_uuids[$i]} --delete
-            highlight "Removing hdd image file"
+            highlight "Removing hdd image file ..."
             rm -f "$vbox_hdd_locations2[$i]" || true
         else
             result "Media accessible, keep hdd image."
         fi
     elif [[ "${vbox_hdd_locations2[$i]}" = "$BUILD_PARENT_BOX_CLOUD_VDI" ]]; then
         step "Found '$BUILD_PARENT_BOX_CLOUD_VDI'"
-        if [[ "${vbox_hdd_states[$i]}" = "inaccessible" ]]; then
+        #if [[ "${vbox_hdd_states[$i]}" = "inaccessible" ]]; then
             highlight "Removing hdd from Media Manager ..."
             $vboxmanage closemedium disk ${vbox_hdd_uuids[$i]} --delete
-            highlight "Removing hdd image file"
+            highlight "Removing hdd image file ..."
             rm -f "$vbox_hdd_locations2[$i]" || true
-        else
-            result "Media accessible, keep hdd image."
-        fi
+        #else
+        #    result "Media accessible, keep hdd image."
+        #fi
     elif [[ "${vbox_hdd_locations2[$i]}" = "$HOME/VirtualBox VMs/${BUILD_BOX_NAME}/box-disk001.vmdk" ]]; then
         step "Found '${vbox_hdd_locations2[$i]}'"
         if [[ "${vbox_hdd_states[$i]}" = "inaccessible" ]]; then
             highlight "Removing hdd from Media Manager ..."
             $vboxmanage closemedium disk ${vbox_hdd_uuids[$i]} --delete
-            highlight "Removing hdd image file"
+            highlight "Removing hdd image file ..."
             rm -f "$vbox_hdd_locations2[$i]" || true
         else
             result "Media accessible, keep hdd image."
