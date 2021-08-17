@@ -1,4 +1,5 @@
 #!/bin/bash -uex
+# vim: ts=2 sw=2 et
 
 if [ -z ${BUILD_RUN:-} ]; then
   echo "This script can not be run directly! Aborting."
@@ -7,11 +8,11 @@ fi
 
 # add shells/shellutils
 sudo emerge -nuvtND --with-bdeps=y \
-	app-eselect/eselect-sh \
-	app-shells/bash-completion \
-	app-shells/zsh \
-	app-shells/zsh-completions \
-	app-doc/zsh-lovers
+  app-eselect/eselect-sh \
+  app-shells/bash-completion \
+  app-shells/zsh \
+  app-shells/zsh-completions \
+  app-doc/zsh-lovers
 
 # custom .zshrc
 cat <<'DATA' | sudo tee -a /root/.zshrc
@@ -112,35 +113,35 @@ sudo emerge -nuvtND --with-bdeps=y \
 
 # sshfs/fuse
 sudo emerge -nuvtND --with-bdeps=y \
-	sys-fs/fuse \
-	net-fs/sshfs
+  sys-fs/fuse \
+  net-fs/sshfs
 
 # various cmdline utils
 sudo emerge -nuvtND --with-bdeps=y \
-	sys-apps/pv \
-	sys-process/htop \
-	dev-python/scandir \
-	dev-python/netifaces \
-	sys-apps/hdparm \
-	sys-process/lsof \
-	sys-fs/ncdu \
-	sys-apps/mlocate \
-	app-text/tree \
-	sys-apps/progress \
-	app-misc/screen \
-	app-misc/tmux \
-	www-client/links \
-	net-ftp/ncftp \
-	mail-client/mutt \
-	net-irc/irssi \
-	app-portage/eix \
-	app-portage/genlop \
-	app-portage/portage-utils \
-	app-portage/gentoolkit \
-	app-portage/cpuid2cpuflags \
-	app-misc/resolve-march-native \
-	app-misc/ranger \
-	sys-apps/most
+  sys-apps/pv \
+  sys-process/htop \
+  dev-python/scandir \
+  dev-python/netifaces \
+  sys-apps/hdparm \
+  sys-process/lsof \
+  sys-fs/ncdu \
+  sys-apps/mlocate \
+  app-text/tree \
+  sys-apps/progress \
+  app-misc/screen \
+  app-misc/tmux \
+  www-client/links \
+  net-ftp/ncftp \
+  mail-client/mutt \
+  net-irc/irssi \
+  app-portage/eix \
+  app-portage/genlop \
+  app-portage/portage-utils \
+  app-portage/gentoolkit \
+  app-portage/cpuid2cpuflags \
+  app-misc/resolve-march-native \
+  app-misc/ranger \
+  sys-apps/most
 
 # nice console font (https://www.funtoo.org/Fonts)
 sudo emerge -nuvtND --with-bdeps=y media-fonts/terminus-font

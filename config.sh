@@ -1,45 +1,45 @@
-#!/bin/bash
+#!/bin/bash -ue
+# vim: ts=4 sw=4 et
 
-# imports
 . ./lib/functions.sh
 require_commands git nproc
-
 set -a
 
 # ----------------------------!  edit settings below  !----------------------------
 
-export BUILD_BOX_NAME="funtoo-base"
-export BUILD_BOX_USERNAME="foobarlab"
+BUILD_BOX_NAME="funtoo-base"
+BUILD_BOX_USERNAME="foobarlab"
 
-export BUILD_BOX_PROVIDER="virtualbox"
+BUILD_BOX_PROVIDER="virtualbox"
 
-export BUILD_BOX_FUNTOO_VERSION="1.4"
-export BUILD_BOX_SOURCES="https://github.com/foobarlab/funtoo-base-packer"
+BUILD_BOX_FUNTOO_VERSION="1.4"
+BUILD_BOX_SOURCES="https://github.com/foobarlab/funtoo-base-packer"
 
-export BUILD_PARENT_BOX_NAME="funtoo-stage3"
-export BUILD_PARENT_BOX_CLOUD_NAME="$BUILD_BOX_USERNAME/$BUILD_PARENT_BOX_NAME"
+BUILD_PARENT_BOX_USERNAME="foobarlab"
+BUILD_PARENT_BOX_NAME="funtoo-stage3"
+BUILD_PARENT_BOX_CLOUD_NAME="$BUILD_PARENT_BOX_USERNAME/$BUILD_PARENT_BOX_NAME"
 
-export BUILD_GUEST_TYPE="Gentoo_64"
+BUILD_GUEST_TYPE="Gentoo_64"
 
-# default memory/cpus used for final created box:
-export BUILD_BOX_CPUS="2"
-export BUILD_BOX_MEMORY="2048"
+# default memory/cpus/disk used for final created box:
+BUILD_BOX_CPUS="2"
+BUILD_BOX_MEMORY="2048"
+#BUILD_BOX_DISKSIZE="50000" # resize disk in MB, comment-in to disable
 
-export BUILD_CUSTOM_OVERLAY=true
-export BUILD_CUSTOM_OVERLAY_NAME="foobarlab"
-export BUILD_CUSTOM_OVERLAY_URL="https://github.com/foobarlab/foobarlab-overlay.git"
-export BUILD_CUSTOM_OVERLAY_BRANCH="main"   # set to 'development' for most current (or 'main' for more stable)
+BUILD_CUSTOM_OVERLAY=true
+BUILD_CUSTOM_OVERLAY_NAME="foobarlab"
+BUILD_CUSTOM_OVERLAY_URL="https://github.com/foobarlab/foobarlab-overlay.git"
+BUILD_CUSTOM_OVERLAY_BRANCH="main"   # set to 'development' for most current (or 'main' for more stable)
 
-export BUILD_FLAVOR="server"              # specify the flavor profile, see https://www.funtoo.org/Funtoo_Profiles#Flavors
-export BUILD_KERNEL=true                  # set to true to build a new kernel (Debian)
-export BUILD_GCC_VERSION=""               # experimental: specify which GCC version to install or leave empty to keep the default, e.g. "9.1.1"
-export BUILD_REBUILD_SYSTEM=false         # experimental: set to true when build toolchain (GCC, binutils, etc) has changed
-export BUILD_REPORT_SPECTRE=true          # if true, report Spectre/Meltdown vulunerability status
-export BUILD_INCLUDE_ANSIBLE=true         # if true, include Ansible for automation
-export BUILD_WINDOW_SYSTEM=true           # build X window system (X.Org)
-export BUILD_HEADLESS=false               # if false, gui will be shown
+BUILD_KERNEL=true                  # set to true to build a new kernel (Debian)
+BUILD_GCC_VERSION=""               # experimental: specify which GCC version to install or leave empty to keep the default, e.g. "9.1.1"
+BUILD_REBUILD_SYSTEM=false         # experimental: set to true when build toolchain (GCC, binutils, etc) has changed
+BUILD_REPORT_SPECTRE=true          # if true, report Spectre/Meltdown vulunerability status
+BUILD_INCLUDE_ANSIBLE=true         # if true, include Ansible for automation
+BUILD_WINDOW_SYSTEM=true           # build X window system (X.Org)
+BUILD_HEADLESS=false               # if false, gui will be shown
 
-export BUILD_KEEP_MAX_CLOUD_BOXES=1       # set the maximum number of boxes to keep in Vagrant Cloud
+BUILD_KEEP_MAX_CLOUD_BOXES=1       # set the maximum number of boxes to keep in Vagrant Cloud
 
 # ----------------------------!  do not edit below this line  !----------------------------
 
@@ -47,9 +47,9 @@ echo $BUILD_BOX_FUNTOO_VERSION | sed -e 's/\.//g' > version    # auto set major 
 . version.sh    # determine build version
 
 # detect number of system cpus available (select half of cpus for best performance)
-export BUILD_CPUS=$((`nproc --all` / 2))
+BUILD_CPUS=$((`nproc --all` / 2))
 let "jobs = $BUILD_CPUS + 1"       # calculate number of jobs (threads + 1)
-export BUILD_MAKEOPTS="-j${jobs}"
+BUILD_MAKEOPTS="-j${jobs}"
 
 # determine ram available (select min and max)
 BUILD_MEMORY_MIN=4096 # we want at least 4G ram for our build
@@ -59,7 +59,6 @@ let "memory = $BUILD_CPUS * 1024"   # calculate 1G ram for each cpu
 BUILD_MEMORY="${memory}"
 BUILD_MEMORY=$(($BUILD_MEMORY < $BUILD_MEMORY_MIN ? $BUILD_MEMORY_MIN : $BUILD_MEMORY)) # lower limit (min)
 BUILD_MEMORY=$(($BUILD_MEMORY > $BUILD_MEMORY_MAX ? $BUILD_MEMORY_MAX : $BUILD_MEMORY)) # upper limit (max)
-export BUILD_MEMORY
 
 BUILD_BOX_RELEASE_NOTES="Funtoo $BUILD_BOX_FUNTOO_VERSION (x86, intel64-nehalem), Debian Kernel 5.10, VirtualBox Guest Additions 6.1"     # edit this to reflect actual setup
 
@@ -81,9 +80,7 @@ if [[ -n "$BUILD_INCLUDE_ANSIBLE" ]]; then
     fi
 fi
 
-export BUILD_BOX_RELEASE_NOTES
-
-export BUILD_TIMESTAMP="$(date --iso-8601=seconds)"
+BUILD_TIMESTAMP="$(date --iso-8601=seconds)"
 
 BUILD_BOX_DESCRIPTION="$BUILD_BOX_NAME version $BUILD_BOX_VERSION"
 if [ -z ${BUILD_TAG+x} ]; then
@@ -96,33 +93,55 @@ else
 fi
 
 if [[ -f ./build_time && -s build_time ]]; then
-	export BUILD_RUNTIME=`cat build_time`
-	export BUILD_RUNTIME_FANCY="Total build runtime was $BUILD_RUNTIME."
+    BUILD_RUNTIME=`cat build_time`
+    BUILD_RUNTIME_FANCY="Total build runtime was $BUILD_RUNTIME."
 else
-	export BUILD_RUNTIME="unknown"
-	export BUILD_RUNTIME_FANCY="Total build runtime was not logged."
+    BUILD_RUNTIME="unknown"
+    BUILD_RUNTIME_FANCY="Total build runtime was not logged."
 fi
 
-export BUILD_GIT_COMMIT_BRANCH=`git rev-parse --abbrev-ref HEAD`
-export BUILD_GIT_COMMIT_ID=`git rev-parse HEAD`
-export BUILD_GIT_COMMIT_ID_SHORT=`git rev-parse --short HEAD`
-export BUILD_GIT_COMMIT_ID_HREF="${BUILD_BOX_SOURCES}/tree/${BUILD_GIT_COMMIT_ID}"
+BUILD_BOX_DESCRIPTION="$BUILD_BOX_RELEASE_NOTES<br><br>$BUILD_BOX_DESCRIPTION<br>created @$BUILD_TIMESTAMP<br>"
 
-export BUILD_BOX_DESCRIPTION="$BUILD_BOX_RELEASE_NOTES<br><br>$BUILD_BOX_DESCRIPTION<br>created @$BUILD_TIMESTAMP<br><br>Source code: $BUILD_BOX_SOURCES<br>This build is based on branch $BUILD_GIT_COMMIT_BRANCH (commit id <a href=\\\"$BUILD_GIT_COMMIT_ID_HREF\\\">$BUILD_GIT_COMMIT_ID_SHORT</a>)<br>$BUILD_RUNTIME_FANCY"
+# check if in git environment and collect git data (if any)
+export BUILD_GIT=$(echo `git rev-parse --is-inside-work-tree 2>/dev/null || echo "false"`)
+if [ $BUILD_GIT == "true" ]; then
+    BUILD_GIT_COMMIT_REPO=`git config --get remote.origin.url`
+    BUILD_GIT_COMMIT_BRANCH=`git rev-parse --abbrev-ref HEAD`
+    BUILD_GIT_COMMIT_ID=`git rev-parse HEAD`
+    BUILD_GIT_COMMIT_ID_SHORT=`git rev-parse --short HEAD`
+    BUILD_GIT_COMMIT_ID_HREF="${BUILD_BOX_SOURCES}/tree/${BUILD_GIT_COMMIT_ID}"
+    BUILD_GIT_LOCAL_MODIFICATIONS=$(if [ "`git diff --shortstat`" == "" ]; then echo 'false'; else echo 'true'; fi)
+    BUILD_BOX_DESCRIPTION="$BUILD_BOX_DESCRIPTION<br>Git repository: $BUILD_GIT_COMMIT_REPO"
+    if [ $BUILD_GIT_LOCAL_MODIFICATIONS == "true" ]; then
+        BUILD_BOX_DESCRIPTION="$BUILD_BOX_DESCRIPTION<br>This build is in an experimental work-in-progress state. Local modifications have not been committed to Git repository yet.<br>$BUILD_RUNTIME_FANCY"
+    else
+        BUILD_BOX_DESCRIPTION="$BUILD_BOX_DESCRIPTION<br>This build is based on branch $BUILD_GIT_COMMIT_BRANCH (commit id <a href=\\\"$BUILD_GIT_COMMIT_ID_HREF\\\">$BUILD_GIT_COMMIT_ID_SHORT</a>).<br>$BUILD_RUNTIME_FANCY"
+    fi
+else
+    BUILD_BOX_DESCRIPTION="$BUILD_BOX_DESCRIPTION<br>Origin source code: $BUILD_BOX_SOURCES"
+    BUILD_BOX_DESCRIPTION="$BUILD_BOX_DESCRIPTION<br>This build is not version controlled yet.<br>$BUILD_RUNTIME_FANCY"
+fi
 
-export BUILD_OUTPUT_FILE="$BUILD_BOX_NAME-$BUILD_BOX_VERSION.box"
-export BUILD_OUTPUT_FILE_TEMP="$BUILD_BOX_NAME.tmp.box"
+BUILD_OUTPUT_FILE_TEMP="$BUILD_BOX_NAME.tmp.box"
+BUILD_OUTPUT_FILE="$BUILD_BOX_NAME-$BUILD_BOX_VERSION.box"
+
+BUILD_PARENT_BOX_CHECK=true
 
 # get the latest parent version from Vagrant Cloud API call:
 . parent_version.sh
 
+BUILD_PARENT_BOX_OVF="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_NAME/0/virtualbox/box.ovf"
+BUILD_PARENT_BOX_CLOUD_PATHNAME=`echo "$BUILD_PARENT_BOX_CLOUD_NAME" | sed "s|/|-VAGRANTSLASH-|"`
+BUILD_PARENT_BOX_CLOUD_OVF="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHNAME/$BUILD_PARENT_BOX_CLOUD_VERSION/virtualbox/box.ovf"
+BUILD_PARENT_BOX_CLOUD_VMDK="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHNAME/$BUILD_PARENT_BOX_CLOUD_VERSION/virtualbox/box-disk001.vmdk"
+BUILD_PARENT_BOX_CLOUD_VDI="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHNAME/$BUILD_PARENT_BOX_CLOUD_VERSION/virtualbox/box-disk001.vdi"
+
 if [ $# -eq 0 ]; then
-	echo "Executing $0 ..."
-	title "BUILD SETTINGS"
-	if [ "$ANSI" = "true" ]; then
-		env | grep BUILD_ | sort | awk -F"=" '{ printf("'${white}${bold}'%.40s '${default}'%s\n",  $1 "'${dark_grey}'........................................'${default}'" , $2) }'
-	else
-	  env | grep BUILD_ | sort | awk -F"=" '{ printf("%.40s %s\n",  $1 "........................................" , $2) }'
-	fi
-	title_divider
+    title "BUILD SETTINGS"
+    if [ "$ANSI" = "true" ]; then
+        env | grep BUILD_ | sort | awk -F"=" '{ printf("'${white}${bold}'%.40s '${default}'%s\n",  $1 "'${dark_grey}'........................................'${default}'" , $2) }'
+    else
+      env | grep BUILD_ | sort | awk -F"=" '{ printf("%.40s %s\n",  $1 "........................................" , $2) }'
+    fi
+    title_divider
 fi

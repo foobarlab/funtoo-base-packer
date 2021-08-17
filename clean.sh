@@ -1,4 +1,5 @@
 #!/bin/bash -e
+# vim: ts=4 sw=4 et
 
 . config.sh quiet
 
@@ -24,11 +25,8 @@ step "Deleting any box file ..."
 rm -f *.box || true
 step "Cleanup scripts dir ..."
 rm -f scripts/*.tar.xz || true
-rm -f scripts/.release_$BUILD_BOX_NAME || true
 step "Cleanup old logs ..."
 rm -f *.log || true
-step "Cleanup old release info ..."
-rm -f release || true
 step "Dropping build version ..."
 rm -f build_version || true
 step "Dropping build runtime ..."

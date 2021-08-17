@@ -25,9 +25,9 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
     - Commandline helpers/tools: *progress, tree, lsof, hdparm, bash-completion, screen, tmux, htop, ncdu, mc*
     - Portage utils: *eix, genlop*
     - Additional shells: *zsh, dash*
-	- Network utils for www, ftp and email: *links, ncftp, mutt*
-	- *Terminus* console font (12 to 32px)
-	- *sshfs* for alternative shared folder mechanism (e.g. use with [vagrant-sshfs](https://github.com/dustymabe/vagrant-sshfs))
+    - Network utils for www, ftp and email: *links, ncftp, mutt*
+    - *Terminus* console font (12 to 32px)
+    - *sshfs* for alternative shared folder mechanism (e.g. use with [vagrant-sshfs](https://github.com/dustymabe/vagrant-sshfs))
     - Any additional software installed in the [stage3 box](https://github.com/foobarlab/funtoo-stage3-packer)
  - Scripts for system administration in */usr/local/sbin*:
     - *foo-sync*: wrapper to sync meta-repo and any overlays
@@ -35,6 +35,10 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
     - *foo-setup-non-free*: apply licensing and distribution changes to make.conf (make it 'non-free')
     - *foo-cleanup*: delete temporay files for housekeeping
     - *foo-prepare-compact*: zero-fill free disk space to prepare for hdd image compaction
+
+### Enable Desktop
+
+Enter ```sudo rc-update add xdm default``` and reboot.
 
 ### Download pre-build images
 

@@ -1,4 +1,5 @@
 #!/bin/bash -uex
+# vim: ts=2 sw=2 et
 
 if [ -z ${BUILD_RUN:-} ]; then
   echo "This script can not be run directly! Aborting."
@@ -30,6 +31,15 @@ cd /tmp
 sudo wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
 sudo chmod 755 ./install.sh
 sudo ZSH="/opt/oh-my-zsh" ./install.sh --unattended --keep-zshrc
+
+## sanitize perl packages
+#sudo perl-cleaner --all
+#
+## remove any temp portage flags and update system
+#for dir in /etc/portage/package.*; do
+#  sudo rm -f /etc/portage/${dir##*/}/temp*
+#done
+#sudo emerge -vtuDN --with-bdeps=y @world
 
 # net-mail/mailbase: adjust permissions as recommended during install
 sudo chown root:mail /var/spool/mail/

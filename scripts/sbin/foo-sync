@@ -1,15 +1,16 @@
 #!/bin/bash
-# simple system update script
+# vim: ts=4 sw=4 et
+# simple portage sync script
 
 if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
 
 for d in /var/git/overlay/*/ ; do
-	if [ -d "$d/.git" ] ; then
-		cd "$d"
-		#git config pull.rebase true
-		echo ">>> Sync overlay $d ..."
-		git pull
-	fi 
+    if [ -d "$d/.git" ] ; then
+        cd "$d"
+        #git config pull.rebase true
+        echo ">>> Sync overlay $d ..."
+        git pull
+    fi
 done
 
 echo ">>> Sync portage tree ..."

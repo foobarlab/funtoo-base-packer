@@ -1,4 +1,5 @@
 #!/bin/bash -uex
+# vim: ts=2 sw=2 et
 
 if [ -z ${BUILD_RUN:-} ]; then
   echo "This script can not be run directly! Aborting."
@@ -6,8 +7,8 @@ if [ -z ${BUILD_RUN:-} ]; then
 fi
 
 if [ -z ${BUILD_GCC_VERSION:-} ]; then
-	echo "BUILD_GCC_VERSION was not set. Skipping GCC install ..."
-	exit 0
+  echo "BUILD_GCC_VERSION was not set. Skipping GCC install ..."
+  exit 0
 fi
 
 # install GCC, see: https://wiki.gentoo.org/wiki/Upgrading_GCC

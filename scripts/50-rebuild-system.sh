@@ -1,4 +1,5 @@
 #!/bin/bash -uex
+# vim: ts=2 sw=2 et
 
 if [ -z ${BUILD_RUN:-} ]; then
   echo "This script can not be run directly! Aborting."
@@ -6,13 +7,13 @@ if [ -z ${BUILD_RUN:-} ]; then
 fi
 
 if [ -z ${BUILD_REBUILD_SYSTEM:-} ]; then
-	echo "BUILD_REBUILD_SYSTEM was not set. Skipping ..."
-	exit 0
+  echo "BUILD_REBUILD_SYSTEM was not set. Skipping ..."
+  exit 0
 else
-	if [ "$BUILD_REBUILD_SYSTEM" = false ]; then
-		echo "BUILD_REBUILD_SYSTEM set to FALSE. Skipping ..."
-		exit 0
-	fi
+  if [ "$BUILD_REBUILD_SYSTEM" = false ]; then
+    echo "BUILD_REBUILD_SYSTEM set to FALSE. Skipping ..."
+    exit 0
+  fi
 fi
 
 sudo emerge -vt --emptytree --usepkg=n @system
@@ -26,17 +27,17 @@ sudo emerge -vt @preserved-rebuild
 sudo perl-cleaner --reallyall
 
 if [ -z ${BUILD_KERNEL:-} ]; then
-    echo "BUILD_KERNEL was not set. Skipping kernel build."
+  echo "BUILD_KERNEL was not set. Skipping kernel build."
 else
-    if [ "$BUILD_KERNEL" = false ]; then
-        echo ">>> Skipping kernel build."
-    else
-        echo ">>> Building kernel ..."
-        cd /usr/src/linux
-        sudo make distclean
-        sudo genkernel all
-        sudo ego boot update
-    fi
+  if [ "$BUILD_KERNEL" = false ]; then
+    echo ">>> Skipping kernel build."
+  else
+    echo ">>> Building kernel ..."
+    cd /usr/src/linux
+    sudo make distclean
+    sudo genkernel all
+    sudo ego boot update
+  fi
 fi
 
 sudo env-update

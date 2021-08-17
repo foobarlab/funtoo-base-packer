@@ -1,4 +1,5 @@
 #!/bin/bash -uex
+# vim: ts=2 sw=2 et
 
 if [ -z ${BUILD_RUN:-} ]; then
   echo "This script can not be run directly! Aborting."
@@ -23,9 +24,9 @@ sudo rc-update add gpm default
 # ---- install xorg server
 
 sudo emerge -nuvtND --with-bdeps=y \
-	x11-base/xorg-x11 \
-	x11-apps/xinit \
-	x11-drivers/xf86-video-vmware
+  x11-base/xorg-x11 \
+  x11-apps/xinit \
+  x11-drivers/xf86-video-vmware
 
 cat <<'DATA' | sudo tee -a /etc/X11/xorg.conf.d/10video.conf
 # setup vmware svga video driver (VMSVGA with virtualbox):
@@ -76,10 +77,10 @@ DATA
 
 # TODO remove 'elogind' once FL-7408 is resolved
 sudo emerge -nuvtND --with-bdeps=y \
-	x11-misc/lightdm \
-	sys-auth/elogind \
-	x11-wm/fluxbox \
-	x11-themes/fluxbox-styles-fluxmod
+  x11-misc/lightdm \
+  sys-auth/elogind \
+  x11-wm/fluxbox \
+  x11-themes/fluxbox-styles-fluxmod
 
 # ---- lighdm config
 
@@ -261,10 +262,10 @@ fluxbox-generate_menu -is -ds
 # ---- install basic utils
 
 sudo emerge -nuvtND --with-bdeps=y \
-	x11-terms/xterm \
-	x11-apps/mesa-progs \
-	media-gfx/feh
-	
+  x11-terms/xterm \
+  x11-apps/mesa-progs \
+  media-gfx/feh
+
 # ---- networking
 
 sudo emerge -nuvtND --with-bdeps=y \
@@ -318,7 +319,7 @@ cat <<'DATA' | sudo tee -a ~vagrant/.Xresources
  xterm*geometry: 80x25
  xterm*faceSize: 12
  xterm*renderFont: true
- 
+
 DATA
 sudo chown vagrant:vagrant ~vagrant/.Xresources
 
