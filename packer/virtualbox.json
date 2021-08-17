@@ -38,7 +38,7 @@
         ["modifyvm","{{.Name}}","--spec-ctrl","off"],
         ["modifyvm","{{.Name}}","--clipboard-mode","bidirectional"],
         ["sharedfolder","add","{{.Name}}","--name=/vagrant","--hostpath=.","--automount"],
-        ["storageattach", "{{.Name}}","--storagectl","SATA Controller","--port","0","--device","0","--nonrotational","on","--discard","on","--type", "hdd","--medium","{{user `vdi_path`}}"]
+        ["storageattach", "{{.Name}}","--storagectl","SATA Controller","--port","0","--device","0","--nonrotational","on","--type", "hdd","--medium","{{user `vdi_path`}}"]
       ]
   }],
   "provisioners": [{
