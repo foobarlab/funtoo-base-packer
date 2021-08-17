@@ -21,10 +21,10 @@ BUILD_PARENT_BOX_CLOUD_NAME="$BUILD_PARENT_BOX_USERNAME/$BUILD_PARENT_BOX_NAME"
 
 BUILD_GUEST_TYPE="Gentoo_64"
 
-# default memory/cpus used for final created box:
+# default memory/cpus/disk used for final created box:
 BUILD_BOX_CPUS="2"
 BUILD_BOX_MEMORY="2048"
-#export BUILD_BOX_DISKSIZE="35000" # resize disk in MB, comment-in to disable
+#BUILD_BOX_DISKSIZE="50000" # resize disk in MB, comment-in to disable
 
 BUILD_CUSTOM_OVERLAY=true
 BUILD_CUSTOM_OVERLAY_NAME="foobarlab"
