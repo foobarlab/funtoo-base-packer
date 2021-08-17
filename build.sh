@@ -105,9 +105,11 @@ if [[ ! -f "$BUILD_PARENT_BOX_CLOUD_VDI" ]]; then
     $vboxmanage clonehd "$BUILD_PARENT_BOX_CLOUD_VMDK" "$BUILD_PARENT_BOX_CLOUD_VDI" --format VDI
     if [ -z ${BUILD_BOX_DISKSIZE:-} ]; then
         result "BUILD_BOX_DISKSIZE is unset, skipping disk resize ..."
+        # TODO set flag for packer (use another provisioner)
     else
         highlight "Resizing vdi to $BUILD_BOX_DISKSIZE MB ..."
         $vboxmanage modifyhd "$BUILD_PARENT_BOX_CLOUD_VDI" --resize $BUILD_BOX_DISKSIZE
+        # TODO set flag for packer (use another provisioner)
     fi
 fi
 sync
