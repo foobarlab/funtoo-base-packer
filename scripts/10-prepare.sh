@@ -69,8 +69,10 @@ sudo cat /etc/issue
 
 if [ "$BUILD_CUSTOM_OVERLAY" = true ]; then
     cd /var/git
-    sudo mkdir -p overlay
+    sudo mkdir -p overlay || true
     cd overlay
+    # FIXME delete if already existing?
+    #sudo rm -rf ./$BUILD_CUSTOM_OVERLAY_NAME || true
     # example: git clone --depth 1 -b development "https://github.com/foobarlab/foobarlab-overlay.git" ./foobarlab
     sudo git clone --depth 1 -b $BUILD_CUSTOM_OVERLAY_BRANCH "$BUILD_CUSTOM_OVERLAY_URL" ./$BUILD_CUSTOM_OVERLAY_NAME
     cd ./$BUILD_CUSTOM_OVERLAY_NAME
