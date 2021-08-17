@@ -36,6 +36,10 @@ It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funt
     - *foo-cleanup*: delete temporay files for housekeeping
     - *foo-prepare-compact*: zero-fill free disk space to prepare for hdd image compaction
 
+### Enable Desktop
+
+Enter ```sudo rc-update add xdm default``` and reboot.
+
 ### Download pre-build images
 
 Get the latest build from Vagrant Cloud: [foobarlab/funtoo-base](https://app.vagrantup.com/foobarlab/boxes/funtoo-base)
