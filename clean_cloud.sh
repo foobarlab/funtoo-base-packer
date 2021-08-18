@@ -6,7 +6,7 @@
 
 title "CLEAN CLOUD"
 
-. vagrant_cloud_token.sh
+. vagrant_cloud_token.sh "$*"
 
 require_commands curl jq
 
