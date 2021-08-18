@@ -44,7 +44,7 @@ BUILD_KEEP_MAX_CLOUD_BOXES=1       # set the maximum number of boxes to keep in 
 # ----------------------------!  do not edit below this line  !----------------------------
 
 echo $BUILD_BOX_FUNTOO_VERSION | sed -e 's/\.//g' > version    # auto set major version
-. version.sh    # determine build version
+. version.sh "$*"   # determine build version
 
 # detect number of system cpus available (select half of cpus for best performance)
 BUILD_CPUS=$((`nproc --all` / 2))
@@ -128,7 +128,7 @@ BUILD_OUTPUT_FILE="$BUILD_BOX_NAME-$BUILD_BOX_VERSION.box"
 BUILD_PARENT_BOX_CHECK=true
 
 # get the latest parent version from Vagrant Cloud API call:
-. parent_version.sh
+. parent_version.sh "$*"
 
 BUILD_PARENT_BOX_OVF="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_NAME/0/virtualbox/box.ovf"
 BUILD_PARENT_BOX_CLOUD_PATHNAME=`echo "$BUILD_PARENT_BOX_CLOUD_NAME" | sed "s|/|-VAGRANTSLASH-|"`
