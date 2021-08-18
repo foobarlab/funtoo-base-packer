@@ -3,49 +3,96 @@
 
 . ./lib/functions.sh "$*"
 
-create_sum() {
-    # TODO check given param(s)
-    find "$PWD/$1" -type d |\
-    sort |\
-    while read dir; \
-    do cd "${dir}"; \
-        [ ! -f checksums.b2 ] && step "Processing " "${dir}" || result "Skipped '" "${dir}" "': checksums.b2 allready present" ; \
-        [ ! -f checksums.b2 ] &&  b2sum * > checksums.b2 ; \
-        chmod a=r "${dir}"/checksums.b2 ; \
+require_commands wget b2sum
+
+#create_sum() {
+#    # TODO check given param(s)
+#    find "$PWD/$1" -type d |\
+#    sort |\
+#    while read dir; \
+#    do cd "${dir}"; \
+#        [ ! -f checksums.b2 ] && step "Processing " "${dir}" || result "Skipped '" "${dir}" "': checksums.b2 allready present" ; \
+#        [ ! -f checksums.b2 ] &&  b2sum * > checksums.b2 ; \
+#        chmod a=r "${dir}"/checksums.b2 ; \
+#    done
+#}
+#
+#check_sum() {
+#    # TODO check given param(s)
+#    find "$PWD/$1" -name checksums.b2 | \
+#    sort | \
+#    while read file; \
+#        do cd "${file%/*}"; \
+#        b2sum -c checksums.b2; \
+#    done > checksums.log
+#}
+
+highlight "Processing distfiles ..."
+
+if [[ -f "$PWD/distfiles.list" ]]; then
+    step "Ensure 'distfiles' dir exists ..."
+    mkdir -p "$PWD/distfiles" || true
+    step "Parsing 'distfiles.list' ..."
+    line_number=0
+    old_IFS=$IFS # save the field separator
+    IFS=$'\n' # new field separator, the end of line
+    for line in $(cat "$PWD/distfiles.list"); do
+        line_number=$((line_number+1))
+        shopt -s extglob; line=${line##*( )}; line="${line%%*( )}"; shopt -u extglob # remove leading and trailing spaces 
+        [[ $line =~ ^#.* ]] && continue # skip comments
+        #info "Line: $line"
+        file_hash=""
+        file_name=""
+        file_url=""
+        count=0
+        IFS=$' ' read -ra file_info <<< "$line"
+        for i in "${file_info[@]}"; do
+            count=$((count+1))
+            case $count in
+                1) file_hash="$i" ;; # BLAKE2B
+                2) file_name="$i" ;; # filename
+                3) file_url="$i"  ;; # download url
+                *) error "More than three space separated values in line $line_number: $line"; exit 1 ;;
+            esac
+        done
+        if [ ! $count -eq 3 ]; then
+            error "Expected three space separated values, but got only $count in line $line_number: $line"
+            exit 1
+        fi
+
+        # DEBUG
+        #result "File: $file_name"
+        #result "Blake2b -> $file_hash"
+        #result "URL -> $file_url"
+
+        success "Processing file '$file_name' ..."
+        step "Check if file is present ..."
+        if [ ! -f "$PWD/distfiles/$file_name" ]; then
+            warn "File is missing."
+            step "Downloading file ..."
+            wget -c "$file_url" -O "$PWD/distfiles/$file_name"
+            todo "Check wget exit status"
+        fi
+        step "Verifying file integrity ..."
+        if [ -f "$PWD/distfiles/$file_name" ]; then
+            file_expected_hash=$(cat "$PWD/distfiles/$file_name" | b2sum -b | sed -e "s/ .*//g")
+            if [[ "$file_hash" = "$file_expected_hash" ]]; then
+                result "OK, checksum matched."
+                continue
+            else
+                warn "Failed, checksum did not match"
+                result $file_expected_hash
+                result $file_hash
+            fi
+            # checksum did not match
+            todo "Report and offer delete and restart of this script"
+        else
+            error "Unable to download '$file_name' from '$file_url'."
+            exit 1
+        fi
     done
-}
+    IFS=$old_IFS # restore default field separator 
 
-check_sum() {
-    # TODO check given param(s)
-    find "$PWD/$1" -name checksums.b2 | \
-    sort | \
-    while read file; \
-        do cd "${file%/*}"; \
-        b2sum -c checksums.b2; \
-    done > checksums.log
-}
-
-# FIXME setup list of downloadable distfiles, skip when empty or non-existant
-#highlight "Creating distfiles dir ..."
-#mkdir -p "$PWD/distfiles" || true
-
-if [[ -d "$PWD/distfiles" ]]; then
-    highlight "Check distfiles ..."
-    check_sum "distfiles"
-    cat "$PWD/checksums.log"
-
-    highlight "Downloading distfiles ..."
-    todo "Download distfiles if missing file checksums found (count files) ..."
-    result "Nothing to download yet."
-
-    highlight "Re-creating checksum ..."
-    todo "Re-create checksum if needed ..."
-    create_sum "distfiles"
-
-    highlight "Re-checking checksum ..."
-    todo "Re-check checksums, abort/continue if distfiles were still missing or download failed."
-    check_sum "distfiles"
-    cat "$PWD/checksums.log"
 else
-    result "No distfiles dir found."
+    info "File 'distfiles.list' not found."
 fi

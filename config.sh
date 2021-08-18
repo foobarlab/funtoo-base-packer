@@ -24,7 +24,7 @@ BUILD_GUEST_TYPE="Gentoo_64"
 # default memory/cpus/disk used for final created box:
 BUILD_BOX_CPUS="2"
 BUILD_BOX_MEMORY="2048"
-#BUILD_BOX_DISKSIZE="51200" # resize disk in MB, comment-in to disable
+#BUILD_BOX_DISKSIZE="51200" # resize disk in MB, comment-in to keep exiting size
 
 BUILD_CUSTOM_OVERLAY=true
 BUILD_CUSTOM_OVERLAY_NAME="foobarlab"
@@ -70,7 +70,7 @@ fi
 
 if [[ -n "$BUILD_WINDOW_SYSTEM" ]]; then
     if [ "$BUILD_WINDOW_SYSTEM" = true ]; then
-        BUILD_BOX_RELEASE_NOTES="${BUILD_BOX_RELEASE_NOTES}, X11 (Fluxbox)"     # edit this to reflect actual setup
+        BUILD_BOX_RELEASE_NOTES="${BUILD_BOX_RELEASE_NOTES}, X11 (Fluxbox)"   # edit this to reflect actual setup
     fi
 fi
 

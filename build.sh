@@ -96,7 +96,7 @@ fi
 highlight "Create packages dir ..."
 mkdir -p packages || true
 
-. distfiles.sh
+. distfiles.sh quiet
 
 # TODO add cloud version check (see stage3)
 
