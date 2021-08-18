@@ -12,6 +12,17 @@ command -v $vboxmanage >/dev/null 2>&1 || vboxmanage=vboxmanage   # try alternat
 header "Building box '$BUILD_BOX_NAME'"
 require_commands vagrant packer wget $vboxmanage
 
+highlight "Checking presence of box '$BUILD_BOX_NAME' ..."
+#$vboxmanage list vms
+vbox_machine_id=$( $vboxmanage list vms | grep $BUILD_BOX_NAME | grep -Eo '{[0-9a-f\-]+}' | sed -n 's/[{}]//p' || echo )
+if [[ -z "$vbox_machine_id" || "$vbox_machine_id" = "" ]]; then
+    info "No machine named '$BUILD_BOX_NAME' found."
+else
+    error "Found machine UUID for '$BUILD_BOX_NAME': { $vbox_machine_id }"
+    result "Please run './clean_env.sh' to remove the box and try again."
+    exit 1
+fi
+
 highlight "Checking presence of parent box '$BUILD_PARENT_BOX_NAME' ..."
 vbox_hdd_found=$( $vboxmanage list hdds | grep "$BUILD_PARENT_BOX_CLOUD_VDI" || echo )
 if [ -f $BUILD_PARENT_BOX_OVF ] && [[ -z "$vbox_hdd_found" || "$vbox_hdd_found" = "" ]]; then
@@ -47,11 +58,6 @@ else
         vagrant box add -f "$BUILD_PARENT_BOX_CLOUD_NAME" --box-version "$BUILD_PARENT_BOX_CLOUD_VERSION" --provider virtualbox
     fi
 fi
-
-highlight "Checking presence of box '$BUILD_BOX_NAME' ..."
-todo "Check if box is present"
-$vboxmanage list vms
-todo "If present please run './clean_env.sh' and try again."
 
 highlight "Downloading default ssh keys ..."
 if [ -d "keys" ]; then

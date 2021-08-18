@@ -44,7 +44,7 @@ case "$choice" in
         ;;
 esac
 
-. vagrant_cloud_token.sh
+. vagrant_cloud_token.sh "$*"
 
 # check if a latest version does exist
 LATEST_VERSION_HTTP_CODE=$( \

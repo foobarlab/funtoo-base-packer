@@ -135,6 +135,21 @@ bg_white="${ANSI_START}${ANSI_RESET};${ANSI_BG_WHITE}${ANSI_END}"
 
 # ---- Functions
 
+set_silent_mode() {
+    if [[ $@ = "" ]]; then
+        silent=false
+    else
+        silent=true
+    fi
+}
+# TODO explicit let scripts set silent mode
+set_silent_mode "$*"
+
+# run given param if not $silent=true
+if_not_silent() {
+    [ ! -v "$silent" ] && [[ "$silent" = "true" ]] || "$@"
+}
+
 require_commands() {
   local command;
   for command in $@; do

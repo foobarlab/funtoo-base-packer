@@ -1,7 +1,7 @@
 #!/bin/bash -ue
 # vim: ts=4 sw=4 et
 
-. ./lib/functions.sh
+. ./lib/functions.sh "$*"
 
 create_sum() {
     # TODO check given param(s)
