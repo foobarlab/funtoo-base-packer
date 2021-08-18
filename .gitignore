@@ -2,10 +2,10 @@
 packer_cache/
 /*.box
 .project
-packer.log
-checksums.log
+/*.log
 /keys
 vagrant-cloud-*
+!vagrant-cloud-token.sh
 output-virtualbox-ovf/
 build_number
 build_version
