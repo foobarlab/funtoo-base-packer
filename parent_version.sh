@@ -13,11 +13,9 @@ fi
 if [ -z "${BUILD_PARENT_BOX_CLOUD_VERSION:-}" ]; then
     if [ ! -z ${BUILD_PARENT_BOX_CHECK:-} ]; then
         require_commands curl jq
-        . vagrant_cloud_token.sh "$*"
         if_not_silent highlight "Reading meta info of parent box ..."
         PARENT_VERSION_HTTP_CODE=$( \
         curl -sS -w "%{http_code}" -o /dev/null \
-          --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
           https://app.vagrantup.com/api/v1/box/$BUILD_PARENT_BOX_CLOUD_NAME \
         )
         case "$PARENT_VERSION_HTTP_CODE" in
@@ -33,7 +31,6 @@ if [ -z "${BUILD_PARENT_BOX_CLOUD_VERSION:-}" ]; then
         if_not_silent highlight "Getting latest version of parent box ..."
         LATEST_PARENT_VERSION=$( \
         curl -sS \
-          --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
           https://app.vagrantup.com/api/v1/box/$BUILD_PARENT_BOX_CLOUD_NAME \
         )
         export BUILD_PARENT_BOX_CLOUD_VERSION=$(echo $LATEST_PARENT_VERSION | jq .current_version.version | tr -d '"')
