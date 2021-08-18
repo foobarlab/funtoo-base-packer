@@ -12,6 +12,8 @@ if [ -z ${BUILD_BOX_NAME:-} ]; then
     exit 1
 fi
 
+# TODO run only once?
+
 if [ ! -z ${BUILD_PARENT_BOX_CHECK:-} ]; then
     require_commands curl jq
     . vagrant_cloud_token.sh
@@ -28,7 +30,7 @@ if [ ! -z ${BUILD_PARENT_BOX_CHECK:-} ]; then
         *) error `printf "Received: HTTP $PARENT_VERSION_HTTP_CODE ==> Unhandled status code while trying to get parent box meta info, aborting.\n"` ; exit 1 ;;
     esac
 
-    highlight "Determine version of parent box ..."
+    highlight "Getting latest version of parent box ..."
     LATEST_PARENT_VERSION=$( \
     curl -sS \
       --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
@@ -36,5 +38,5 @@ if [ ! -z ${BUILD_PARENT_BOX_CHECK:-} ]; then
     )
 
     export BUILD_PARENT_BOX_CLOUD_VERSION=$(echo $LATEST_PARENT_VERSION | jq .current_version.version | tr -d '"')
-    result "Found latest parent box version: $BUILD_PARENT_BOX_CLOUD_VERSION"
+    info "Found parent box version: '$BUILD_PARENT_BOX_CLOUD_VERSION'"
 fi

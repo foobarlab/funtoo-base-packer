@@ -11,6 +11,10 @@ require_commands vagrant $vboxmanage
 title "ENVIRONMENT CLEANUP"
 
 highlight "Housekeeping Vagrant environment ..."
+step "Prune old parent versions of box '${BUILD_PARENT_BOX_NAME}' ..."
+vagrant box prune --name ${BUILD_PARENT_BOX_NAME}
+step "Prune previous versions of box '${BUILD_BOX_NAME}' ..."
+vagrant box prune --name ${BUILD_BOX_NAME}
 step "Prune invalid Vagrant entries ..."
 vagrant global-status --prune >/dev/null
 step "Delete temporary Vagrant files ..."

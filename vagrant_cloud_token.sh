@@ -1,12 +1,16 @@
 #!/bin/bash -ue
 # vim: ts=4 sw=4 et
 
+# TODO run only once?
+
 # imports
 . ./lib/functions.sh
 require_commands curl jq
 
+highlight "Checking Vagrant Cloud auth token presence ..."
+
 if [ -f ./vagrant-cloud-token ]; then
-    result "Using previously stored auth token."
+    info "Using previously stored auth token."
     VAGRANT_CLOUD_TOKEN=`cat ./vagrant-cloud-token`
 else
     warn "No auth token found."

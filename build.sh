@@ -14,6 +14,18 @@ require_commands vagrant packer wget $vboxmanage
 
 header "Building box '$BUILD_BOX_NAME'"
 
+highlight "Checking existing boxes ..."
+vbox_hdd_found=$( $vboxmanage list hdds | grep "$BUILD_PARENT_BOX_CLOUD_VDI" || echo )
+
+highlight "Checking presence of parent box ..."
+if [ -f $BUILD_PARENT_BOX_OVF ] && [[ -z "$vbox_hdd_found" || "$vbox_hdd_found" = "" ]]; then
+    error "The parent box '${BUILD_PARENT_BOX_CLOUD_NAME}-${BUILD_PARENT_BOX_CLOUD_VERSION}' is not installed by Vagrant!"
+    result "Try './clean_env.sh' in the parent box build dir or remove parent box manually, then try again."
+    todo "Remove parent box from system?"
+    exit 1
+fi
+
+highlight "Downloading parent box if needed ..."
 if [ -f $BUILD_PARENT_BOX_OVF ]; then
     export BUILD_PARENT_OVF=$BUILD_PARENT_BOX_OVF
     warn "An existing local '$BUILD_PARENT_BOX_NAME' parent box was detected. Skipping download ..."
@@ -40,6 +52,7 @@ else
     fi
 fi
 
+highlight "Downloading default ssh keys ..."
 if [ -d "keys" ]; then
     info "Ok, key dir exists."
 else
@@ -69,15 +82,15 @@ else
     fi
 fi
 
-step "Create packages dir ..."
+highlight "Create packages dir ..."
 mkdir -p packages || true
 
-# TODO check when not resizing disk: do not storageattach in virtualbox.json! use 'only' conditionals in packer json ...
-
-step "Searching for vdi file ..."
+highlight "Searching for parent box vdi file ..."
 vbox_hdd_found=$( $vboxmanage list hdds | grep "$BUILD_PARENT_BOX_CLOUD_VDI" || echo )
 if [[ -z "$vbox_hdd_found" || "$vbox_hdd_found" = "" ]]; then
-    result "No vdi file found."
+    error "No vdi file found for parent box '${BUILD_PARENT_BOX_CLOUD_NAME}-${BUILD_PARENT_BOX_CLOUD_VERSION}'!"
+    result "Please restart for trying again."
+    exit 1
 else
     vbox_found_hdd_count=$( $vboxmanage list hdds | grep -o "^UUID" | wc -l )
     info "Found $vbox_found_hdd_count hdd(s)."
@@ -89,6 +102,7 @@ else
     for (( i=0; i<$vbox_found_hdd_count; i++ )); do
         if [[ "${vbox_hdd_locations2[$i]}" = "$BUILD_PARENT_BOX_CLOUD_VDI" ]]; then
             result "Found '$BUILD_PARENT_BOX_CLOUD_VDI'"
+            
             # FIXME check state?
             result "State: ${vbox_hdd_states[$i]}"
             #result "UUID: ${vbox_hdd_uuids[$i]}"
@@ -96,23 +110,23 @@ else
             $vboxmanage closemedium disk "${vbox_hdd_uuids[$i]}" --delete
             highlight "Removing previous resized vdi file ..."
             rm -f "$BUILD_PARENT_BOX_CLOUD_VDI" || true
+        
         fi
     done
-fi
-
-if [[ ! -f "$BUILD_PARENT_BOX_CLOUD_VDI" ]]; then
-    highlight "Cloning parent box hdd to vdi file ..."
-    $vboxmanage clonehd "$BUILD_PARENT_BOX_CLOUD_VMDK" "$BUILD_PARENT_BOX_CLOUD_VDI" --format VDI
-    if [ -z ${BUILD_BOX_DISKSIZE:-} ]; then
-        result "BUILD_BOX_DISKSIZE is unset, skipping disk resize ..."
-        # TODO set flag for packer (use another provisioner)
-    else
-        highlight "Resizing vdi to $BUILD_BOX_DISKSIZE MB ..."
-        $vboxmanage modifyhd "$BUILD_PARENT_BOX_CLOUD_VDI" --resize $BUILD_BOX_DISKSIZE
-        # TODO set flag for packer (use another provisioner)
+    if [[ ! -f "$BUILD_PARENT_BOX_CLOUD_VDI" ]]; then
+        highlight "Cloning parent box hdd to vdi file ..."
+        $vboxmanage clonehd "$BUILD_PARENT_BOX_CLOUD_VMDK" "$BUILD_PARENT_BOX_CLOUD_VDI" --format VDI
+        if [ -z ${BUILD_BOX_DISKSIZE:-} ]; then
+            result "BUILD_BOX_DISKSIZE is unset, skipping disk resize ..."
+            # TODO set flag for packer (use another provisioner)
+        else
+            highlight "Resizing vdi to $BUILD_BOX_DISKSIZE MB ..."
+            $vboxmanage modifyhd "$BUILD_PARENT_BOX_CLOUD_VDI" --resize $BUILD_BOX_DISKSIZE
+            # TODO set flag for packer (use another provisioner)
+        fi
     fi
+    sync
 fi
-sync
 
 . config.sh
 
@@ -120,6 +134,7 @@ step "Invoking packer ..."
 export PACKER_LOG_PATH="$PWD/packer.log"
 export PACKER_LOG="1"
 packer validate "$PWD/packer/virtualbox.json"
+# TODO use 'only' conditionals in packer json ...
 packer build -force -on-error=abort "$PWD/packer/virtualbox.json"
 
 title "OPTIMIZING BOX SIZE"
