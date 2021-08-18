@@ -17,13 +17,13 @@ vbox_machine_id=$( $vboxmanage list vms | grep $BUILD_BOX_NAME | grep -Eo '{[0-9
 if [[ -z "$vbox_machine_id" || "$vbox_machine_id" = "" ]]; then
     info "No machine named '$BUILD_BOX_NAME' found."
 else
-    error "The box '$BUILD_BOX_NAME' already exists!"
+    warn "The box '$BUILD_BOX_NAME' already exists!"
     info "Machine UUID: ["$vbox_machine_id"]"
     echo
     info "Either this box is still powered on or you have a previous build"
     info "VirtualBox machine lying around."
     echo
-    result "Please run './clean_env.sh' to shutdown and remove the box, then try again."
+    error "Can not continue, please run './clean_env.sh' to shutdown and remove the box, then try again."
     exit 1
 fi
 
@@ -97,6 +97,8 @@ highlight "Create packages dir ..."
 mkdir -p packages || true
 
 . distfiles.sh
+
+# TODO add cloud version check (see stage3)
 
 highlight "Cleanup existing parent box vdi file ..."
 vbox_hdd_found=$( $vboxmanage list hdds | grep "$BUILD_PARENT_BOX_CLOUD_VDI" || echo )
