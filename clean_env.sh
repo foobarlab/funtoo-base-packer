@@ -45,7 +45,7 @@ else
         $vboxmanage unregistervm --delete "$vbox_id" >/dev/null 2>&1 || true
     done
 fi
-step "Searching for any left inaccessible machines ..."
+step "Searching for any leftover inaccessible machines ..."
 vbox_inaccessible_ids=$( $vboxmanage  list vms | grep "<inaccessible>" | grep -Eo '{[0-9a-f\-]+}' | sed -n 's/[{}]//p' || echo )
 if [[ -z "$vbox_inaccessible_ids" || "$vbox_inaccessible_ids" = "" ]]; then
     info "No leftover inaccessible machines found."
