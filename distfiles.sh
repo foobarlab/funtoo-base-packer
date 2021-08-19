@@ -16,7 +16,7 @@ if [[ -f "$PWD/distfiles.list" ]]; then
     IFS=$'\n' # new field separator, the end of line
     for line in $(cat "$PWD/distfiles.list"); do
         line_number=$((line_number+1))
-        shopt -s extglob; line=${line##*( )}; line="${line%%*( )}"; shopt -u extglob # remove leading and trailing spaces 
+        shopt -s extglob; line=${line##*( )}; line="${line%%*( )}"; shopt -u extglob # remove leading and trailing spaces
         [[ $line =~ ^#.* ]] && continue # skip comments
         #info "Line: $line"
         file_hash=""
@@ -30,10 +30,11 @@ if [[ -f "$PWD/distfiles.list" ]]; then
                 1) file_hash="$i" ;; # BLAKE2B
                 2) file_name="$i" ;; # filename
                 3) file_url="$i"  ;; # download url
-                *) error "More than three space separated values in line $line_number: $line"; exit 1 ;;
+                *) error "More than three space separated values in line $line_number: $line"; exit 1 ;; # FIXME ignore error, just warn
             esac
         done
         if [ ! $count -eq 3 ]; then
+            # FIXME ignore error, just warn
             error "Expected three space separated values, but got only $count in line $line_number: $line"
             exit 1
         fi
@@ -50,6 +51,7 @@ if [[ -f "$PWD/distfiles.list" ]]; then
             step "Downloading file ..."
             wget -c "$file_url" -O "$PWD/distfiles/$file_name"
             todo "Check wget exit status"
+            todo "Count error if failed"
         fi
         step "Verifying file integrity ..."
         if [ -f "$PWD/distfiles/$file_name" ]; then
@@ -63,14 +65,18 @@ if [[ -f "$PWD/distfiles.list" ]]; then
                 result $file_hash
             fi
             # checksum did not match
-            todo "Report and offer delete and restart of this script"
+            todo "report and offer delete of the file"
+            todo "Count error"
         else
-            error "Unable to download '$file_name' from '$file_url'."
-            exit 1
+            warn "Unable to download '$file_name' from '$file_url'."
+            todo "Count error"
         fi
     done
-    IFS=$old_IFS # restore default field separator 
+    IFS=$old_IFS # restore default field separator
 
 else
     info "File 'distfiles.list' not found."
 fi
+
+todo "Offer script restart if there were any errors or checksum mismatches"
+
