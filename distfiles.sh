@@ -5,28 +5,6 @@
 
 require_commands wget b2sum
 
-#create_sum() {
-#    # TODO check given param(s)
-#    find "$PWD/$1" -type d |\
-#    sort |\
-#    while read dir; \
-#    do cd "${dir}"; \
-#        [ ! -f checksums.b2 ] && step "Processing " "${dir}" || result "Skipped '" "${dir}" "': checksums.b2 allready present" ; \
-#        [ ! -f checksums.b2 ] &&  b2sum * > checksums.b2 ; \
-#        chmod a=r "${dir}"/checksums.b2 ; \
-#    done
-#}
-#
-#check_sum() {
-#    # TODO check given param(s)
-#    find "$PWD/$1" -name checksums.b2 | \
-#    sort | \
-#    while read file; \
-#        do cd "${file%/*}"; \
-#        b2sum -c checksums.b2; \
-#    done > checksums.log
-#}
-
 highlight "Processing distfiles ..."
 
 if [[ -f "$PWD/distfiles.list" ]]; then
