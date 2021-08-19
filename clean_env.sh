@@ -35,13 +35,25 @@ else
     result "Deleting machine ..."
     $vboxmanage unregistervm --delete $vbox_machine_id >/dev/null 2>&1 || true
 fi
-step "Delete all inaccessible VMs named '$BUILD_BOX_NAME' ..."
-vbox_inaccessible_id=$( $vboxmanage list vms | grep "<inaccessible>" | grep "$BUILD_BOX_NAME" | sed -r 's/.*\{(.*)\}/\1/' )
-if [[ -z "$vbox_inaccessible_id" || "$vbox_inaccessible_id" = "" ]]; then
-    info "No inaccessible machine named '$BUILD_BOX_NAME' found."
+step "Searching for inaccessible machines named '$BUILD_BOX_NAME' ..."
+vbox_inaccessible_ids=$( $vboxmanage list vms | grep "<inaccessible>" | grep "$BUILD_BOX_NAME" | sed -r 's/.*\{(.*)\}/\1/' )
+if [[ -z "$vbox_inaccessible_ids" || "$vbox_inaccessible_ids" = "" ]]; then
+    info "No inaccessible machines named '$BUILD_BOX_NAME' found."
 else
-    warn "Found inaccessible machine UUID for '$BUILD_BOX_NAME': { vbox_inaccessible_id }"
-    $vboxmanage unregistervm --delete "$vbox_inaccessible_id" >/dev/null 2>&1 || true
+    for vbox_id in $vbox_inaccessible_ids; do
+        warn "Deleting inaccessible machine '$BUILD_BOX_NAME' with UUID { $vbox_id }"
+        $vboxmanage unregistervm --delete "$vbox_id" >/dev/null 2>&1 || true
+    done
+fi
+step "Searching for any leftover inaccessible machines ..."
+vbox_inaccessible_ids=$( $vboxmanage  list vms | grep "<inaccessible>" | grep -Eo '{[0-9a-f\-]+}' | sed -n 's/[{}]//p' || echo )
+if [[ -z "$vbox_inaccessible_ids" || "$vbox_inaccessible_ids" = "" ]]; then
+    info "No leftover inaccessible machines found."
+else
+    for vbox_id in $vbox_inaccessible_ids; do
+        warn "Deleting leftover inaccessible machine with UUID { $vbox_id }"
+        $vboxmanage unregistervm --delete "$vbox_id" >/dev/null 2>&1 || true
+    done
 fi
 step "Force removing of appliance from VirtualBox machine folder ..."
 vboxmachinefolder=$( $vboxmanage list systemproperties | grep "Default machine folder" | cut -d ':' -f2 | sed -e 's/^\s*//g' )
