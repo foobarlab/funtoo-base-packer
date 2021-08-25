@@ -43,7 +43,7 @@
   }],
   "provisioners": [{
       "type": "shell",
-      "script": "resize.sh",
+      "script": "packer/resize.sh",
       "expect_disconnect": true,
       "pause_before": "1s",
       "pause_after": "30s",
@@ -60,7 +60,7 @@
       "type": "file"
   },{
       "type": "shell",
-      "script": "provision.sh",
+      "script": "packer/provision.sh",
       "environment_vars": [
           "scripts=/tmp",
           "BUILD_RUN=true",
