@@ -121,7 +121,6 @@ sudo emerge -nuvtND --with-bdeps=y \
   sys-apps/pv \
   sys-process/htop \
   dev-python/scandir \
-  dev-python/netifaces \
   sys-apps/hdparm \
   sys-process/lsof \
   sys-fs/ncdu \
