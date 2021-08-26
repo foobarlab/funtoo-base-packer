@@ -30,11 +30,10 @@ if [[ -f "$PWD/distfiles.list" ]]; then
                 1) file_hash="$i" ;; # BLAKE2B
                 2) file_name="$i" ;; # filename
                 3) file_url="$i"  ;; # download url
-                *) error "More than three space separated values in line $line_number: $line"; exit 1 ;; # FIXME ignore error, just warn
+                *) error "More than three space separated values in line $line_number: $line"; exit 1 ;;
             esac
         done
         if [ ! $count -eq 3 ]; then
-            # FIXME ignore error, just warn
             error "Expected three space separated values, but got only $count in line $line_number: $line"
             exit 1
         fi
@@ -51,7 +50,6 @@ if [[ -f "$PWD/distfiles.list" ]]; then
             step "Downloading file ..."
             wget -c "$file_url" -O "$PWD/distfiles/$file_name"
             todo "Check wget exit status"
-            todo "Count error if failed"
         fi
         step "Verifying file integrity ..."
         if [ -f "$PWD/distfiles/$file_name" ]; then
@@ -65,11 +63,10 @@ if [[ -f "$PWD/distfiles.list" ]]; then
                 result $file_hash
             fi
             # checksum did not match
-            todo "report and offer delete of the file"
-            todo "Count error"
+            todo "Report and offer delete and restart of this script"
         else
-            warn "Unable to download '$file_name' from '$file_url'."
-            todo "Count error"
+            error "Unable to download '$file_name' from '$file_url'."
+            exit 1
         fi
     done
     IFS=$old_IFS # restore default field separator
@@ -77,6 +74,3 @@ if [[ -f "$PWD/distfiles.list" ]]; then
 else
     info "File 'distfiles.list' not found."
 fi
-
-todo "Offer script restart if there were any errors or checksum mismatches"
-
