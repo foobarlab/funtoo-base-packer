@@ -132,7 +132,7 @@ if [ "$BUILD_SKIP_VERSION_CHECK" = false ]; then
             warn "This version is smaller than the cloud version!"
             todo "Automatically increase build_number"
         fi
-        final "Looks like we have an unreleased version to provide. Proceeding build ..."
+        result "Looks like we build an unreleased version."
     fi
 else
     warn "Skipped cloud version check."
