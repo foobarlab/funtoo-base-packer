@@ -153,6 +153,7 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-python
 # FIXME unconventional license naming, see FL-8730
 # required for app-admin/ansible
 >=dev-python/packaging-21.0 BSD-2-Clause or Apache-2.0
+>=dev-python/pyparsing-2.4.7 MIT License
 # required for dev-python/netifaces
 >=dev-python/netifaces-0.11.0 MIT License
 >=dev-python/jsonpointer-2.1 Modified BSD License
