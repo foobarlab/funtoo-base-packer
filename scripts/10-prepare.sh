@@ -145,6 +145,23 @@ net-firewall/iptables conntrack netlink nftables pcap
 net-firewall/nftables json
 DATA
 
+# ---- package.license
+
+sudo mkdir -p /etc/portage/package.license
+cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-python
+# 2021-08-26 - due to recent changes to python
+# FIXME unconventional license naming, see FL-8730
+# required for app-admin/ansible
+>=dev-python/packaging-21.0 BSD-2-Clause or Apache-2.0
+# required for dev-python/netifaces
+>=dev-python/netifaces-0.11.0 MIT License
+>=dev-python/jsonpointer-2.1 Modified BSD License
+>=dev-python/commonmark-0.9.1 BSD-3-Clause
+>=dev-python/regex-2021.8.21 Apache Software License
+>=dev-python/webcolors-1.11.1 BSD 3-Clause
+>=dev-python/rfc3339-validator-0.1.4 MIT license
+DATA
+
 # ---- re-sync and clean binary packages
 
 sudo ego sync
