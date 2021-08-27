@@ -98,6 +98,8 @@ sudo rm -f /etc/portage/repos.conf/foobarlab-stage3
 
 # ---- make.conf
 
+# TODO remove all python2 stuff in make.conf? (-python_targets_python2_7 or set PYTHON_TARGETS)
+
 sudo sed -i 's/USE=\"/USE="zsh-completion idn lzma tools udev syslog cacert threads pic ncurses /g' /etc/portage/make.conf
 
 cat <<'DATA' | sudo tee -a /etc/portage/make.conf
@@ -144,13 +146,28 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-firewall
 net-firewall/iptables conntrack netlink nftables pcap
 net-firewall/nftables json
 DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-python2
+# try to disable all python2 stuff
+dev-python/cython -python_targets_python2_7
+app-admin/ansible -python_targets_python2_7
+DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-audio
+media-plugins/alsa-plugins pulseaudio
+DATA
+#cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-pulseaudio
+# TODO add non-x11 pulseaudio flags?
+#DATA
 
 # ---- package.license
 
 sudo mkdir -p /etc/portage/package.license
+cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
+>=sys-devel/llvm-9.0 Apache-2.0-with-LLVM-exceptions
+>=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
+DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-python
 # 2021-08-26 - due to recent changes to python
-# FIXME unconventional license naming, see FL-8730
+# FIXME unconventional license naming, see FL-8730, FL-8679
 # required for app-admin/ansible
 >=dev-python/packaging-21.0 BSD-2-Clause or Apache-2.0
 >=dev-python/pyparsing-2.4.7 MIT License
@@ -196,28 +213,6 @@ source /etc/profile
 sudo env-update
 source /etc/profile
 sudo ego sync
-
-# ---- non-x11 flags
-
-sudo mkdir -p /etc/portage/package.use
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-audio
-media-plugins/alsa-plugins pulseaudio
-DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-ansible
-# skip python 2.7 support for Ansible to save some space
-app-admin/ansible -python_targets_python2_7
-DATA
-#cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-pulseaudio
-# TODO add non-x11 pulseaudio flags? (TODO compile without window system)
-#DATA
-
-sudo mkdir -p /etc/portage/package.license
-cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
->=sys-devel/llvm-9.0 Apache-2.0-with-LLVM-exceptions
->=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
-DATA
-
-# FIXME media-libs/libpng-1.6.37 masked by libpng2 license: required for non-x11 build?
 
 # ---- build X11?
 
