@@ -187,7 +187,6 @@ DATA
 # ---- re-sync and clean binary packages
 
 sudo ego sync
-sudo eix-update
 sudo eclean packages
 
 # ---- set profiles
@@ -207,9 +206,6 @@ sudo eselect python list
 sudo eselect python cleanup
 sudo eselect python set python3.7
 sudo eselect python list
-
-# DEBUG: print all python2 deps
-EIX_LIMIT=0 eix --installed-with-use python_targets_python2_7
 
 # TODO get rid of python2.7
 #sudo emerge -C python:2.7
