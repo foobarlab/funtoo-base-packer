@@ -5,7 +5,7 @@
 
 title "CLEANUP"
 
-#. clean_box.sh
+. clean_box.sh
 
 highlight "Cleaning sources ..."
 
