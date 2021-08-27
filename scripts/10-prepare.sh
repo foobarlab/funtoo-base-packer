@@ -122,6 +122,9 @@ INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_GB"
 INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_US"
 INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en@shaw"
 
+# TODO python3 only, get rid of python2
+#PYTHON_TARGETS="python3_7"
+
 DATA
 sudo sed -i 's/BUILD_MAKEOPTS/'"${BUILD_MAKEOPTS}"'/g' /etc/portage/make.conf
 
@@ -146,10 +149,11 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-firewall
 net-firewall/iptables conntrack netlink nftables pcap
 net-firewall/nftables json
 DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-python2
-# try to disable all python2 stuff
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-python2-deprecation
+# try to disable all unneeded python2 stuff
 dev-python/cython -python_targets_python2_7
 app-admin/ansible -python_targets_python2_7
+dev-vcs/git -python_targets_python2_7
 DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-audio
 media-plugins/alsa-plugins pulseaudio
@@ -183,6 +187,7 @@ DATA
 # ---- re-sync and clean binary packages
 
 sudo ego sync
+sudo eix-update
 sudo eclean packages
 
 # ---- set profiles
@@ -197,10 +202,17 @@ sudo epro list
 
 # ---- cleanup python
 
+# set default python
 sudo eselect python list
 sudo eselect python cleanup
 sudo eselect python set python3.7
 sudo eselect python list
+
+# DEBUG: print all python2 deps
+EIX_LIMIT=0 eix --installed-with-use python_targets_python2_7
+
+# TODO get rid of python2.7
+#sudo emerge -C python:2.7
 
 # ---- set locales
 
