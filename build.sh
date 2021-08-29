@@ -122,6 +122,8 @@ if [ "$BUILD_SKIP_VERSION_CHECK" = false ]; then
     info "This version..........: '${BUILD_BOX_VERSION}'"
     echo
 
+    # TODO automatically generate initial build number?
+
     if [[ "$BUILD_BOX_VERSION" = "$latest_cloud_version" ]]; then
         error "An equal version number already exists, please run './clean.sh' to increment your build number and try again."
         todo "Automatically increase build number?"

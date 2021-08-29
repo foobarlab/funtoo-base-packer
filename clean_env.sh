@@ -10,8 +10,6 @@ require_commands vagrant $vboxmanage
 
 title "ENVIRONMENT CLEANUP"
 
-#. clean_box.sh # TODO
-
 highlight "Housekeeping Vagrant environment ..."
 step "Prune old versions of parent box '${BUILD_PARENT_BOX_NAME}' ..."
 vagrant box prune -f -k --name "${BUILD_PARENT_BOX_NAME}"
