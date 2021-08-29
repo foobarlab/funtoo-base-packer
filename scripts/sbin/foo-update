@@ -10,14 +10,17 @@ if [ ! -d "/var/git/meta-repo" ]; then
   /usr/local/sbin/foo-sync
 fi
 
-emerge -avtuDN --with-bdeps=y @world
+emerge -avtuDN --with-bdeps=y --complete-graph=y @world
 
 if [ $? -ne 0 ]; then
   echo "Failure during update: user cancelled or an error ocurred. Please run 'foo-sync' and try again." >&2
-  exit 1
+  exit $?
 fi
 
 # extra options: comment-in to disable
+
+echo ">>> Rebuilding preserved packages ..."
+emerge -vt @preserved-rebuild
 
 echo ">>> Remove obsolete packages ..."
 emerge --depclean

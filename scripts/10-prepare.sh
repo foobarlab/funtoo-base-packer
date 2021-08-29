@@ -122,9 +122,6 @@ INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_GB"
 INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_US"
 INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en@shaw"
 
-# TODO python3 only, get rid of python2
-#PYTHON_TARGETS="python3_7"
-
 DATA
 sudo sed -i 's/BUILD_MAKEOPTS/'"${BUILD_MAKEOPTS}"'/g' /etc/portage/make.conf
 
@@ -149,8 +146,8 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-firewall
 net-firewall/iptables conntrack netlink nftables pcap
 net-firewall/nftables json
 DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-python2-deprecation
-# try to disable all unneeded python2 stuff
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-python2-removal
+# try to disable all python2 stuff
 dev-python/cython -python_targets_python2_7
 app-admin/ansible -python_targets_python2_7
 dev-vcs/git -python_targets_python2_7
@@ -168,20 +165,6 @@ sudo mkdir -p /etc/portage/package.license
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
 >=sys-devel/llvm-9.0 Apache-2.0-with-LLVM-exceptions
 >=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
-DATA
-cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-python
-# 2021-08-26 - due to recent changes to python
-# FIXME unconventional license naming, see FL-8730, FL-8679
-# required for app-admin/ansible
->=dev-python/packaging-21.0 BSD-2-Clause or Apache-2.0
->=dev-python/pyparsing-2.4.7 MIT License
-# required for dev-python/netifaces
->=dev-python/netifaces-0.11.0 MIT License
->=dev-python/jsonpointer-2.1 Modified BSD License
->=dev-python/commonmark-0.9.1 BSD-3-Clause
->=dev-python/regex-2021.8.21 Apache Software License
->=dev-python/webcolors-1.11.1 BSD 3-Clause
->=dev-python/rfc3339-validator-0.1.4 MIT license
 DATA
 
 # ---- re-sync and clean binary packages
@@ -206,9 +189,6 @@ sudo eselect python list
 sudo eselect python cleanup
 sudo eselect python set python3.7
 sudo eselect python list
-
-# TODO get rid of python2.7
-#sudo emerge -C python:2.7
 
 # ---- set locales
 

@@ -4,6 +4,8 @@
 
 if [ "$EUID" -ne 0 ]; then echo "Please run as root"; exit 1; fi
 
+# TODO sync meta-repo if older than X hours/days ...
+
 for d in /var/git/overlay/*/ ; do
     if [ -d "$d/.git" ] ; then
         cd "$d"
