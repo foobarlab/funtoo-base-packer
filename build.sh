@@ -98,12 +98,53 @@ mkdir -p packages || true
 
 . distfiles.sh quiet
 
-# TODO add cloud version check (see stage3)
+# do not build an already existing release on vagrant cloud by default
 
+if [ ! $# -eq 0 ]; then
+    BUILD_SKIP_VERSION_CHECK=true
+else
+    BUILD_SKIP_VERSION_CHECK=false
+fi
+
+if [ "$BUILD_SKIP_VERSION_CHECK" = false ]; then
+
+    # check version match on cloud and abort if same
+    highlight "Comparing local and cloud version ..."
+    # FIXME check if box already exists (should give us a 200 HTTP response, if not we will get a 404)
+    latest_cloud_version=$( \
+    curl -sS \
+      https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME \
+    )
+
+    latest_cloud_version=$(echo $latest_cloud_version | jq .current_version.version | tr -d '"')
+    echo
+    info "Latest cloud version..: '${latest_cloud_version}'"
+    info "This version..........: '${BUILD_BOX_VERSION}'"
+    echo
+
+    # TODO automatically generate initial build number?
+
+    if [[ "$BUILD_BOX_VERSION" = "$latest_cloud_version" ]]; then
+        error "An equal version number already exists, please run './clean.sh' to increment your build number and try again."
+        todo "Automatically increase build number?"
+        exit 1
+    else
+        version_too_small=`version_lt $BUILD_BOX_VERSION $latest_cloud_version && echo "true" || echo "false"`
+        if [[ "$version_too_small" = "true" ]]; then
+            warn "This version is smaller than the cloud version!"
+            todo "Automatically increase build_number"
+        fi
+        result "Looks like we build an unreleased version."
+    fi
+else
+    warn "Skipped cloud version check."
+fi
+
+# FIXME refactor clean parent vdi part (see clean_env)
 highlight "Cleanup existing parent box vdi file ..."
 vbox_hdd_found=$( $vboxmanage list hdds | grep "$BUILD_PARENT_BOX_CLOUD_VDI" || echo )
 if [[ -z "$vbox_hdd_found" || "$vbox_hdd_found" = "" ]]; then
-    info "No vdi file found for parent box '${BUILD_PARENT_BOX_CLOUD_NAME}-${BUILD_PARENT_BOX_CLOUD_VERSION}'"  
+    info "No vdi file found for parent box '${BUILD_PARENT_BOX_CLOUD_NAME}-${BUILD_PARENT_BOX_CLOUD_VERSION}'"
 else
     step "Scanning VirtualBox hdds ..."
     vbox_hdd_found_count=$( $vboxmanage list hdds | grep -o "^UUID" | wc -l )
@@ -125,7 +166,8 @@ else
                     info "State: 'inaccessible'. Will be removed."
                     ;;
                 "locked")
-                    error "Seems like the vdi file is in state 'locked' and can not be removed. Is the box already up and running?"
+                    error "Seems like the vdi file is in state 'locked' and can not be removed easily. Is the box still up and running?"
+                    todo "Detect if box is running and try to forecefully poweroff "
                     result "Please run './clean_env.sh' and try again."
                     exit 1
                     ;;
@@ -146,22 +188,29 @@ else
     done
 fi
 
-if [[ -f $BUILD_PARENT_BOX_CLOUD_VMDK ]] && [[ ! -f "$BUILD_PARENT_BOX_CLOUD_VDI" ]]; then
-    highlight "Cloning parent box hdd to vdi file ..."
-    $vboxmanage clonehd "$BUILD_PARENT_BOX_CLOUD_VMDK" "$BUILD_PARENT_BOX_CLOUD_VDI" --format VDI
+highlight "Trying to clone parent box hdd ..."
+if [ -f $BUILD_PARENT_BOX_CLOUD_VMDK ]; then
+    if [ -f "$BUILD_PARENT_BOX_CLOUD_VDI" ]; then
+        rm -f "$BUILD_PARENT_BOX_CLOUD_VDI" || true
+    fi
+    step "Cloning to vdi file ..."
+    $vboxmanage clonemedium disk "$BUILD_PARENT_BOX_CLOUD_VMDK" "$BUILD_PARENT_BOX_CLOUD_VDI" --format VDI
     if [ -z ${BUILD_BOX_DISKSIZE:-} ]; then
         info "BUILD_BOX_DISKSIZE is unset, skipping disk resize ..."
         # TODO set flag for packer (use another provisioner) ?
     else
-        highlight "Resizing vdi to $BUILD_BOX_DISKSIZE MB ..."
-        $vboxmanage modifyhd "$BUILD_PARENT_BOX_CLOUD_VDI" --resize "$BUILD_BOX_DISKSIZE"
+        step "Resizing vdi to $BUILD_BOX_DISKSIZE MB ..."
+        $vboxmanage modifymedium disk "$BUILD_PARENT_BOX_CLOUD_VDI" --resize "$BUILD_BOX_DISKSIZE"
         # TODO set flag for packer (use another provisioner) ?
     fi
 else
-    error "Unable to clone parent box to vdi file. Please run './clean_env.sh' and try again."
+    error "Missing vmdk file to clone!"
+    result "Please try again and select 'yes' on downloading the parent box file."
     exit 1
 fi
 sync
+
+final "All preparations done."
 
 . config.sh
 
@@ -187,7 +236,7 @@ if [ -f "$BUILD_OUTPUT_FILE_TEMP" ]; then
     vagrant --provision up || { echo "Unable to startup '$BUILD_BOX_NAME'."; exit 1; }
     step "Halting '$BUILD_BOX_NAME' ..."
     vagrant halt
-    # TODO vboxmanage modifymedium --compact <path to vdi> ?
+    # TODO vboxmanage modifymedium disk --compact <path to vdi> ?
     step "Exporting base box to '$BUILD_OUTPUT_FILE' ..."
     # TODO package additional optional files with --include ?
     # TODO use configuration values inside template (BUILD_BOX_MEMORY, etc.)
@@ -207,4 +256,4 @@ hours=$((runtime / 3600));
 minutes=$(( (runtime % 3600) / 60 ));
 seconds=$(( (runtime % 3600) % 60 ));
 echo "$hours hours $minutes minutes $seconds seconds" >> build_time
-result "Total build runtime was $hours hours $minutes minutes $seconds seconds."
+result "Build runtime was $hours hours $minutes minutes $seconds seconds."
