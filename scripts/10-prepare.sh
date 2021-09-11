@@ -10,9 +10,9 @@ fi
 
 sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
 if [[ -d "$sf_vagrant/distfiles" ]]; then
-    sudo rsync -urv $sf_vagrant/distfiles /var/cache/portage/
-    sudo chown portage:portage /var/cache/portage/distfiles/*
-    sudo chmod 664 /var/cache/portage/distfiles/*
+  sudo rsync -urv $sf_vagrant/distfiles /var/cache/portage/
+  sudo chown portage:portage /var/cache/portage/distfiles/*
+  sudo chmod 664 /var/cache/portage/distfiles/*
 fi
 
 # ---- import binary packages
@@ -68,19 +68,19 @@ sudo cat /etc/issue
 # ---- custom overlay
 
 if [ "$BUILD_CUSTOM_OVERLAY" = true ]; then
-    cd /var/git
-    sudo mkdir -p overlay || true
-    cd overlay
-    # FIXME delete if already existing?
-    #sudo rm -rf ./$BUILD_CUSTOM_OVERLAY_NAME || true
-    # example: git clone --depth 1 -b development "https://github.com/foobarlab/foobarlab-overlay.git" ./foobarlab
-    sudo git clone --depth 1 -b $BUILD_CUSTOM_OVERLAY_BRANCH "$BUILD_CUSTOM_OVERLAY_URL" ./$BUILD_CUSTOM_OVERLAY_NAME
-    cd ./$BUILD_CUSTOM_OVERLAY_NAME
-    # set default strategy:
-    #sudo git config pull.rebase true  # merge
-    sudo git config pull.ff only       # fast forward only (recommended)
-    sudo chown -R portage.portage /var/git/overlay
-    cat <<'DATA' | sudo tee -a /etc/portage/repos.conf/$BUILD_CUSTOM_OVERLAY_NAME
+  cd /var/git
+  sudo mkdir -p overlay || true
+  cd overlay
+  # FIXME delete if already existing?
+  #sudo rm -rf ./$BUILD_CUSTOM_OVERLAY_NAME || true
+  # example: git clone --depth 1 -b development "https://github.com/foobarlab/foobarlab-overlay.git" ./foobarlab
+  sudo git clone --depth 1 -b $BUILD_CUSTOM_OVERLAY_BRANCH "$BUILD_CUSTOM_OVERLAY_URL" ./$BUILD_CUSTOM_OVERLAY_NAME
+  cd ./$BUILD_CUSTOM_OVERLAY_NAME
+  # set default strategy:
+  #sudo git config pull.rebase true  # merge
+  sudo git config pull.ff only       # fast forward only (recommended)
+  sudo chown -R portage.portage /var/git/overlay
+  cat <<'DATA' | sudo tee -a /etc/portage/repos.conf/$BUILD_CUSTOM_OVERLAY_NAME
 [DEFAULT]
 main-repo = core-kit
 
@@ -89,7 +89,7 @@ location = /var/git/overlay/BUILD_CUSTOM_OVERLAY_NAME
 auto-sync = no
 priority = 10
 DATA
-    sudo sed -i 's/BUILD_CUSTOM_OVERLAY_NAME/'"$BUILD_CUSTOM_OVERLAY_NAME"'/g' /etc/portage/repos.conf/$BUILD_CUSTOM_OVERLAY_NAME
+  sudo sed -i 's/BUILD_CUSTOM_OVERLAY_NAME/'"$BUILD_CUSTOM_OVERLAY_NAME"'/g' /etc/portage/repos.conf/$BUILD_CUSTOM_OVERLAY_NAME
 fi
 
 # remove foobarlab-stage3 repo
