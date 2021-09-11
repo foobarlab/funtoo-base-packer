@@ -9,6 +9,7 @@ fi
 sudo env-update
 source /etc/profile
 
+sudo emaint binhost --fix
 sudo eclean packages
 
 sudo emerge --depclean
