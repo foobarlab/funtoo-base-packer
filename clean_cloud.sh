@@ -14,7 +14,7 @@ echo
 info "This script will remove outdated boxes from Vagrant Cloud."
 echo
 info "A maximum number of $BUILD_KEEP_MAX_CLOUD_BOXES boxes will be kept."
-info "The current version will always be kept."
+info "The latest version will always be kept."
 echo
 info "User.......: '$BUILD_BOX_USERNAME'"
 info "Box........: '$BUILD_BOX_NAME'"
@@ -35,7 +35,7 @@ if [ $LATEST_CLOUD_VERSION = "null" ]; then
     exit 0
 fi
 
-highlight "Latest version (will always be kept):"
+highlight "Latest version:"
 info "$LATEST_CLOUD_VERSION"
 
 EXISTING_CLOUD_VERSIONS=$(echo $CLOUD_BOX_INFO | jq .versions[] | jq .version | tr -d '"' | sort -r )
