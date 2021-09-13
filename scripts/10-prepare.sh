@@ -155,6 +155,9 @@ DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-audio
 media-plugins/alsa-plugins pulseaudio
 DATA
+cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-gmp
+>=dev-libs/gmp-6.2.1-r1 static-libs
+DATA
 #cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-pulseaudio
 # TODO add non-x11 pulseaudio flags?
 #DATA
