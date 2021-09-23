@@ -84,6 +84,7 @@ Vagrant.configure("2") do |config|
   #config.vagrant.sensitive = ["MySecretPassword", ENV["MY_TOKEN"]] # TODO hide sensitive information
   config.vm.box_check_update = false
   config.vm.box = "#{ENV['BUILD_BOX_NAME']}"
+  config.vm.box_version = "<9999"   # TODO version constraint (not building funtoo next)
   config.vm.hostname = "#{ENV['BUILD_BOX_NAME']}"
   config.vm.provider "virtualbox" do |vb|
     vb.gui = (ENV['BUILD_HEADLESS'] == "false")
