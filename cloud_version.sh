@@ -32,7 +32,7 @@ for version in ${BUILD_CLOUD_VERSION[$CLOUD_VERSION_FOUND]}; do
   # compare major version and check release kind
   major_version=$( echo $version | sed -e "s/[^0-9]*\([0-9]*\)[.].*/\1/" )
   case $major_version in
-    "9999")
+    "0")
         BUILD_CLOUD_VERSION[${version}]="${BUILD_CLOUD_VERSION[${version}]}release-next "
       ;;
     *)

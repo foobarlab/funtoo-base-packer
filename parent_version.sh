@@ -29,6 +29,7 @@ if [ -z "${BUILD_PARENT_BOX_CLOUD_VERSION:-}" ]; then
                  ;;
         esac
         if_not_silent highlight "Getting latest version of parent box ..."
+        # FIXME select proper version
         LATEST_PARENT_VERSION=$( \
         curl -sS \
           https://app.vagrantup.com/api/v1/box/$BUILD_PARENT_BOX_CLOUD_NAME \
