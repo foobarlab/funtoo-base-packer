@@ -11,6 +11,7 @@ require_commands curl jq
 
 declare -A BUILD_CLOUD_VERSION
 
+step "Requesting cloud box info ..."
 cloud_box_info=$( \
   curl -sS -f \
   https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME \
@@ -62,7 +63,6 @@ for version in ${BUILD_CLOUD_VERSION[$CLOUD_VERSION_FOUND]}; do
   elif `version_lt $BUILD_BOX_VERSION $version`; then
     BUILD_CLOUD_VERSION[${version}]="${BUILD_CLOUD_VERSION[${version}]}higher-version "
   fi
-
 done
 
 # DEBUG
