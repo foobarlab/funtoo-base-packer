@@ -172,7 +172,7 @@ success() {
   local text="$*"
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${light_magenta}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${light_green}"; fi
     text=`bracket_to_bold "${text}"`
     echo -e "${color}${bold}+++${color} ${text}${default}"
   else
@@ -184,7 +184,7 @@ warn() {
   local text="$*"
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${light_yellow}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${yellow}"; fi
     text=`bracket_to_bold "${text}"`
     echo -e "${color}${bold}!!!${color} ${text}${default}"
   else
@@ -208,7 +208,7 @@ info() {
   local text="$*"
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${default}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${cyan}"; fi
     text=`bracket_to_bold "${text}"`
     echo -e "${color}    ${text}${default}"
   else
@@ -244,7 +244,7 @@ step() {
   local text="$*"
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${default}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${dark_grey}"; fi
     text=`bracket_to_bold "${text}"`
     echo -e "${color}--- ${text}${default}"
   else
@@ -256,11 +256,11 @@ note() {
   local text="$*"
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${white}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${light_cyan}"; fi
     text=`bracket_to_bold "${text}"`
-    echo -e "${color} #  ${text}${default}"
+    echo -e "${color}    ${text}${default}"
   else
-    echo " #  ${text}"
+    echo "    ${text}"
   fi
 }
 
@@ -268,7 +268,7 @@ result() {
   local text="$*"
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${light_green}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${light_magenta}"; fi
     text=`bracket_to_bold "${text}"`
     echo -e "${color}==> ${text}${default}"
   else
@@ -281,7 +281,7 @@ final() {
   echo
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${default}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${white}"; fi
     text=`bracket_to_bold "${text}"`
     echo -e "${color}${text}${default}"
   else
