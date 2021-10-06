@@ -55,8 +55,9 @@ sudo rc-update -v    # show final runlevels
 sudo genlop -u -l    # show (un)merged packages before logs are cleared
 
 # TODO test export distfiles to local directory
-sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
-sudo rsync -urv /var/cache/portage/distfiles/* $sf_vagrant/distfiles/
+#sudo eclean-dist
+#sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
+#sudo rsync -urv /var/cache/portage/distfiles/* $sf_vagrant/distfiles/
 
 sudo /usr/local/sbin/foo-cleanup
 
