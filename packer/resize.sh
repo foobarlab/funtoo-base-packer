@@ -7,7 +7,7 @@ if [ -z ${BUILD_RUN:-} ]; then
 fi
 
 echo "Resizing disk ..."
-sudo growpart /dev/sda4 || true
+sudo growpart /dev/sda 4 || true
 sudo resize2fs /dev/sda4 || true
 
 echo "Resize result:"
