@@ -49,20 +49,20 @@ esac
 # check if a latest version does exist
 LATEST_VERSION_HTTP_CODE=$( \
   curl -sS -w "%{http_code}" -o /dev/null \
-    --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
-    https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME \
+  --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
+  https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME \
 )
 
 case "$LATEST_VERSION_HTTP_CODE" in
-  200) result `printf "Received: HTTP $LATEST_VERSION_HTTP_CODE ==> One or more boxes found, will continue ...\n"` ;;
-  404) warn `printf "Received HTTP $LATEST_VERSION_HTTP_CODE (file not found) ==> There is no current box.\n"` ;;
-  *) error `printf "Received: HTTP $LATEST_VERSION_HTTP_CODE ==> Unhandled status code while trying to get latest box meta info, aborting.\n"`; exit 1 ;;
+    200) result `printf "Received: HTTP $LATEST_VERSION_HTTP_CODE ==> One or more boxes found, will continue ...\n"` ;;
+    404) warn `printf "Received HTTP $LATEST_VERSION_HTTP_CODE (file not found) ==> There is no current box.\n"` ;;
+    *) error `printf "Received: HTTP $LATEST_VERSION_HTTP_CODE ==> Unhandled status code while trying to get latest box meta info, aborting.\n"`; exit 1 ;;
 esac
 
 # check version match on cloud and abort if same
 highlight "Checking existing cloud version ..."
 LATEST_CLOUD_VERSION=$( \
-curl -sS \
+  curl -sS \
   --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
   https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME \
 )
@@ -72,15 +72,15 @@ info "Our version: '$BUILD_BOX_VERSION'"
 info "Latest cloud version: '$LATEST_CLOUD_VERSION'"
 
 if [[ $BUILD_BOX_VERSION = $LATEST_CLOUD_VERSION ]]; then
-  info "Same version already exists."
+    info "Same version already exists."
 else
-  result "Looks like we got a new version to provide."
+    result "Looks like we got a new version to provide."
 fi
 
 # Create a new box
 highlight "Trying to create a new box '$BUILD_BOX_NAME' ..."
 UPLOAD_CREATE_BOX=$( \
-curl -sS \
+  curl -sS \
   --header "Content-Type: application/json" \
   --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
   https://app.vagrantup.com/api/v1/boxes \
@@ -107,7 +107,7 @@ fi
 # Create a new version
 highlight "Trying to create a new version '$BUILD_BOX_VERSION' ..."
 UPLOAD_NEW_VERSION=$( \
-curl -sS \
+  curl -sS \
   --header "Content-Type: application/json" \
   --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
   https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME/versions \
@@ -141,11 +141,11 @@ result "'$BUILD_OUTPUT_FILE': SHA-1 [ '$UPLOAD_CHECKSUM' ]"
 # Create a new provider
 highlight "Trying to create a new provider '$BUILD_BOX_PROVIDER' ..."
 UPLOAD_NEW_PROVIDER=$( \
-curl -sS \
-  --header "Content-Type: application/json" \
-  --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
-  https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME/version/$BUILD_BOX_VERSION/providers \
-  --data '{ "provider": { "checksum": "'$UPLOAD_CHECKSUM'", "checksum_type": "sha1", "name": "'$BUILD_BOX_PROVIDER'" } }' \
+    curl -sS \
+    --header "Content-Type: application/json" \
+    --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
+    https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME/version/$BUILD_BOX_VERSION/providers \
+    --data '{ "provider": { "checksum": "'$UPLOAD_CHECKSUM'", "checksum_type": "sha1", "name": "'$BUILD_BOX_PROVIDER'" } }' \
 )
 
 UPLOAD_NEW_PROVIDER_SUCCESS=`echo $UPLOAD_NEW_PROVIDER | jq '.success'`
@@ -156,7 +156,7 @@ if [ $UPLOAD_NEW_PROVIDER_SUCCESS == 'false' ]; then
         result "OK, the provider '$BUILD_BOX_PROVIDER' seems already taken. No need to create a new provider."
     # Check if upload is needed
     UPLOAD_PROVIDER=$( \
-      curl -sS \
+        curl -sS \
         --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
           https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME/version/$BUILD_BOX_VERSION/provider/$BUILD_BOX_PROVIDER \
     )
@@ -201,7 +201,7 @@ fi
 # Prepare the provider for upload/get an upload URL
 highlight "Requesting upload url ..."
 UPLOAD_PREPARE_UPLOADURL=$( \
-curl -sS \
+  curl -sS \
   --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
   https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME/version/$BUILD_BOX_VERSION/provider/$BUILD_BOX_PROVIDER/upload/direct \
 )
@@ -227,19 +227,19 @@ UPLOAD_FINALIZE_URL=$(echo "$UPLOAD_PREPARE_UPLOADURL" | jq '.callback' | tr -d 
 # FIXME try --progress-meter and fallback to --progress-bar (curl is less than 7.6.7.0)
 UPLOAD_PROGRESS="--progress-bar"
 if [ -t 1 ]; then
-  highlight "Uploading ..."
+    highlight "Uploading ..."
 else
-  info "Not a terminal, disabling progress meter ..."
-  # FIXME no-progress-meter: fallback to --silent if curl is less or equal version 7.67.0
-  #UPLOAD_PROGRESS="--no-progress-meter"
-  UPLOAD_PROGRESS="--silent"
-  highlight "Uploading ... This may take a while ..."
+    info "Not a terminal, disabling progress meter ..."
+    # FIXME no-progress-meter: fallback to --silent if curl is less or equal version 7.67.0
+    #UPLOAD_PROGRESS="--no-progress-meter"
+    UPLOAD_PROGRESS="--silent"
+    highlight "Uploading ... This may take a while ..."
 fi
 
 curl -f $UPLOAD_URL \
-     $UPLOAD_PROGRESS \
-     --request PUT \
-     --upload-file $BUILD_OUTPUT_FILE \
+    $UPLOAD_PROGRESS \
+    --request PUT \
+    --upload-file $BUILD_OUTPUT_FILE \
 | tee /dev/null
 
 result "Upload ended with exit code $?."
@@ -247,10 +247,10 @@ result "Upload ended with exit code $?."
 # Finalize upload
 highlight "Finalizing upload ..."
 UPLOAD_FINALIZE=$( \
-curl -sS \
-  --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
-  --request PUT \
-  $UPLOAD_FINALIZE_URL \
+    curl -sS \
+    --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
+    --request PUT \
+    $UPLOAD_FINALIZE_URL \
 )
 
 result "Finalized with exit code $?."
@@ -261,7 +261,7 @@ result "Finalized with exit code $?."
 # Release the version
 highlight "Releasing box ..."
 UPLOAD_RELEASE_BOX=$( \
-curl -sS \
+  curl -sS \
   --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
   https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME/version/$BUILD_BOX_VERSION/release \
   --request PUT \

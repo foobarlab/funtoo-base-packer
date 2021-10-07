@@ -19,6 +19,11 @@ sudo revdep-rebuild
 sudo emaint binhost --fix
 sudo eclean packages
 
+# clean and export distfiles
+sudo eclean-dist
+sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
+sudo rsync -urv /var/cache/portage/distfiles/* $sf_vagrant/distfiles/
+
 sudo bash -c "sed -i '/^MAKEOPTS/d' /etc/portage/make.conf"           # delete MAKEOPTS (make.conf)
 sudo bash -c "sed -i 's/^\(MAKEOPTS.*\)/#\1/g' /etc/genkernel.conf"   # comment-in MAKEOPTS (genkernel)
 

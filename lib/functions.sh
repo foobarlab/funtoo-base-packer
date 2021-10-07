@@ -150,17 +150,18 @@ if_not_silent() {
     [ ! -v "$silent" ] && [[ "$silent" = "true" ]] || "$@"
 }
 
+# check if required command is found
 require_commands() {
   local command;
   for command in $@; do
-    command -v $command >/dev/null 2>&1 || { error "Command '${command}' required but it's not installed.  Aborting." >&2; exit 1; }
+    command -v $command >/dev/null 2>&1 || { error "Command '${command}' required but can not be found. Aborting." >&2; exit 1; }
   done
 }
 
+# compare version strings
 version_lte() {
     [  "$1" == "`echo -e "$1\n$2" | sort -V | head -n1`" ]
 }
-
 version_lt() {
     [ "$1" = "$2" ] && return 1 || version_lte $1 $2
 }
@@ -171,7 +172,7 @@ success() {
   local text="$*"
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${light_magenta}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${light_green}"; fi
     text=`bracket_to_bold "${text}"`
     echo -e "${color}${bold}+++${color} ${text}${default}"
   else
@@ -183,7 +184,7 @@ warn() {
   local text="$*"
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${light_yellow}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${yellow}"; fi
     text=`bracket_to_bold "${text}"`
     echo -e "${color}${bold}!!!${color} ${text}${default}"
   else
@@ -207,7 +208,7 @@ info() {
   local text="$*"
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${default}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${cyan}"; fi
     text=`bracket_to_bold "${text}"`
     echo -e "${color}    ${text}${default}"
   else
@@ -243,7 +244,7 @@ step() {
   local text="$*"
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${default}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${dark_grey}"; fi
     text=`bracket_to_bold "${text}"`
     echo -e "${color}--- ${text}${default}"
   else
@@ -255,11 +256,11 @@ note() {
   local text="$*"
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${white}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${light_cyan}"; fi
     text=`bracket_to_bold "${text}"`
-    echo -e "${color} #  ${text}${default}"
+    echo -e "${color}    ${text}${default}"
   else
-    echo " #  ${text}"
+    echo "    ${text}"
   fi
 }
 
@@ -267,7 +268,7 @@ result() {
   local text="$*"
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${light_green}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${light_magenta}"; fi
     text=`bracket_to_bold "${text}"`
     echo -e "${color}==> ${text}${default}"
   else
@@ -280,7 +281,7 @@ final() {
   echo
   if [ "${ANSI}" = "true" ]; then
     color="${default}"
-    if [ "${ANSI_COLOR}" = "true" ]; then color="${default}"; fi
+    if [ "${ANSI_COLOR}" = "true" ]; then color="${white}"; fi
     text=`bracket_to_bold "${text}"`
     echo -e "${color}${text}${default}"
   else

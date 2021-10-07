@@ -22,7 +22,7 @@ info "Provider...: '$BUILD_BOX_PROVIDER'"
 echo
 
 CLOUD_BOX_INFO=$( \
-curl -sS -f \
+  curl -sS -f \
   --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
   https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME \
 )
@@ -96,19 +96,19 @@ do
             # revoke that version:
             highlight "Revoking version $ITEM ..."
             CLOUD_BOX_REVOKE=$( \
-curl -sS \
-  --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
-  --request PUT \
-  https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME/version/$ITEM/revoke \
-)
+              curl -sS \
+              --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
+              --request PUT \
+              https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME/version/$ITEM/revoke \
+            )
             # delete that version:
             highlight "Delete version $ITEM ..."
             CLOUD_BOX_DELETE=$( \
-curl -sS \
-  --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
-  --request DELETE \
-  https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME/version/$ITEM \
-)
+              curl -sS \
+              --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
+              --request DELETE \
+              https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME/version/$ITEM \
+            )
             result "Deleted."
         fi
     else
@@ -122,7 +122,7 @@ done
 
 # re-read box infos, show summary
 CLOUD_BOX_INFO=$( \
-curl -sS -f \
+  curl -sS -f \
   --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
   https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME \
 )

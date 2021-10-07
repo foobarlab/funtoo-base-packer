@@ -30,16 +30,6 @@ for vbox_id in $vbox_running_ids; do
     $vboxmanage controlvm "$vbox_id" poweroff >/dev/null 2>&1 || true
 done
 
-step "Searching for VirtualBox named '$BUILD_BOX_NAME' ..."
-vbox_machine_id=$( $vboxmanage list vms | grep $BUILD_BOX_NAME | grep -Eo '{[0-9a-f\-]+}' | sed -n 's/[{}]//p' || echo )
-if [[ -z "$vbox_machine_id" || "$vbox_machine_id" = "" ]]; then
-    info "No machine named '$BUILD_BOX_NAME' found."
-else
-    warn "Found machine UUID for '$BUILD_BOX_NAME': { $vbox_machine_id }"
-    result "Deleting machine '$BUILD_BOX_NAME' ..."
-    $vboxmanage unregistervm --delete $vbox_machine_id >/dev/null 2>&1 || true
-fi
-
 step "Searching for inaccessible machines named '$BUILD_BOX_NAME' ..."
 vbox_inaccessible_ids=$( $vboxmanage list vms | grep "<inaccessible>" | grep "$BUILD_BOX_NAME" | sed -r 's/.*\{(.*)\}/\1/' )
 if [[ -z "$vbox_inaccessible_ids" || "$vbox_inaccessible_ids" = "" ]]; then
@@ -109,6 +99,16 @@ else
     sleep 1
     vbox_hdd_left_count=$( $vboxmanage list hdds | grep -o "^UUID" | wc -l )
     info "Total $vbox_hdd_found_count hdd(s) processed. Keeping $vbox_hdd_left_count hdd(s)."
+fi
+
+step "Searching for VirtualBox named '$BUILD_BOX_NAME' ..."
+vbox_machine_id=$( $vboxmanage list vms | grep $BUILD_BOX_NAME | grep -Eo '{[0-9a-f\-]+}' | sed -n 's/[{}]//p' || echo )
+if [[ -z "$vbox_machine_id" || "$vbox_machine_id" = "" ]]; then
+    info "No machine named '$BUILD_BOX_NAME' found."
+else
+    warn "Found machine UUID for '$BUILD_BOX_NAME': { $vbox_machine_id }"
+    result "Deleting machine '$BUILD_BOX_NAME' ..."
+    $vboxmanage unregistervm --delete $vbox_machine_id >/dev/null 2>&1 || true
 fi
 
 highlight "Housekeeping sources ..."

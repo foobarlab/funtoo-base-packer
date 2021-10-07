@@ -32,6 +32,7 @@ sudo rc-update add rsyslog default
 sudo emerge -nuvtND --with-bdeps=y sys-process/vixie-cron
 sudo rc-update add vixie-cron default
 
+# FIXME obsolete since kernel 5.6 (already included in kernel), TODO enable in kernel? see: https://github.com/jirka-h/haveged
 # add some entropy and randomness
 sudo emerge -nuvtND --with-bdeps=y sys-apps/haveged
 sudo rc-update add haveged default
