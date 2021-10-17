@@ -39,7 +39,7 @@ sudo ZSH="/opt/oh-my-zsh" ./install.sh --unattended --keep-zshrc
 #for dir in /etc/portage/package.*; do
 #  sudo rm -f /etc/portage/${dir##*/}/temp*
 #done
-#sudo emerge -vtuDN --with-bdeps=y @world
+#sudo emerge -vtuDN --with-bdeps=y --complete-graph=y @world
 
 # net-mail/mailbase: adjust permissions as recommended during install
 sudo chown root:mail /var/spool/mail/

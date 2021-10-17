@@ -50,15 +50,15 @@
       "timeout": "10m",
       "environment_vars": [ "BUILD_RUN=true" ],
       "valid_exit_codes": [ 0 ]
-  },{
+    },{
       "destination": "/tmp",
       "source": "scripts",
       "type": "file"
-  },{
+    },{
       "destination": "/tmp/sbin",
       "source": "scripts/sbin",
       "type": "file"
-  },{
+    },{
       "type": "shell",
       "script": "packer/provision.sh",
       "environment_vars": [

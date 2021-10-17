@@ -23,12 +23,12 @@ BUILD_CLOUD_VERSION[$CLOUD_VERSION_FOUND]=$(echo $cloud_box_info | jq .versions[
 for version in ${BUILD_CLOUD_VERSION[$CLOUD_VERSION_FOUND]}; do
   step "Processing version '$version' ..."
   BUILD_CLOUD_VERSION["${version}"]=""
-  
+
   # check if current
   if [[ $version = ${BUILD_CLOUD_VERSION[$CLOUD_VERSION_CURRENT]} ]]; then
     BUILD_CLOUD_VERSION[${version}]="${BUILD_CLOUD_VERSION[${version}]}is-current "
   fi
-  
+
   # compare major version and check release kind
   major_version=$( echo $version | sed -e "s/[^0-9]*\([0-9]*\)[.].*/\1/" )
   case $major_version in
