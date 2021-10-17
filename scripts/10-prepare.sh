@@ -170,10 +170,9 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
 >=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
 DATA
 
-# ---- re-sync and clean binary packages
+# ---- sync portage and profiles
 
 sudo ego sync
-sudo eclean packages
 
 # ---- set profiles
 
@@ -198,21 +197,6 @@ sudo eselect python list
 sudo locale-gen
 sudo eselect locale set en_US.UTF-8
 source /etc/profile
-
-# ---- re-sync meta-repo and overlays
-
-sudo env-update
-source /etc/profile
-sudo ego sync
-
-# ---- clean bin pkgs
-
-sudo emaint binhost --fix
-sudo eclean packages
-
-# ---- clean distfiles
-
-sudo eclean-dist
 
 # ---- build X11?
 
@@ -268,18 +252,3 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-xorg
 # required for funtoo profile 'X':
 >=media-libs/libpng-1.6.37 libpng2
 DATA
-
-# ---- re-sync meta-repo and overlays
-
-sudo env-update
-source /etc/profile
-sudo ego sync
-
-# ---- clean bin pkgs
-
-sudo emaint binhost --fix
-sudo eclean packages
-
-# ---- clean distfiles
-
-sudo eclean-dist
