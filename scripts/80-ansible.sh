@@ -16,6 +16,7 @@ else
   fi
 fi
 
+sudo emerge -nuvtND --with-bdeps=y dev-libs/libyaml   # FIXME workaround, pyyaml needs libyaml, dep missing
 sudo emerge -nuvtND --with-bdeps=y app-admin/ansible dev-python/lxml
 sudo mkdir -p /etc/ansible
 cat <<'DATA' | sudo tee -a /etc/ansible/ansible.cfg
