@@ -6,7 +6,7 @@
 
 title "UPLOAD BOX"
 if [ -f "$BUILD_OUTPUT_FILE" ]; then
-    result "Found box file '$BUILD_OUTPUT_FILE' in the current directory."
+    step "Found box file '$BUILD_OUTPUT_FILE' in the current directory."
 else
     error "There is no box file '$BUILD_OUTPUT_FILE' in the current directory."
     result "Please run './build.sh' to build a box."
@@ -46,6 +46,7 @@ esac
 
 . vagrant_cloud_token.sh "$*"
 
+# FIXME replace with cloud_version.sh
 # check if a latest version does exist
 LATEST_VERSION_HTTP_CODE=$( \
   curl -sS -w "%{http_code}" -o /dev/null \
@@ -54,11 +55,12 @@ LATEST_VERSION_HTTP_CODE=$( \
 )
 
 case "$LATEST_VERSION_HTTP_CODE" in
-    200) result `printf "Received: HTTP $LATEST_VERSION_HTTP_CODE ==> One or more boxes found, will continue ...\n"` ;;
+    200) step `printf "Received: HTTP $LATEST_VERSION_HTTP_CODE ==> One or more boxes found, will continue ...\n"` ;;
     404) warn `printf "Received HTTP $LATEST_VERSION_HTTP_CODE (file not found) ==> There is no current box.\n"` ;;
     *) error `printf "Received: HTTP $LATEST_VERSION_HTTP_CODE ==> Unhandled status code while trying to get latest box meta info, aborting.\n"`; exit 1 ;;
 esac
 
+# FIXME replace with cloud_version.sh
 # check version match on cloud and abort if same
 highlight "Checking existing cloud version ..."
 LATEST_CLOUD_VERSION=$( \
@@ -74,7 +76,7 @@ info "Latest cloud version: '$LATEST_CLOUD_VERSION'"
 if [[ $BUILD_BOX_VERSION = $LATEST_CLOUD_VERSION ]]; then
     info "Same version already exists."
 else
-    result "Looks like we got a new version to provide."
+    step "Looks like we got a new version to provide."
 fi
 
 # Create a new box
@@ -92,14 +94,14 @@ if [ $UPLOAD_CREATE_BOX_SUCCESS == 'false' ]; then
     # we get an error if the box name already exists so we can most likely ignore that error silently
     UPLOAD_BOX_NAME_ALREADY_TAKEN=`echo $UPLOAD_CREATE_BOX | jq '.errors' | jq 'contains(["Type has already been taken"])'`
     if [ $UPLOAD_BOX_NAME_ALREADY_TAKEN == 'true' ]; then
-        result "OK, the box name '$BUILD_BOX_NAME' seems already taken. No need to create a new box name."
+        step "OK, the box name '$BUILD_BOX_NAME' seems already taken. No need to create a new box name."
     else
         error "Error response from API:"
         echo $UPLOAD_CREATE_BOX | jq '.errors'
         exit 1
     fi
 else
-    result "OK, we created a new box named '$BUILD_BOX_NAME'."
+    step "OK, we created a new box named '$BUILD_BOX_NAME'."
     #info "Response from API:"
     #echo $UPLOAD_CREATE_BOX | jq
 fi
@@ -119,14 +121,14 @@ if [ $UPLOAD_NEW_VERSION_SUCCESS == 'false' ]; then
     # we get an error if the box version already exists so we can most likely ignore that error silently
     UPLOAD_BOX_VERSION_ALREADY_TAKEN=`echo $UPLOAD_NEW_VERSION | jq '.errors' | jq 'contains(["Version has already been taken"])'`
     if [ $UPLOAD_BOX_VERSION_ALREADY_TAKEN == 'true' ]; then
-        result "OK, the box version '$BUILD_BOX_VERSION' seems already taken. No need to create a new version."
+        step "The box version '$BUILD_BOX_VERSION' seems already taken. No need to create a new version."
     else
         error "Error response from API:"
         echo $UPLOAD_NEW_VERSION | jq '.errors'
         exit 1
     fi
 else
-    result "OK, we created a new version '$BUILD_BOX_VERSION'."
+    step "OK, we created a new version '$BUILD_BOX_VERSION'."
     #info "Response from API:"
     #echo $UPLOAD_NEW_VERSION | jq
 fi
@@ -136,7 +138,7 @@ highlight "Creating checksum ..."
 #UPLOAD_CHECKSUM_CALC=`pv $BUILD_OUTPUT_FILE | sha1sum`
 UPLOAD_CHECKSUM_CALC=`sha1sum $BUILD_OUTPUT_FILE`
 UPLOAD_CHECKSUM=`echo $UPLOAD_CHECKSUM_CALC | cut -d " " -f1`
-result "'$BUILD_OUTPUT_FILE': SHA-1 [ '$UPLOAD_CHECKSUM' ]"
+step "'$BUILD_OUTPUT_FILE': SHA-1 [ '$UPLOAD_CHECKSUM' ]"
 
 # Create a new provider
 highlight "Trying to create a new provider '$BUILD_BOX_PROVIDER' ..."
@@ -153,7 +155,7 @@ if [ $UPLOAD_NEW_PROVIDER_SUCCESS == 'false' ]; then
     # we get an error if the provider already exists so we can most likely ignore that error silently
     UPLOAD_PROVIDER_ALREADY_EXISTS=`echo $UPLOAD_NEW_PROVIDER | jq '.errors' | jq 'contains(["Metadata provider must be unique for version"])'`
     if [ $UPLOAD_PROVIDER_ALREADY_EXISTS == 'true' ]; then
-        result "OK, the provider '$BUILD_BOX_PROVIDER' seems already taken. No need to create a new provider."
+        step "The provider '$BUILD_BOX_PROVIDER' seems already taken. No need to create a new provider."
     # Check if upload is needed
     UPLOAD_PROVIDER=$( \
         curl -sS \
@@ -163,7 +165,7 @@ if [ $UPLOAD_NEW_PROVIDER_SUCCESS == 'false' ]; then
     UPLOAD_PROVIDER_CHECKSUM_TYPE=`echo $UPLOAD_PROVIDER | jq ".checksum_type" | tr -d '"'`
     UPLOAD_PROVIDER_CHECKSUM=`echo $UPLOAD_PROVIDER | jq ".checksum" | tr -d '"'`
     if [ "$UPLOAD_PROVIDER_CHECKSUM_TYPE" == 'sha1' ]; then
-      result "Upstream checksum type matched."
+      step "Upstream checksum type matched."
       if [ "$UPLOAD_PROVIDER_CHECKSUM" == "$UPLOAD_CHECKSUM" ]; then
         # DEBUG:
         #echo $UPLOAD_PROVIDER | jq
@@ -171,7 +173,7 @@ if [ $UPLOAD_NEW_PROVIDER_SUCCESS == 'false' ]; then
         # FIXME ask to delete the provider? check if there is a hosted file ... download and compare checksums?
         UPLOAD_CHECK_DOWNLOAD_URL=`echo $UPLOAD_PROVIDER | jq ".download_url" | tr -d '"'`
         UPLOAD_CHECK_DOWNLOAD_HTTP_CODE=$( curl -sS -I -L -w "%{http_code}" -o /dev/null $UPLOAD_CHECK_DOWNLOAD_URL )
-        result "Got response HTTP code: $UPLOAD_CHECK_DOWNLOAD_HTTP_CODE"
+        step "Got response HTTP code: $UPLOAD_CHECK_DOWNLOAD_HTTP_CODE"
 
         case "$UPLOAD_CHECK_DOWNLOAD_HTTP_CODE" in
           200) final "The box seems already up-to-date."; exit 0 ;;
@@ -193,7 +195,7 @@ if [ $UPLOAD_NEW_PROVIDER_SUCCESS == 'false' ]; then
     exit 1
   fi
 else
-    result "OK, provider did not exist yet, creating a new provider '$BUILD_BOX_PROVIDER' ..."
+    step "Provider did not exist yet, creating a new provider '$BUILD_BOX_PROVIDER' ..."
     #info "Response from API:"
     #echo $UPLOAD_NEW_PROVIDER | jq
 fi
@@ -212,7 +214,7 @@ if [ $UPLOAD_PREPARE_UPLOADURL_SUCCESS == 'false' ]; then
     echo $UPLOAD_PREPARE_UPLOADURL | jq '.errors'
     exit 1
 else
-    result "OK, we received an upload url and finalize callback."
+    step "OK, we received an upload url and finalize callback."
 fi
 
 # Extract the upload URL and finalize callback from the response
@@ -242,7 +244,7 @@ curl -f $UPLOAD_URL \
     --upload-file $BUILD_OUTPUT_FILE \
 | tee /dev/null
 
-result "Upload ended with exit code $?."
+step "Upload ended with exit code $?."
 
 # Finalize upload
 highlight "Finalizing upload ..."
@@ -253,7 +255,7 @@ UPLOAD_FINALIZE=$( \
     $UPLOAD_FINALIZE_URL \
 )
 
-result "Finalized with exit code $?."
+step "Finalized with exit code $?."
 
 # DEBUG:
 #echo "DEBUG: Finalize result: '$UPLOAD_FINALIZE'"
