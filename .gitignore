@@ -6,12 +6,12 @@ packer_cache/
 /keys
 vagrant-cloud-*
 !vagrant-cloud-token.sh
-output-virtualbox-ovf/
+output-*/
 build_number
 build_version
 build_time
 version
 temp/
 packages/
-distfiles/
 /*.checksum
+distfiles/

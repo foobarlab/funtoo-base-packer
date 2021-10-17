@@ -14,7 +14,7 @@ rm -rf .vagrant/ || true
 step "Cleaning packer_cache ..."
 rm -rf packer_cache/ || true
 step "Cleaning packer output dir ..."
-rm -rf output-virtualbox-ovf/ || true
+rm -rf output-*/ || true
 step "Drop build version ..."
 rm -f build_version || true
 step "Drop major version ..."
