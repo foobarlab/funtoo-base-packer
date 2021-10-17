@@ -205,6 +205,15 @@ sudo env-update
 source /etc/profile
 sudo ego sync
 
+# ---- clean bin pkgs
+
+sudo emaint binhost --fix
+sudo eclean packages
+
+# ---- clean distfiles
+
+sudo eclean-dist
+
 # ---- build X11?
 
 if [ -z ${BUILD_WINDOW_SYSTEM:-} ]; then
@@ -259,3 +268,18 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-xorg
 # required for funtoo profile 'X':
 >=media-libs/libpng-1.6.37 libpng2
 DATA
+
+# ---- re-sync meta-repo and overlays
+
+sudo env-update
+source /etc/profile
+sudo ego sync
+
+# ---- clean bin pkgs
+
+sudo emaint binhost --fix
+sudo eclean packages
+
+# ---- clean distfiles
+
+sudo eclean-dist

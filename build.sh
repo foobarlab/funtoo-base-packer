@@ -158,11 +158,8 @@ else
         if [[ "${vbox_hdd_locations2[$i]}" = "$BUILD_PARENT_BOX_CLOUD_VDI" ]]; then
             result "Found vdi file '$BUILD_PARENT_BOX_CLOUD_VDI'"
             case "${vbox_hdd_states[$i]}" in
-                "created" )
-                    info "State: 'created'. Will be removed."
-                    ;;
-                "inaccessible")
-                    info "State: 'inaccessible'. Will be removed."
+                "created" | "inaccessible")
+                    step "State: '${vbox_hdd_states[$i]}'. Will be removed."
                     ;;
                 "locked")
                     error "Seems like the vdi file is in state 'locked' and can not be removed easily. Is the box still up and running?"
@@ -223,6 +220,7 @@ fi
 step "Invoking Packer build configuration '$PWD/packer/virtualbox.json' ..."
 packer validate "$PWD/packer/virtualbox.json"
 
+# TODO upgrade to HCL2
 # TODO use 'only' conditionals in packer json for distinct provisioner ?
 packer build -force -on-error=abort "$PWD/packer/virtualbox.json"
 
