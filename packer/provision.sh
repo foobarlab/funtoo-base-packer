@@ -14,7 +14,7 @@ chmod +x ${scripts}/scripts/*.sh
 
 for script in \
   10-prepare \
-  15-cleansync.sh \
+  15-cleansync \
   20-kernel \
   30-system-update \
   40-gcc-upgrade \
