@@ -16,8 +16,13 @@ else
   fi
 fi
 
+# ---- install
+
 sudo emerge -nuvtND --with-bdeps=y dev-libs/libyaml   # FIXME workaround, pyyaml needs libyaml, dep missing
 sudo emerge -nuvtND --with-bdeps=y app-admin/ansible dev-python/lxml
+
+# ---- config
+
 sudo mkdir -p /etc/ansible
 cat <<'DATA' | sudo tee -a /etc/ansible/ansible.cfg
 [defaults]
@@ -27,6 +32,7 @@ interpreter_python = auto_silent  # Python discovery, see: https://docs.ansible.
 ssh_args = -o ControlMaster=auto -o ControlPersist=60s -o UserKnownHostsFile=/dev/null -o IdentitiesOnly=yes
 DATA
 
-# sync any guest packages to host (via shared folder)
+# ---- sync any guest packages to host (via shared folder)
+
 sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
 sudo rsync -urv /var/cache/portage/packages/* $sf_vagrant/packages/

@@ -6,15 +6,15 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
+# ---- update world
+
 sudo emerge -vtuDN --with-bdeps=y --complete-graph=y @world
-
 sudo emerge -vt @preserved-rebuild
-
 sudo emerge --depclean
-
 sudo emerge -vt @preserved-rebuild
 
-# remove known obsolete config files
+# ---- remove known obsolete config files
+
 sudo rm -f /etc/conf.d/._cfg0000_hostname
 
 sudo find /etc/ -name '._cfg*'        # DEBUG: list all config files needing an update
@@ -22,10 +22,12 @@ sudo find /etc/ -name '._cfg*' -print -exec cat -n '{}' \;  # DEBUG: cat all con
 
 sudo etc-update --verbose --preen    # auto-merge trivial changes
 
+# ---- update environment
 
 sudo env-update
 source /etc/profile
 
-# sync any guest packages to host (via shared folder)
+# ---- sync any guest packages to host (via shared folder)
+
 sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
 sudo rsync -urv /var/cache/portage/packages/* $sf_vagrant/packages/

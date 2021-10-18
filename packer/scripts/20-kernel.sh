@@ -18,6 +18,8 @@ else
   fi
 fi
 
+# ---- copy kernel config
+
 if [ -f ${scripts}/scripts/kernel.config ]; then
   if [ -f /usr/src/kernel.config ]; then
     KERNEL_RELEASE=$(uname -r)
@@ -26,7 +28,9 @@ if [ -f ${scripts}/scripts/kernel.config ]; then
   sudo cp ${scripts}/scripts/kernel.config /usr/src
 fi
 
-sudo emerge -nuvtND --with-bdeps=y sys-kernel/genkernel
+# ---- configure genkernel
+
+sudo emerge -vt sys-kernel/genkernel
 sudo mv /etc/genkernel.conf /etc/genkernel.conf.old
 
 cat <<'DATA' | sudo tee -a /etc/genkernel.conf
@@ -75,15 +79,21 @@ sudo sed -i 's/BUILD_MAKEOPTS/'"$BUILD_MAKEOPTS"'/g' /etc/genkernel.conf
 sudo env-update
 source /etc/profile
 
+# ---- list installed kernels
+
 sudo eclean-kernel -l
 sudo eselect kernel list
 
-sudo emerge -nuvtND --with-bdeps=y sys-kernel/debian-sources
+# ---- prepare new kernel
+
+sudo emerge -vt sys-kernel/debian-sources
 
 sudo eselect kernel list
 sudo eselect kernel set 1
 sudo eselect kernel list
 sudo eclean-kernel -l
+
+# ---- configure kernel
 
 cd /usr/src/linux
 
@@ -94,12 +104,17 @@ sudo make olddefconfig
 sudo mv -f /usr/src/linux/.config /usr/src/kernel.config
 sudo cp -f /usr/src/kernel.config /usr/src/kernel.config.base-dist
 
-sudo genkernel all
+# ---- build kernel
 
+sudo genkernel all
 cd /usr/src
+
+# ---- update environment
 
 sudo env-update
 source /etc/profile
+
+# ---- update boot
 
 sudo mv /etc/boot.conf /etc/boot.conf.old
 cat <<'DATA' | sudo tee -a /etc/boot.conf

@@ -97,7 +97,6 @@ DATA
 sudo chown vagrant:vagrant ~vagrant/.dmrc
 
 # ---- fluxbox config
-
 # see http://fluxbox-wiki.org/category/howtos/en/index.html
 
 mkdir ~vagrant/.fluxbox || true
@@ -330,6 +329,7 @@ sudo eselect fontconfig enable 70-yes-bitmaps.conf || true
 sudo eselect fontconfig enable 75-yes-terminus.conf || true
 sudo eselect fontconfig list
 
-# sync any guest packages to host (via shared folder)
+# ---- sync any guest packages to host (via shared folder)
+
 sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
 sudo rsync -urv /var/cache/portage/packages/* $sf_vagrant/packages/

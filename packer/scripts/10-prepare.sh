@@ -26,8 +26,12 @@ sudo find /var/cache/portage/packages/ -type d -exec chmod 755 {} +
 sudo find /var/cache/portage/packages/ -type f -exec chmod 644 {} +
 sudo chown root:portage /var/cache/portage/packages
 sudo chmod 775 /var/cache/portage/packages
+
+# ---- sync world and cleanup
+
 sudo ego sync
 sudo emaint binhost --fix
+sudo eclean-dist
 
 # ---- install /usr/local scripts
 
@@ -169,10 +173,6 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
 >=sys-devel/llvm-9.0 Apache-2.0-with-LLVM-exceptions
 >=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
 DATA
-
-# ---- sync portage and profiles
-
-sudo ego sync
 
 # ---- set profiles
 

@@ -16,6 +16,8 @@ else
   fi
 fi
 
+# ---- system and world rebuild
+
 sudo emerge -vt --emptytree --usepkg=n @system
 sudo etc-update --verbose --preen
 
@@ -24,7 +26,11 @@ sudo etc-update --verbose --preen
 
 sudo emerge -vt @preserved-rebuild
 
+# ---- perl cleaner
+
 sudo perl-cleaner --reallyall
+
+# ---- kernel
 
 if [ -z ${BUILD_KERNEL:-} ]; then
   echo "BUILD_KERNEL was not set. Skipping kernel build."
@@ -40,9 +46,12 @@ else
   fi
 fi
 
+# ---- update environment
+
 sudo env-update
 source /etc/profile
 
-# sync any guest packages to host (via shared folder)
+# ---- sync any guest packages to host (via shared folder)
+
 sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
 sudo rsync -urv /var/cache/portage/packages/* $sf_vagrant/packages/

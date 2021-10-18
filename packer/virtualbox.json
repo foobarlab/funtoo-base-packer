@@ -52,11 +52,11 @@
       "valid_exit_codes": [ 0 ]
     },{
       "destination": "/tmp",
-      "source": "scripts",
+      "source": "packer/scripts",
       "type": "file"
     },{
       "destination": "/tmp/sbin",
-      "source": "scripts/sbin",
+      "source": "packer/scripts/sbin",
       "type": "file"
     },{
       "type": "shell",
