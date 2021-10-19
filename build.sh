@@ -219,12 +219,7 @@ if [ $PACKER_LOG ]; then
     info "Logging Packer output to '$PACKER_LOG_PATH' ..."
 fi
 
-#step "Invoking Packer build configuration '$PWD/packer/virtualbox.json' ..."
-#packer validate "$PWD/packer/virtualbox.json"
-
-# TODO upgrade to HCL2
 # TODO use 'only' conditionals in packer json for distinct provisioner ?
-#packer build -force -on-error=abort "$PWD/packer/virtualbox.json"
 packer build -force -on-error=abort "$PWD/packer/virtualbox.pkr.hcl"
 
 title "OPTIMIZING BOX SIZE"
