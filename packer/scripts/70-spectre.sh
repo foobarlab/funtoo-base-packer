@@ -23,12 +23,16 @@ else
   fi
 fi
 
+# ---- install
+
 sudo emerge -nuvtND --with-bdeps=y app-admin/spectre-meltdown-checker
 
-# report current Spectre/Meltdown status
+# ---- report current Spectre/Meltdown status
+
 sudo mount /boot || true
 sudo spectre-meltdown-checker -v --explain 2>/dev/null || true
 
-# sync any guest packages to host (via shared folder)
+# ---- sync any guest packages to host (via shared folder)
+
 sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
 sudo rsync -urv /var/cache/portage/packages/* $sf_vagrant/packages/

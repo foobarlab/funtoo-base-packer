@@ -33,6 +33,7 @@ sudo emerge -nuvtND --with-bdeps=y \
 
 # TODO add media-sound/alsa-tools?
 
-# sync any guest packages to host (via shared folder)
+# ---- sync any guest packages to host (via shared folder)
+
 sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
 sudo rsync -urv /var/cache/portage/packages/* $sf_vagrant/packages/

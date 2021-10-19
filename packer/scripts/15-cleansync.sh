@@ -6,11 +6,10 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
-# ---- re-sync meta-repo and overlays
+# ---- update environment
 
 sudo env-update
 source /etc/profile
-sudo ego sync
 
 # ---- clean bin pkgs
 

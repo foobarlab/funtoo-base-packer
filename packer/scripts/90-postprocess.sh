@@ -6,8 +6,10 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
-# configure zsh: install oh-my-zsh, see https://github.com/ohmyzsh/ohmyzsh
+# ---- configure zsh
+# install oh-my-zsh, see https://github.com/ohmyzsh/ohmyzsh
 # TODO add 'ansible' plugin only if BUILD_INCLUDE_ANSIBLE is set and 'true'
+
 cat <<'DATA' | sudo tee -a /etc/zsh/zshenv
 export ZSH=/opt/oh-my-zsh    # use globally installed oh-my-zsh
 export LANG=en_US.UTF-8
@@ -32,18 +34,23 @@ sudo wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install
 sudo chmod 755 ./install.sh
 sudo ZSH="/opt/oh-my-zsh" ./install.sh --unattended --keep-zshrc
 
-## sanitize perl packages
+## ---- sanitize perl packages
+#
 #sudo perl-cleaner --all
 #
-## remove any temp portage flags and update system
+## ---- remove any temp portage flags and update system
+#
 #for dir in /etc/portage/package.*; do
 #  sudo rm -f /etc/portage/${dir##*/}/temp*
 #done
 #sudo emerge -vtuDN --with-bdeps=y --complete-graph=y @world
 
-# net-mail/mailbase: adjust permissions as recommended during install
+# ---- net-mail/mailbase: adjust permissions as recommended during install
+
 sudo chown root:mail /var/spool/mail/
 sudo chmod 03775 /var/spool/mail/
 
-# sys-apps/mlocate: add shared folder (usually '/vagrant') to /etc/updatedb.conf prune paths to avoid leaking shared files
+# ---- sys-apps/mlocate: add shared folder
+# (usually '/vagrant') to /etc/updatedb.conf prune paths to avoid leaking shared files
+
 sudo sed -i 's/PRUNEPATHS="/PRUNEPATHS="\/vagrant /g' /etc/updatedb.conf
