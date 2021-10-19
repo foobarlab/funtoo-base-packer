@@ -231,7 +231,7 @@ build {
   }
   post-processor "checksum" {
     checksum_types = ["sha1"]
-    output         = "packer.sha1.checksum"
+    output         = "packer.{{.ChecksumType}}.checksum"
   }
   post-processor "vagrant" {
     keep_input_artifact = false
