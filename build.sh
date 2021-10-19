@@ -219,7 +219,7 @@ if [ $PACKER_LOG ]; then
     info "Logging Packer output to '$PACKER_LOG_PATH' ..."
 fi
 
-# TODO use 'only' conditionals in packer json for distinct provisioner ?
+# TODO use 'only' conditionals in packer for distinct provisioner?
 packer build -force -on-error=abort "$PWD/packer/virtualbox.pkr.hcl"
 
 title "OPTIMIZING BOX SIZE"
