@@ -127,6 +127,17 @@ sudo emerge -nuvtND --with-bdeps=y \
   sys-fs/fuse \
   net-fs/sshfs
 
+# ---- portage
+
+sudo emerge -nuvtND --with-bdeps=y \
+  app-portage/eix \
+  app-portage/genlop \
+  app-portage/portage-utils \
+  app-portage/gentoolkit \
+  app-portage/cpuid2cpuflags \
+  app-misc/resolve-march-native \
+  app-portage/elogv
+
 # ---- various
 
 sudo emerge -nuvtND --with-bdeps=y \
@@ -146,12 +157,6 @@ sudo emerge -nuvtND --with-bdeps=y \
   net-ftp/ncftp \
   mail-client/mutt \
   net-irc/irssi \
-  app-portage/eix \
-  app-portage/genlop \
-  app-portage/portage-utils \
-  app-portage/gentoolkit \
-  app-portage/cpuid2cpuflags \
-  app-misc/resolve-march-native \
   app-misc/ranger \
   sys-apps/most
 
