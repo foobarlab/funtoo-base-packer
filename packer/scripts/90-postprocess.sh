@@ -44,13 +44,14 @@ for dir in /etc/portage/package.*; do
   sudo rm -f /etc/portage/${dir##*/}/temp*
 done
 
-# ---- net-mail/mailbase: adjust permissions as recommended during install
+# ---- mail permissions
+# net-mail/mailbase: adjust permissions as recommended during install
 
 sudo chown root:mail /var/spool/mail/
 sudo chmod 03775 /var/spool/mail/
 
-# ---- sys-apps/mlocate: add shared folder
-# (usually '/vagrant') to /etc/updatedb.conf prune paths to avoid leaking shared files
+# ---- sys-apps/mlocate
+# add shared folder (usually '/vagrant') to /etc/updatedb.conf prune paths to avoid leaking shared files
 
 sudo sed -i 's/PRUNEPATHS="/PRUNEPATHS="\/vagrant /g' /etc/updatedb.conf
 
@@ -66,7 +67,7 @@ sudo emerge --depclean
 sudo emerge -vt @preserved-rebuild
 sudo revdep-rebuild
 
-# ---- sync any guest packages to host (via shared folder)
+# ---- sync binary packages to host (via shared folder)
 
 sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
 sudo rsync -urv /var/cache/portage/packages/* $sf_vagrant/packages/

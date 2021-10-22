@@ -11,7 +11,7 @@ fi
 sudo env-update
 source /etc/profile
 
-# ---- clean packages
+# ---- clean binary packages
 
 sudo emaint binhost --fix
 sudo eclean packages

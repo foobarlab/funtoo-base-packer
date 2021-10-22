@@ -15,7 +15,7 @@ require_commands vagrant packer wget $vboxmanage
 highlight "Checking presence of box '$BUILD_BOX_NAME' ..."
 vbox_machine_id=$( $vboxmanage list vms | grep $BUILD_BOX_NAME | grep -Eo '{[0-9a-f\-]+}' | sed -n 's/[{}]//p' || echo )
 if [[ -z "$vbox_machine_id" || "$vbox_machine_id" = "" ]]; then
-    info "No machine named '$BUILD_BOX_NAME' found."
+    step "No machine named '$BUILD_BOX_NAME' found."
 else
     warn "The box '$BUILD_BOX_NAME' already exists!"
     info "Machine UUID: ["$vbox_machine_id"]"
@@ -67,14 +67,14 @@ fi
 
 highlight "Downloading default ssh keys ..."
 if [ -d "keys" ]; then
-    info "Ok, key dir exists."
+    step "Ok, key dir exists."
 else
     step "Creating key dir ..."
     mkdir -p keys
 fi
 
 if [ -f "keys/vagrant" ]; then
-    info "Ok, private key exists."
+    step "Ok, private key exists."
 else
     step "Downloading default private key ..."
     wget -c https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant -O keys/vagrant
@@ -85,7 +85,7 @@ else
 fi
 
 if [ -f "keys/vagrant.pub" ]; then
-    info "Ok, public key exists."
+    step "Ok, public key exists."
 else
     step "Downloading default public key ..."
     wget -c https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub -O keys/vagrant.pub
@@ -145,7 +145,7 @@ fi
 highlight "Cleanup existing parent box vdi file ..."
 vbox_hdd_found=$( $vboxmanage list hdds | grep "$BUILD_PARENT_BOX_CLOUD_VDI" || echo )
 if [[ -z "$vbox_hdd_found" || "$vbox_hdd_found" = "" ]]; then
-    info "No vdi file found for parent box '${BUILD_PARENT_BOX_CLOUD_NAME}-${BUILD_PARENT_BOX_CLOUD_VERSION}'"
+    step "No vdi file found for parent box '${BUILD_PARENT_BOX_CLOUD_NAME}-${BUILD_PARENT_BOX_CLOUD_VERSION}'"
 else
     step "Scanning VirtualBox hdds ..."
     vbox_hdd_found_count=$( $vboxmanage list hdds | grep -o "^UUID" | wc -l )
@@ -194,7 +194,7 @@ if [ -f $BUILD_PARENT_BOX_CLOUD_VMDK ]; then
     step "Cloning to vdi file ..."
     $vboxmanage clonemedium disk "$BUILD_PARENT_BOX_CLOUD_VMDK" "$BUILD_PARENT_BOX_CLOUD_VDI" --format VDI
     if [ -z ${BUILD_BOX_DISKSIZE:-} ]; then
-        info "BUILD_BOX_DISKSIZE is unset, skipping disk resize ..."
+        step "BUILD_BOX_DISKSIZE is unset, skipping disk resize ..."
         # TODO set flag for packer (use another provisioner) ?
     else
         step "Resizing vdi to $BUILD_BOX_DISKSIZE MB ..."
@@ -216,7 +216,7 @@ export PACKER_LOG_PATH="$PWD/packer.log"
 export PACKER_LOG="1"
 
 if [ $PACKER_LOG ]; then
-    info "Logging Packer output to '$PACKER_LOG_PATH' ..."
+    highlight "Logging Packer output to '$PACKER_LOG_PATH' ..."
 fi
 
 # TODO use 'only' conditionals in packer for distinct provisioner?

@@ -27,7 +27,7 @@ sudo etc-update --verbose --preen    # auto-merge trivial changes
 sudo env-update
 source /etc/profile
 
-# ---- sync any guest packages to host (via shared folder)
+# ---- sync binary packages
 
 sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
 sudo rsync -urv /var/cache/portage/packages/* $sf_vagrant/packages/

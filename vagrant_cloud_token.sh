@@ -6,11 +6,8 @@
 require_commands curl jq
 
 if [ -z "${VAGRANT_CLOUD_TOKEN:-}" ]; then
-
-    if_not_silent highlight "Checking Vagrant Cloud auth token presence ..."
-
     if [ -f ./vagrant-cloud-token ]; then
-        if_not_silent step "Loading previously stored auth token."
+        step "Loading previously stored auth token."
         VAGRANT_CLOUD_TOKEN=`cat ./vagrant-cloud-token`
     else
         warn "No auth token found."
