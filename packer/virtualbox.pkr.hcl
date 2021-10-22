@@ -179,7 +179,7 @@ source "virtualbox-ovf" "gold" {
   export_opts = [
     "--manifest",
     "--vsys", "0",
-    "--description", "${var.box_description}",
+    "--description", "\"${var.box_description}\"",
     "--version", "${var.box_version}"
   ]
 }
