@@ -34,16 +34,15 @@ sudo wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install
 sudo chmod 755 ./install.sh
 sudo ZSH="/opt/oh-my-zsh" ./install.sh --unattended --keep-zshrc
 
-## ---- sanitize perl packages
-#
-#sudo perl-cleaner --all
-#
-## ---- remove any temp portage flags and update system
-#
-#for dir in /etc/portage/package.*; do
-#  sudo rm -f /etc/portage/${dir##*/}/temp*
-#done
-#sudo emerge -vtuDN --with-bdeps=y --complete-graph=y @world
+# ---- sanitize perl packages
+
+sudo perl-cleaner --all
+
+# ---- remove any temp portage flags
+
+for dir in /etc/portage/package.*; do
+  sudo rm -f /etc/portage/${dir##*/}/temp*
+done
 
 # ---- net-mail/mailbase: adjust permissions as recommended during install
 
@@ -54,3 +53,15 @@ sudo chmod 03775 /var/spool/mail/
 # (usually '/vagrant') to /etc/updatedb.conf prune paths to avoid leaking shared files
 
 sudo sed -i 's/PRUNEPATHS="/PRUNEPATHS="\/vagrant /g' /etc/updatedb.conf
+
+# ---- update world
+
+sudo /usr/local/sbin/foo-sync || sudo ego sync
+sudo emerge -vtuDN --with-bdeps=y --complete-graph=y @world
+
+# ---- check consistency
+
+sudo emerge -vt @preserved-rebuild
+sudo emerge --depclean
+sudo emerge -vt @preserved-rebuild
+sudo revdep-rebuild

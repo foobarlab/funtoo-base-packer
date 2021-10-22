@@ -11,13 +11,6 @@ fi
 sudo env-update
 source /etc/profile
 
-# ---- check consistency
-
-sudo emerge -vt @preserved-rebuild
-sudo emerge --depclean
-sudo emerge -vt @preserved-rebuild
-sudo revdep-rebuild
-
 # ---- clean packages
 
 sudo emaint binhost --fix
