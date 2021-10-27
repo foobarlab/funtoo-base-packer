@@ -58,7 +58,7 @@ variable "guest_os_type" {
 }
 
 variable "headless" {
-  type    = string
+  type    = bool
   default = "${env("BUILD_HEADLESS")}"
 }
 
@@ -143,10 +143,10 @@ source "virtualbox-ovf" "gold" {
   headless             = "${var.headless}"
   shutdown_command     = "echo 'packer' | sudo -S shutdown -P now"
   source_path          = "${var.source_path}"
+  ssh_username         = "${var.username}"
   ssh_password         = "${var.password}"
   ssh_private_key_file = "keys/vagrant"
   ssh_pty              = "true"
-  ssh_username         = "${var.username}"
   ssh_wait_timeout     = "30s"
   vboxmanage           = [
     ["modifyvm", "{{ .Name }}", "--memory", "${var.memory}"],
@@ -179,7 +179,7 @@ source "virtualbox-ovf" "gold" {
   export_opts = [
     "--manifest",
     "--vsys", "0",
-    "--description", "${var.box_description}",
+    "--description", "\"${var.box_description}\"",
     "--version", "${var.box_version}"
   ]
 }

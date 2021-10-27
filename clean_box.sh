@@ -9,8 +9,8 @@ require_commands vagrant
 
 highlight "Removing Vagrant box ..."
 step "Suspending any running instances named '$BUILD_BOX_NAME' ..."
-vagrant suspend "$BUILD_BOX_NAME" 2>/dev/null || true   # FIXME use id instead of box name?
+vagrant suspend "$BUILD_BOX_NAME" >/dev/null 2>&1 || true   # FIXME use id instead of box name?
 step "Destroying current box ..."
 vagrant destroy -f || true
 step "Removing box '$BUILD_BOX_NAME' ..."
-vagrant box remove -f "$BUILD_BOX_NAME" 2>/dev/null || true # FIXME use id instead of box name?
+vagrant box remove -f "$BUILD_BOX_NAME" >/dev/null 2>&1 || true # FIXME use id instead of box name?

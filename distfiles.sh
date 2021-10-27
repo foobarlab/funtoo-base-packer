@@ -72,5 +72,5 @@ if [[ -f "$PWD/distfiles.list" ]]; then
     IFS=$old_IFS # restore default field separator
 
 else
-    info "File 'distfiles.list' not found."
+    step "File 'distfiles.list' not found."
 fi

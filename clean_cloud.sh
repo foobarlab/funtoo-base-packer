@@ -78,7 +78,9 @@ case "$choice" in
         echo
         exit 0
         ;;
-  * ) echo
+  * )   echo
+        echo
+        highlight "Cleaning boxes ..."
         ;;
 esac
 
@@ -89,33 +91,29 @@ do
     COUNT=$((COUNT+1))
     if [ $COUNT -gt $BUILD_KEEP_MAX_CLOUD_BOXES ]; then
         if [ "$ITEM" = "$LATEST_CLOUD_VERSION" ]; then
-            highlight "Skipping box version $ITEM (latest version will always be kept)."
+            step "Skipping box version $ITEM (latest version will always be kept)."
         else
-            warn "Found outdated box version $ITEM ..."
-
-            # revoke that version:
-            highlight "Revoking version $ITEM ..."
+            step "Revoking version $ITEM ..."
             CLOUD_BOX_REVOKE=$( \
               curl -sS \
               --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
               --request PUT \
               https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME/version/$ITEM/revoke \
             )
-            # delete that version:
-            highlight "Delete version $ITEM ..."
+            step "Deleting version $ITEM ..."
             CLOUD_BOX_DELETE=$( \
               curl -sS \
               --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
               --request DELETE \
               https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME/version/$ITEM \
             )
-            result "Deleted."
+            result "Deleted $ITEM."
         fi
     else
         if [ "$ITEM" = "$LATEST_CLOUD_VERSION" ]; then
-            highlight "Skipping box version $ITEM (latest version will always be kept) ..."
+            step "Skipping box version $ITEM (latest version will always be kept) ..."
         else
-            highlight "Skipping box version $ITEM ..."
+            step "Skipping box version $ITEM ..."
         fi
     fi
 done
