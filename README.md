@@ -49,11 +49,11 @@ Scripts for system administration in */usr/local/sbin*:
  - *foo-cleanup*: delete temporay files for housekeeping
  - *foo-prepare-compact*: zero-fill free disk space to prepare for hdd image compaction
 
-### Enable Desktop
+## Enable Desktop
 
 Enter ```sudo rc-update add xdm default``` and reboot.
 
-### Download pre-build images
+## Download pre-build images
 
 Get the latest build from Vagrant Cloud:
 [foobarlab/funtoo-base](https://app.vagrantup.com/foobarlab/boxes/funtoo-base)
