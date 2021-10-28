@@ -2,14 +2,15 @@
 # vim: ts=4 sw=4 et
 # NOTE: Vagrant Cloud API see: https://www.vagrantup.com/docs/vagrant-cloud/api.html
 
-. config.sh quiet
+source "${BUILD_BIN_CONFIG:-./bin/config.sh}" quiet
 
 title "UPLOAD BOX"
 if [ -f "$BUILD_OUTPUT_FILE" ]; then
-    step "Found box file '$BUILD_OUTPUT_FILE' in the current directory."
+    step "Found box file '$BUILD_OUTPUT_FILE'."
 else
-    error "There is no box file '$BUILD_OUTPUT_FILE' in the current directory."
-    result "Please run './build.sh' to build a box."
+    step "Missing box file '$BUILD_OUTPUT_FILE'"
+    error "There is no box file '${BUILD_OUTPUT_FILE##*/}'!"
+    result "Please run 'make build' first."
     if [ $# -eq 0 ]; then
         exit 1  # exit with error when running without param
     else
@@ -44,13 +45,10 @@ case "$choice" in
         ;;
 esac
 
-. vagrant_cloud_token.sh "$*"
-
 # FIXME replace with cloud_version.sh
 # check if a latest version does exist
 LATEST_VERSION_HTTP_CODE=$( \
   curl -sS -w "%{http_code}" -o /dev/null \
-  --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
   https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME \
 )
 
@@ -65,7 +63,6 @@ esac
 highlight "Checking existing cloud version ..."
 LATEST_CLOUD_VERSION=$( \
   curl -sS \
-  --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
   https://app.vagrantup.com/api/v1/box/$BUILD_BOX_USERNAME/$BUILD_BOX_NAME \
 )
 
@@ -78,6 +75,9 @@ if [[ $BUILD_BOX_VERSION = $LATEST_CLOUD_VERSION ]]; then
 else
     step "Looks like we got a new version to provide."
 fi
+
+# Request auth
+source "${BUILD_DIR_BIN}/vagrant_cloud_token.sh" "$*"
 
 # Create a new box
 highlight "Trying to create a new box '$BUILD_BOX_NAME' ..."

@@ -1,31 +1,32 @@
 #!/bin/bash -ue
 # vim: ts=4 sw=4 et
 
-. ./lib/functions.sh "$*"
+[[ -v BUILD_ROOT ]] || BUILD_ROOT="${PWD}"   # FIXME try to set correct path (e.g. when run from inside bin dir)
+source "${BUILD_LIB_UTILS:-./bin/lib/utils.sh}" "$*"
 require_commands git nproc
 set -a
 
-# ----------------------------!  edit settings below  !----------------------------
-
-BUILD_BOX_NAME="funtoo-base"
-BUILD_BOX_USERNAME="foobarlab"
+# ----------------------------!  default settings below  !----------------------------
 
 BUILD_BOX_PROVIDER="virtualbox"
+BUILD_GUEST_TYPE="Gentoo_64"
 
-BUILD_BOX_FUNTOO_VERSION="1.4"
+BUILD_BOX_USERNAME="foobarlab"
+BUILD_BOX_NAME="funtoo-base"
 BUILD_BOX_SOURCES="https://github.com/foobarlab/funtoo-base-packer"
 
 BUILD_PARENT_BOX_USERNAME="foobarlab"
 BUILD_PARENT_BOX_NAME="funtoo-stage3"
 BUILD_PARENT_BOX_CLOUD_NAME="$BUILD_PARENT_BOX_USERNAME/$BUILD_PARENT_BOX_NAME"
 
-BUILD_GUEST_TYPE="Gentoo_64"
+BUILD_BOX_FUNTOO_VERSION="1.4"
 
 # default memory/cpus/disk used for final created box:
 BUILD_BOX_CPUS="2"
 BUILD_BOX_MEMORY="2048"
 #BUILD_BOX_DISKSIZE="51200" # resize disk in MB, comment-in to keep exiting size
 
+# add a custom overlay?
 BUILD_CUSTOM_OVERLAY=true
 BUILD_CUSTOM_OVERLAY_NAME="foobarlab"
 BUILD_CUSTOM_OVERLAY_URL="https://github.com/foobarlab/foobarlab-overlay.git"
@@ -43,8 +44,8 @@ BUILD_KEEP_MAX_CLOUD_BOXES=1       # set the maximum number of boxes to keep in 
 
 # ----------------------------!  do not edit below this line  !----------------------------
 
-echo $BUILD_BOX_FUNTOO_VERSION | sed -e 's/\.//g' > version    # auto set major version
-. version.sh "$*"   # determine build version
+echo $BUILD_BOX_FUNTOO_VERSION | sed -e 's/\.//g' > "$BUILD_FILE_VERSIONFILE"    # auto set major version
+source "${BUILD_DIR_BIN}/version.sh" "$*"   # determine build version
 
 # detect number of system cpus available (select half of cpus for best performance)
 BUILD_CPUS=$((`nproc --all` / 2))
@@ -90,8 +91,8 @@ if [ ! -z ${BUILD_TAG+x} ]; then
     BUILD_BOX_DESCRIPTION="$BUILD_BOX_DESCRIPTION ($BUILD_TAG)"
 fi
 
-if [[ -f ./build_time && -s build_time ]]; then
-    BUILD_RUNTIME=`cat build_time`
+if [[ -f ${BUILD_FILE_BUILD_TIME} && -s ${BUILD_FILE_BUILD_TIME} ]]; then
+    BUILD_RUNTIME=`cat ${BUILD_FILE_BUILD_TIME}`
     BUILD_RUNTIME_FANCY="Total build runtime was $BUILD_RUNTIME."
 else
     BUILD_RUNTIME="unknown"
@@ -120,19 +121,22 @@ else
     BUILD_BOX_DESCRIPTION="$BUILD_BOX_DESCRIPTION<br>This build is not version controlled yet.<br>$BUILD_RUNTIME_FANCY"
 fi
 
-BUILD_OUTPUT_FILE_TEMP="$BUILD_BOX_NAME.tmp.box"
-BUILD_OUTPUT_FILE="$BUILD_BOX_NAME-$BUILD_BOX_VERSION.box"
+BUILD_OUTPUT_FILE_TEMP="${BUILD_DIR_BUILD}/${BUILD_BOX_NAME}.tmp.box"
+BUILD_OUTPUT_FILE="${BUILD_DIR_BUILD}/${BUILD_BOX_NAME}-${BUILD_BOX_VERSION}.box"
 
 BUILD_PARENT_BOX_CHECK=true
 
 # get the latest parent version from Vagrant Cloud API call:
-. parent_version.sh "$*"
+source "${BUILD_DIR_BIN}/parent_version.sh" "$*"
 
 BUILD_PARENT_BOX_OVF="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_NAME/0/virtualbox/box.ovf"
 BUILD_PARENT_BOX_CLOUD_PATHNAME=`echo "$BUILD_PARENT_BOX_CLOUD_NAME" | sed "s|/|-VAGRANTSLASH-|"`
 BUILD_PARENT_BOX_CLOUD_OVF="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHNAME/$BUILD_PARENT_BOX_CLOUD_VERSION/virtualbox/box.ovf"
 BUILD_PARENT_BOX_CLOUD_VMDK="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHNAME/$BUILD_PARENT_BOX_CLOUD_VERSION/virtualbox/box-disk001.vmdk"
 BUILD_PARENT_BOX_CLOUD_VDI="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHNAME/$BUILD_PARENT_BOX_CLOUD_VERSION/virtualbox/box-disk001.vdi"
+
+# override build settings? load build.conf ... 
+[[ -f ""${BUILD_FILE_BUILDCONF}"" ]] && source "${BUILD_FILE_BUILDCONF}"
 
 if [ $# -eq 0 ]; then
     title "BUILD SETTINGS"

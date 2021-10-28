@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vim: ts=2 sw=2 et ft=ruby :
 
-system("./config.sh >/dev/null")
+system("./bin/config.sh >/dev/null")
 
 Vagrant.require_version ">= 2.1.0"
 
@@ -80,17 +80,22 @@ bash -c 'dd if=/dev/zero of=/dev/sda3 2>/dev/null' || true
 mkswap /dev/sda3
 SCRIPT
 
+box_name = ENV["BUILD_BOX_NAME"] || "foobarlab/funtoo-base"
+headless = ENV['BUILD_HEADLESS'] || "false"
+memory   = ENV['BUILD_BOX_MEMORY'] || 2048
+cpus     = ENV['BUILD_BOX_CPUS'] || 2
+
 Vagrant.configure("2") do |config|
   #config.vagrant.sensitive = ["MySecretPassword", ENV["MY_TOKEN"]] # TODO hide sensitive information
   config.vm.box_check_update = false
-  config.vm.box = "#{ENV['BUILD_BOX_NAME']}"
+  config.vm.box = box_name
   #config.vm.box_version = ">0"   # TODO version constraint (not building funtoo next)
-  config.vm.hostname = "#{ENV['BUILD_BOX_NAME']}"
+  config.vm.hostname = box_name
   config.vm.provider "virtualbox" do |vb|
-    vb.gui = (ENV['BUILD_HEADLESS'] == "false")
-    vb.memory = "#{ENV['BUILD_BOX_MEMORY']}"
-    vb.cpus = "#{ENV['BUILD_BOX_CPUS']}"
-    # customize VirtualBox settings, see also 'virtualbox.json'
+    vb.gui = (headless == "false")
+    vb.memory = memory
+    vb.cpus = cpus
+    # customize VirtualBox settings, see also 'virtualbox.pkr.hcl'
     vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
     vb.customize ["modifyvm", :id, "--audio", "pulse"]
     vb.customize ["modifyvm", :id, "--audiocontroller", "hda"]

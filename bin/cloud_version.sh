@@ -5,7 +5,7 @@
 CLOUD_VERSION_CURRENT='Current-version'
 CLOUD_VERSION_FOUND='Found-version'
 
-. config.sh quiet
+source "${BUILD_BIN_CONFIG:-./bin/config.sh}" quiet
 
 require_commands curl jq
 

@@ -1,14 +1,14 @@
 #!/bin/bash -ue
 # vim: ts=4 sw=4 et
 
-. ./lib/functions.sh "$*"
+source "${BUILD_LIB_UTILS:-./bin/lib/utils.sh}" "$*"
 
 require_commands curl jq
 
 if [ -z "${VAGRANT_CLOUD_TOKEN:-}" ]; then
-    if [ -f ./vagrant-cloud-token ]; then
-        step "Loading previously stored auth token."
-        VAGRANT_CLOUD_TOKEN=`cat ./vagrant-cloud-token`
+    if [ -f "$BUILD_FILE_VAGRANT_TOKEN" ]; then
+        step "Loading previously stored auth token: '$BUILD_FILE_VAGRANT_TOKEN'"
+        VAGRANT_CLOUD_TOKEN=`cat ${BUILD_FILE_VAGRANT_TOKEN}`
     else
         warn "No auth token found."
         echo
@@ -48,16 +48,16 @@ if [ -z "${VAGRANT_CLOUD_TOKEN:-}" ]; then
 
         read -p "Do you want to store the auth token for future use (y/N)? " choice
         case "$choice" in
-          y|Y ) highlight "Storing auth token ..."
-                echo $VAGRANT_CLOUD_TOKEN > ./vagrant-cloud-token
-                chmod 600 ./vagrant-cloud-token
+          y|Y ) step "Storing auth token ..."
+                echo "$VAGRANT_CLOUD_TOKEN" > "$BUILD_FILE_VAGRANT_TOKEN"
+                chmod 600 "$BUILD_FILE_VAGRANT_TOKEN"
                 ;;
-          * ) highlight "Not storing auth token."
+          * ) step "Not storing auth token."
               ;;
         esac
 
     fi
     export VAGRANT_CLOUD_TOKEN
 else
-    if_not_silent result "Reusing existing auth token."
+    if_not_silent result "Reusing in-memory auth token."
 fi

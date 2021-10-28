@@ -7,7 +7,7 @@ if [ -z ${BUILD_RUN:-} ]; then
 fi
 
 if [ -z ${scripts:-} ]; then
-  SCRIPTS=.
+  scripts=.
 fi
 
 chmod +x ${scripts}/scripts/*.sh

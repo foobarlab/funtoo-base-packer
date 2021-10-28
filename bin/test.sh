@@ -1,7 +1,7 @@
 #!/bin/bash -ue
 # vim: ts=4 sw=4 et
 
-. config.sh quiet
+source "${BUILD_BIN_CONFIG:-./bin/config.sh}" quiet
 
 require_commands vagrant
 
@@ -24,7 +24,7 @@ then
     vagrant suspend
 else
     error "There is no box file '$BUILD_OUTPUT_FILE' in the current directory."
-    info "Please place the box file here or use './build.sh' to create a box file."
+    info "Please place the box file here or use 'make build' to create a box file."
     if [ $# -eq 0 ]; then
         exit 1  # exit with error when running without param
     else

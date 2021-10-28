@@ -1,17 +1,16 @@
+# eclipse
+.project
+.settings
+
+# cached dirs and files
+packages/
+distfiles/
+vagrant-cloud-token
+version
+
+# temporary build files
 .vagrant/
 packer_cache/
-/*.box
-.project
-/*.log*
 /keys
-vagrant-cloud-*
-!vagrant-cloud-token.sh
-output-*/
-build_number
-build_version
-build_time
-version
-temp/
-packages/
-/*.checksum
-distfiles/
+/build
+/output-*

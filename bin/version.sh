@@ -6,39 +6,41 @@
 # versioning format: major.minor.buildnumber
 # as required by Vagrant
 
-. ./lib/functions.sh "$*"
+source "${BUILD_LIB_UTILS:-./bin/lib/utils.sh}" "$*"
 
-if [ ! -f version ]; then
-    error "Missing file 'version'! Please run './config.sh' for default major version numbering."
+if [ ! -f "${BUILD_FILE_VERSIONFILE}" ]; then
+    error "Missing file '${BUILD_FILE_VERSIONFILE}'! Please run 'make config' for default major version numbering."
     exit 1
 fi
 
 if [ -z "${BUILD_BOX_VERSION:-}" ]; then
-    if [ -f build_version ]; then
-        BUILD_BOX_VERSION=$(<build_version)
+    if [ -f "$BUILD_FILE_BUILD_VERSION" ]; then
+        BUILD_BOX_VERSION=$(<"$BUILD_FILE_BUILD_VERSION")
     else
         # get major version (must exist as file 'version'):
-        BUILD_MAJOR_VERSION=$(<version)
+        BUILD_MAJOR_VERSION=$(<"${BUILD_FILE_VERSIONFILE}")
         # generate minor version (date in format YYMMDD):
         BUILD_MINOR_VERSION=$(date +%y%m%d)
         # take existing env var BUILD_NUMBER, increment the one stored in
-        # file 'build_number' or initialize a new one beginning with 0:
+        # file 'build_number' or initialize a new one starting with 0:
         if [ -z ${BUILD_NUMBER:-} ] ; then
-            if [ -f build_number ]; then
+            if [ -f "$BUILD_FILE_BUILD_NUMBER" ]; then
                 # read from file and increase by one
-                BUILD_NUMBER=$(<build_number)
+                BUILD_NUMBER=$(<"$BUILD_FILE_BUILD_NUMBER")
                 BUILD_NUMBER=$((BUILD_NUMBER+1))
             else
                 BUILD_NUMBER=0
             fi
-            # store for later reuse in file 'build_number'
-            echo $BUILD_NUMBER > build_number
+            # create build dir if not existant
+            mkdir -p "${BUILD_DIR_BUILD}" || true
+            # store 'build_number' for later reuse
+            echo $BUILD_NUMBER > "${BUILD_FILE_BUILD_NUMBER}"
             export BUILD_NUMBER
         fi
         BUILD_BOX_VERSION=$BUILD_MAJOR_VERSION.$BUILD_MINOR_VERSION.$BUILD_NUMBER
-    fi    
+    fi
     export BUILD_BOX_VERSION
-    echo $BUILD_BOX_VERSION > build_version
+    echo $BUILD_BOX_VERSION > "$BUILD_FILE_BUILD_VERSION"
 else
     step "Reusing previous set version: '$BUILD_BOX_VERSION'"
 fi

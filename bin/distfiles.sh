@@ -1,24 +1,23 @@
 #!/bin/bash -ue
 # vim: ts=4 sw=4 et
 
-. ./lib/functions.sh "$*"
+source "${BUILD_LIB_UTILS:-./bin/lib/utils.sh}" "$*"
 
 require_commands wget b2sum
 
 highlight "Processing distfiles ..."
 
-if [[ -f "$PWD/distfiles.list" ]]; then
-    step "Ensure 'distfiles' dir exists ..."
-    mkdir -p "$PWD/distfiles" || true
-    step "Parsing 'distfiles.list' ..."
+if [[ -f "$BUILD_FILE_DISTFILESLIST" ]]; then
+    step "Ensure dir '${BUILD_DIR_DISTFILES##*/}' dir exists ..."
+    mkdir -p "$BUILD_DIR_DISTFILES" || true
+    step "Parsing '${BUILD_FILE_DISTFILESLIST}' ..."
     line_number=0
     old_IFS=$IFS # save the field separator
     IFS=$'\n' # new field separator, the end of line
-    for line in $(cat "$PWD/distfiles.list"); do
+    for line in $(cat "$BUILD_FILE_DISTFILESLIST"); do
         line_number=$((line_number+1))
         shopt -s extglob; line=${line##*( )}; line="${line%%*( )}"; shopt -u extglob # remove leading and trailing spaces
         [[ $line =~ ^#.* ]] && continue # skip comments
-        #info "Line: $line"
         file_hash=""
         file_name=""
         file_url=""
@@ -37,28 +36,20 @@ if [[ -f "$PWD/distfiles.list" ]]; then
             error "Expected three space separated values, but got only $count in line $line_number: $line"
             exit 1
         fi
-
-        # DEBUG
-        #result "File: $file_name"
-        #result "Blake2b -> $file_hash"
-        #result "URL -> $file_url"
-
-        success "Processing file '$file_name' ..."
-        step "Check if file is present ..."
-        if [ ! -f "$PWD/distfiles/$file_name" ]; then
-            warn "File is missing."
-            step "Downloading file ..."
-            wget -c "$file_url" -O "$PWD/distfiles/$file_name"
+        step "Looking for file '$file_name' ..."
+        if [ ! -f "${BUILD_DIR_DISTFILES}/$file_name" ]; then
+            step "Downloading '$file_name' ..."
+            wget -c "$file_url" -O "${BUILD_DIR_DISTFILES}/$file_name" || warn "Something went wrong."
             todo "Check wget exit status"
         fi
         step "Verifying file integrity ..."
-        if [ -f "$PWD/distfiles/$file_name" ]; then
-            file_expected_hash=$(cat "$PWD/distfiles/$file_name" | b2sum -b | sed -e "s/ .*//g")
+        if [ -f "${BUILD_DIR_DISTFILES}/$file_name" ]; then
+            file_expected_hash=$(cat "${BUILD_DIR_DISTFILES}/$file_name" | b2sum -b | sed -e "s/ .*//g")
             if [[ "$file_hash" = "$file_expected_hash" ]]; then
-                result "OK, checksum matched."
+                success "$file_name"
                 continue
             else
-                warn "Failed, checksum did not match"
+                warn "Verification failed, checksum did not match!"
                 result $file_expected_hash
                 result $file_hash
             fi
@@ -72,5 +63,5 @@ if [[ -f "$PWD/distfiles.list" ]]; then
     IFS=$old_IFS # restore default field separator
 
 else
-    step "File 'distfiles.list' not found."
+    step "File '${BUILD_FILE_DISTFILESLIST##*/}' not found."
 fi
