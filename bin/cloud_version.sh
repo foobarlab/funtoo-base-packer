@@ -11,6 +11,8 @@ require_commands curl jq
 
 declare -A BUILD_CLOUD_VERSION
 
+todo "add cloud function: latest_version"
+
 step "Requesting cloud box info ..."
 cloud_box_info=$( \
   curl -sS -f \

@@ -4,6 +4,8 @@
 # get the lastest version number for a parent box from Vagrant Cloud
 # see: https://www.vagrantup.com/docs/vagrant-cloud/api.html#boxes
 
+# TODO cover with cloud_version.sh?
+
 source "${BUILD_LIB_UTILS:-./bin/lib/utils.sh}" "$*"
 
 if [ -z ${BUILD_BOX_NAME:-} ]; then
@@ -28,8 +30,7 @@ if [ -z "${BUILD_PARENT_BOX_CLOUD_VERSION:-}" ]; then
                  exit 1
                  ;;
         esac
-        step "Requesting latest parent box version ..."
-        # FIXME select proper version
+        step "Getting latest version of parent box ..."
         LATEST_PARENT_VERSION=$( \
           curl -sS \
           https://app.vagrantup.com/api/v1/box/$BUILD_PARENT_BOX_CLOUD_NAME \

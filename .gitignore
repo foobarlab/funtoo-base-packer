@@ -8,7 +8,7 @@ distfiles/
 vagrant-cloud-token
 version
 
-# temporary build files
+# temporary created files during build
 .vagrant/
 packer_cache/
 /keys
