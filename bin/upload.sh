@@ -28,13 +28,12 @@ info "Box..........: '$BUILD_BOX_NAME'"
 info "Provider.....: '$BUILD_BOX_PROVIDER'"
 info "Version......: '$BUILD_BOX_VERSION'"
 info "File.........: '$BUILD_OUTPUT_FILE'"
+# TODO show filesize
 info "Build time...: '$BUILD_RUNTIME'"
-# FIXME show and compare sha1 checksum?
+# TODO show description?
+# TODO show and compare sha1 checksum?
 echo
-info "Please verify if above information is correct."
-echo
-
-read -p "    Continue (Y/n)? " choice
+read -p "    Start upload (Y/n)? " choice
 case "$choice" in
   n|N ) echo
         warn "User cancelled."

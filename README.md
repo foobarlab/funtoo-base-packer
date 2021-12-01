@@ -1,6 +1,6 @@
 # Funtoo Base box packer
 
-This is a minimal Funtoo Linux that is packaged into a Vagrant box file.
+This is a customized minimal Funtoo Linux that is packaged into a Vagrant box file.
 Currently only a VirtualBox version is provided.
 It is based on the [Funtoo Stage3 Vagrant box](https://github.com/foobarlab/funtoo-stage3-packer)
 and can be used for bootstrapping your own box.
