@@ -9,7 +9,7 @@ export BUILD_ROOT:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 .PHONY: all config build clean clean_env clean_box clean_cloud cloud_version \
         distfiles init startup test parent_version upload vagrant_cloud_token \
-        version help readme clean_temp
+        version help readme clean_temp install download
 
 ## show help
 help:
@@ -33,6 +33,10 @@ config:
 ## build a raw box
 build:
 	@build.sh
+
+## install as local vagrant box
+install:
+	@install.sh
 
 ## remove any build and temporary created files
 clean:

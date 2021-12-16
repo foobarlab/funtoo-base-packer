@@ -137,7 +137,7 @@ variable "window_system" {
   default = "${env("BUILD_WINDOW_SYSTEM")}"
 }
 
-source "virtualbox-ovf" "gold" {
+source "virtualbox-ovf" "img" {
   boot_wait            = "30s"
   guest_additions_mode = "disable"
   headless             = "${var.headless}"
@@ -185,7 +185,7 @@ source "virtualbox-ovf" "gold" {
 }
 
 build {
-  sources = ["source.virtualbox-ovf.gold"]
+  sources = ["source.virtualbox-ovf.img"]
   provisioner "shell" {
     environment_vars  = ["BUILD_RUN=true"]
     expect_disconnect = true

@@ -44,6 +44,9 @@ BUILD_KEEP_MAX_CLOUD_BOXES=1       # set the maximum number of boxes to keep in 
 
 # ----------------------------!  do not edit below this line  !----------------------------
 
+# override build settings above? load build.conf ... 
+[[ -f ""${BUILD_FILE_BUILDCONF}"" ]] && source "${BUILD_FILE_BUILDCONF}"
+
 echo $BUILD_BOX_FUNTOO_VERSION | sed -e 's/\.//g' > "$BUILD_FILE_VERSIONFILE"    # auto set major version
 source "${BUILD_DIR_BIN}/version.sh" "$*"   # determine build version
 
@@ -134,9 +137,6 @@ BUILD_PARENT_BOX_CLOUD_PATHNAME=`echo "$BUILD_PARENT_BOX_CLOUD_NAME" | sed "s|/|
 BUILD_PARENT_BOX_CLOUD_OVF="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHNAME/$BUILD_PARENT_BOX_CLOUD_VERSION/virtualbox/box.ovf"
 BUILD_PARENT_BOX_CLOUD_VMDK="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHNAME/$BUILD_PARENT_BOX_CLOUD_VERSION/virtualbox/box-disk001.vmdk"
 BUILD_PARENT_BOX_CLOUD_VDI="$HOME/.vagrant.d/boxes/$BUILD_PARENT_BOX_CLOUD_PATHNAME/$BUILD_PARENT_BOX_CLOUD_VERSION/virtualbox/box-disk001.vdi"
-
-# override build settings? load build.conf ... 
-[[ -f ""${BUILD_FILE_BUILDCONF}"" ]] && source "${BUILD_FILE_BUILDCONF}"
 
 if [ $# -eq 0 ]; then
     title "BUILD SETTINGS"
