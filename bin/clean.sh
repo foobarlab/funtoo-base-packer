@@ -21,7 +21,7 @@ deleteitem="${BUILD_ROOT}/packer_cache/"
 step "Remove packer_cache: '${deleteitem}'"
 rm -rf "${deleteitem}" || true
 
-deleteitem="${BUILD_ROOT}/output-gold/"
+deleteitem="${BUILD_ROOT}/output-img/"
 step "Remove packer output dir: '${deleteitem}'"
 rm -rf "${deleteitem}" || true
 
