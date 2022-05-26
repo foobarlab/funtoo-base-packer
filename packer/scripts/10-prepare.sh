@@ -10,9 +10,11 @@ fi
 
 sf_vagrant="`sudo df | grep vagrant | tail -1 | awk '{ print $6 }'`"
 if [[ -d "$sf_vagrant/distfiles" ]]; then
+  sudo mkdir -p /var/cache/portage/distfiles
   sudo rsync -urv $sf_vagrant/distfiles /var/cache/portage/
-  sudo chown portage:portage /var/cache/portage/distfiles/*
-  sudo chmod 664 /var/cache/portage/distfiles/*
+  sudo chown -R portage:portage /var/cache/portage/distfiles
+  sudo chmod -R 664 /var/cache/portage/distfiles
+  sudo chmod 775 /var/cache/portage/distfiles
 fi
 
 # ---- import binary packages
