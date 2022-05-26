@@ -136,8 +136,8 @@ sudo sed -i 's/BUILD_MAKEOPTS/'"${BUILD_MAKEOPTS}"'/g' /etc/portage/make.conf
 sudo mkdir -p /etc/portage/package.use
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-kernel
 sys-kernel/genkernel -cryptsetup
-sys-kernel/debian-sources -binary -custom-cflags
-sys-kernel/debian-sources-lts -binary -custom-cflags
+sys-kernel/debian-sources -logo -binary -custom-cflags
+sys-kernel/debian-sources-lts -logo -binary -custom-cflags
 sys-kernel/linux-firmware initramfs redistributable
 sys-firmware/intel-microcode initramfs
 DATA
