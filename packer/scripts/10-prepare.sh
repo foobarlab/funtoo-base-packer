@@ -128,6 +128,8 @@ INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_GB"
 INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_US"
 INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en@shaw"
 
+CURL_SSL="gnutls"
+
 DATA
 sudo sed -i 's/BUILD_MAKEOPTS/'"${BUILD_MAKEOPTS}"'/g' /etc/portage/make.conf
 
@@ -174,6 +176,10 @@ sudo mkdir -p /etc/portage/package.license
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
 >=sys-devel/llvm-9.0 Apache-2.0-with-LLVM-exceptions
 >=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
+DATA
+
+cat <<'DATA' | sudo tee -a /etc/portage/package.license/curl
+>=net-misc/curl-7.83.1 curl
 DATA
 
 # ---- set profiles
