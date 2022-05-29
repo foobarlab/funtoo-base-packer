@@ -156,7 +156,6 @@ net-firewall/nftables json
 DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base-python2-removal
 # try to disable all python2 stuff
-dev-python/cython -python_targets_python2_7
 app-admin/ansible -python_targets_python2_7
 dev-vcs/git -python_targets_python2_7
 DATA
