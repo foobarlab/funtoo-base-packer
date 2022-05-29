@@ -17,7 +17,7 @@ and can be used for bootstrapping your own box.
  - Vagrant user *vagrant* with password *vagrant* (can get superuser via sudo without password),
    additionally using the default SSH authorized keys provided by Vagrant
    (see https://github.com/hashicorp/vagrant/tree/master/keys) 
- - Optional: Debian Kernel 5.15 (debian-sources) stripped down for use with VirtualBox (default: enabled)
+ - Optional: Debian Kernel 5.16 (debian-sources) stripped down for use with VirtualBox (default: enabled)
  - Optional: switch and rebuild a non-default GCC version (experimental, default: disabled)
  - Optional: rebuild world, recompile the whole system (experimental, default: disabled)
  - Optional: include *Ansible* (for automation, default: enabled)
