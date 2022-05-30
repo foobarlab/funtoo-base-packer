@@ -4,6 +4,7 @@
 
 # cached dirs and files
 packages/
+packages*/
 distfiles/
 vagrant-cloud-token
 version
