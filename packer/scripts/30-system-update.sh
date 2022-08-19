@@ -8,7 +8,7 @@ fi
 
 # ---- update world
 
-sudo emerge -vtuDN --with-bdeps=y --complete-graph=y @world
+sudo emerge -vtuDN --with-bdeps=y --binpkg-changed-deps=y --complete-graph=y @world
 sudo emerge -vt @preserved-rebuild
 sudo emerge --depclean
 sudo emerge -vt @preserved-rebuild
