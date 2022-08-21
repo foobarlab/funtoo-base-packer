@@ -6,6 +6,10 @@ if [ -z ${BUILD_RUN:-} ]; then
   exit 1
 fi
 
+# ---- required packages before world update
+
+sudo emerge -vt spidermonkey:68
+
 # ---- update world
 
 sudo emerge -vtuDN --with-bdeps=y --binpkg-changed-deps=y --complete-graph=y @world
