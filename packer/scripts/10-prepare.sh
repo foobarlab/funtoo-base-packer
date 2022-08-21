@@ -182,6 +182,13 @@ cat <<'DATA' | sudo tee -a /etc/portage/package.license/curl
 >=net-misc/curl-7.83.1 curl
 DATA
 
+# ---- package.mask
+
+sudo mkdir -p /etc/portage/package.mask
+cat <<'DATA' | sudo tee -a /etc/portage/package.mask/base-spidermonkey
+>=dev-lang/spidermonkey-78
+DATA
+
 # ---- set profiles
 
 sudo epro mix-ins +no-systemd +console-extras +audio +media
