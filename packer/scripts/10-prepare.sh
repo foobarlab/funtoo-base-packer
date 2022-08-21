@@ -144,6 +144,7 @@ sys-kernel/linux-firmware initramfs redistributable
 sys-firmware/intel-microcode initramfs
 DATA
 cat <<'DATA' | sudo tee -a /etc/portage/package.use/base
+sys-libs/ncurses tinfo
 app-admin/rsyslog gnutls normalize
 app-misc/mc -edit -slang
 sys-apps/portage doc
