@@ -136,7 +136,8 @@ sudo emerge -nuvtND --with-bdeps=y \
   app-portage/gentoolkit \
   app-portage/cpuid2cpuflags \
   app-misc/resolve-march-native \
-  app-portage/elogv
+  app-portage/elogv \
+  app-admin/vulner
 
 # ---- various
 
