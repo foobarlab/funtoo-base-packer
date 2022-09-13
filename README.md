@@ -63,7 +63,7 @@ Get the latest build from Vagrant Cloud:
 Install [VirtualBox](https://www.virtualbox.org) (extensions not needed),
 [Vagrant](https://www.vagrantup.com/) and [Packer](https://www.packer.io/).
 
-The provided scripts make use of various commandline utils:
+The provided scripts require various commandline utils:
 
  - bash
  - wget
@@ -77,7 +77,13 @@ The provided scripts make use of various commandline utils:
  - awk
  - grep
 
+Please ensure these programs are installed and executable.
+
 Type ```make``` for help, build your own box with ```make all```.
+
+## Debugging build scripts
+
+Prepend ```BUILD_DEBUG=true``` to the make command for verbose output.
 
 ## Feedback and bug reports welcome
 
