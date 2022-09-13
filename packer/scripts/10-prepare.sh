@@ -52,7 +52,7 @@ sed -i 's/<a .*a>/'$BUILD_GIT_COMMIT_ID'/g' ~vagrant/.release_$BUILD_BOX_NAME
 sudo rm -f /etc/motd
 cat <<'DATA' | sudo tee -a /etc/motd
 
-Funtoo Linux Vagrant Box (BUILD_BOX_USERNAME/BUILD_BOX_NAME) - release BUILD_BOX_VERSION build BUILD_TIMESTAMP
+Funtoo Linux (BUILD_BOX_USERNAME/BUILD_BOX_NAME) - release BUILD_BOX_VERSION build BUILD_TIMESTAMP
 
 DATA
 sudo sed -i 's/BUILD_BOX_NAME/'"$BUILD_BOX_NAME"'/g' /etc/motd
@@ -63,7 +63,7 @@ sudo cat /etc/motd
 
 sudo rm -f /etc/issue
 cat <<'DATA' | sudo tee -a /etc/issue
-This is a Funtoo Linux Vagrant Box (BUILD_BOX_USERNAME/BUILD_BOX_NAME-BUILD_BOX_VERSION)
+Funtoo Linux (BUILD_BOX_USERNAME/BUILD_BOX_NAME-BUILD_BOX_VERSION)
 
 DATA
 sudo sed -i 's/BUILD_BOX_VERSION/'$BUILD_BOX_VERSION'/g' /etc/issue
@@ -128,8 +128,6 @@ INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_GB"
 INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en_US"
 INSTALL_MASK="${INSTALL_MASK} -/usr/share/locale/en@shaw"
 
-CURL_SSL="gnutls"
-
 DATA
 sudo sed -i 's/BUILD_MAKEOPTS/'"${BUILD_MAKEOPTS}"'/g' /etc/portage/make.conf
 
@@ -176,10 +174,6 @@ sudo mkdir -p /etc/portage/package.license
 cat <<'DATA' | sudo tee -a /etc/portage/package.license/base-llvm
 >=sys-devel/llvm-9.0 Apache-2.0-with-LLVM-exceptions
 >=sys-devel/llvm-common-9.0 Apache-2.0-with-LLVM-exceptions
-DATA
-
-cat <<'DATA' | sudo tee -a /etc/portage/package.license/curl
->=net-misc/curl-7.83.1 curl
 DATA
 
 # ---- package.mask
