@@ -30,7 +30,7 @@ fi
 
 # ---- configure genkernel
 
-sudo emerge -vt sys-kernel/genkernel
+#sudo emerge -vt sys-kernel/genkernel
 sudo mv /etc/genkernel.conf /etc/genkernel.conf.old
 
 cat <<'DATA' | sudo tee -a /etc/genkernel.conf
