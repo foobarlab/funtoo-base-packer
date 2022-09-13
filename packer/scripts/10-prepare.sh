@@ -184,10 +184,10 @@ DATA
 
 # ---- package.mask
 
-sudo mkdir -p /etc/portage/package.mask
-cat <<'DATA' | sudo tee -a /etc/portage/package.mask/base-spidermonkey
->=dev-lang/spidermonkey-78
-DATA
+#sudo mkdir -p /etc/portage/package.mask
+#cat <<'DATA' | sudo tee -a /etc/portage/package.mask/base-spidermonkey
+#>=dev-lang/spidermonkey-78
+#DATA
 
 # ---- set profiles
 
